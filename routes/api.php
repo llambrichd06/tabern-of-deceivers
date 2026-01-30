@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\PermissionController;
 
 use App\Http\Controllers\Api\ProfileController;
@@ -18,6 +19,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
+    Route::apiResource('leaderboards', LeaderboardController::class);
+    Route::post('/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
@@ -38,6 +41,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
             ->values()
             ->toArray();
     });
+
 });
 
 Route::get('category-list', [CategoryController::class, 'getList']);
