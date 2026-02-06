@@ -14,12 +14,7 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_code');
-            $table->unsignedBigInteger('player_1');
-            $table->unsignedBigInteger('player_2');
-            $table->unsignedBigInteger('player_3');
-            $table->unsignedBigInteger('player_4');
-            $table->unsignedBigInteger('player_5');
-            $table->unsignedBigInteger('player_6');
+            $table->enum('state', ['lobby','on_going','completed']);
             $table->timestamps();
         });
     }
