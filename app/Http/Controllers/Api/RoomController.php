@@ -21,7 +21,7 @@ class RoomController extends Controller
     
     public function store(Request $request) {
         $data = $request->validate([
-            'room_code' => ['required', 'min:8', 'max:8'],
+            'room_code' => ['required', 'size:8'],
             'state' => ['required', 'in:lobby, on_going, completed']
         ]);
         $room = Room::create($data);
