@@ -22,7 +22,9 @@ class RoomController extends Controller
     public function store(Request $request) {
         $data = $request->validate([
             'room_code' => ['required', 'size:8'],
-            'state' => ['required', 'in:lobby, on_going, completed']
+            'state' => ['required', 'in:lobby, on_going, completed'],
+            'host_id' => ['required', 'exists:users,id'],
+            'private' => ['required', 'in:true, false']
         ]);
         $room = Room::create($data);
         return $room;
@@ -32,7 +34,9 @@ class RoomController extends Controller
         $room = Room::find($room->id);
         $data = $request->validate([
             'room_code' => ['required', 'size:8'],
-            'state' => ['required', 'in:lobby, on_going, completed']
+            'state' => ['required', 'in:lobby, on_going, completed'],
+            'host_id' => ['required', 'exists:users,id'],
+            'private' => ['required', 'in:true, false']
         ]);
      
         $room->room_code = $data->room_code ?? $room->room_code;
