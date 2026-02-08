@@ -9,5 +9,7 @@ class Room extends Model
     protected $fillable = [
         'room_code', //Code for the users to join the room
         'state', //3 states lobby, on_going, completed
+        'host_id', //Id of the host user
+        'private', //boolean for private room or not (shows up in the room list)
     ];
 }

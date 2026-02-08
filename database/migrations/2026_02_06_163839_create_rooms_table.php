@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('room_code');
             $table->enum('state', ['lobby','on_going','completed']);
+            $table->enum('private', ['0','1']);
+            $table->unsignedBigInteger('host_id');
             $table->timestamps();
+
+            $table->foreign('host_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
