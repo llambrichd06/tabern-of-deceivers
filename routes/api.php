@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PermissionController;
 
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +20,11 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
+
     Route::apiResource('leaderboards', LeaderboardController::class);
     Route::post('/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
+
+    Route::apiResource('rooms', RoomController::class);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
