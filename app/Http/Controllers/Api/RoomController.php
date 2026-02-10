@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
@@ -14,7 +14,10 @@ class RoomController extends Controller
     }
 
     public function show(Room $room) {
-        return $room;
+        $host = $room->host();
+        return response()->json([ //this doesent work currently
+            'room_owner' => $host
+        ]);
     }
     
     // public function kickPlayer() //idea a futur
