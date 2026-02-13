@@ -8,15 +8,15 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    public function index() {
-        $room = Room::all();
+    public function index(Request $request) {
+        $room = Room::with('host')->get();
         return $room;
     }
 
     public function show(Room $room) {
-        $host = $room->host();
-        return response()->json([ //this doesent work currently
-            'room_owner' => $host
+        $room->load('host');
+        return response()->json([
+            'Room' => $room,
         ]);
     }
     
