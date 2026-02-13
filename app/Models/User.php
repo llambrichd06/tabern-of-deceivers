@@ -7,6 +7,7 @@ use App\Notifications\UserResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -85,6 +86,11 @@ class User extends Authenticatable implements HasMedia
     public function hostedRooms(): HasMany
     {
         return $this->hasMany(Room::class, 'host_id');
+    }
+
+    public function stats(): HasOne 
+    {
+        return $this->hasOne(Leaderboard::class);
     }
 
 }

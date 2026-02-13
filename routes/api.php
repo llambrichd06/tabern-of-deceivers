@@ -22,9 +22,11 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResource('roles', RoleController::class);
 
     Route::apiResource('leaderboards', LeaderboardController::class);
-    Route::post('/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
+    Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
+    Route::get('/leaderboards/getBestUsers', [LeaderboardController::class, 'getBestUsers']);
 
     Route::apiResource('rooms', RoomController::class);
+    Route::get('/openRooms', [RoomController::class, 'openRooms']);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);

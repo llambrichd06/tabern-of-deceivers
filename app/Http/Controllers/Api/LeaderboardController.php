@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leaderboard;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LeaderboardController extends Controller
@@ -42,6 +43,14 @@ class LeaderboardController extends Controller
             }
             $leaderboard->save();
             return $leaderboard;
+    }
+
+    public function getBestUsers() {
+        $bestUsers = User::from('users u')
+            ->join('leaderboard l', 'u.id', '=', 'l.user_id')
+            ->orderBy('l.wins')
+            ->limit(3)
+            ->get();
     }
     
     public function store(Request $request) {

@@ -13,6 +13,16 @@ class RoomController extends Controller
         return $room;
     }
 
+    public function openRooms() {
+        $pubRooms = Room::with('host')
+            ->where('private', '0')
+            ->where('state', 'lobby')
+            ->get(); //NEED TO PAGINATE THIS TO LIKE 4
+        return response()->json([
+            'Public Rooms' => $pubRooms,
+        ]);
+    }
+
     public function show(Room $room) {
         $room->load('host');
         return response()->json([
