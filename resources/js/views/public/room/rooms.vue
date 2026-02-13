@@ -1,4 +1,5 @@
 <template>
+    <!-- ------------------------------ Menu Buttons ------------------------------ -->
     <section>
         <div><h2>Search Game</h2></div>
         <div><h2>Host Game</h2></div>
@@ -18,26 +19,7 @@
                     <div>Mode: [mode]</div>
                 </div>
                 <div>
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
-                    </div>
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
-                    </div>
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
-                    </div>
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
-                    </div>
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
-                    </div>
+                <!-- We create the users with a loop. -->
                     <div>
                         <div><img src="" alt="fotoPerfil"></div>
                         <div>UserName</div>
@@ -53,4 +35,6 @@
 
 <script setup>
 import { authStore } from "@/store/auth";
+import { ref } from "vue";
+
 </script>
