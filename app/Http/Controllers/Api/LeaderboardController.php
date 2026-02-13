@@ -11,9 +11,13 @@ class LeaderboardController extends Controller
     public function index() {
         $leaderboard = Leaderboard::all();
         return $leaderboard;
-    }
+        }
+        
+        public function show(Leaderboard $leaderboard) {
+            return $leaderboard;
+        }
 
-    public function updateLeaderboards(Request $request) {
+        public function updateLeaderboards(Request $request) {
         $leaderboard = Leaderboard::where('user_id', $request->user_id)->first();
         if (!$leaderboard) {
             $leaderboard = new Leaderboard();
@@ -39,9 +43,6 @@ class LeaderboardController extends Controller
             $leaderboard->save();
             return $leaderboard;
     }
-    public function show(Leaderboard $leaderboard) {
-        return $leaderboard;
-    }
     
     public function store(Request $request) {
         $data = $request->validate([
@@ -51,8 +52,6 @@ class LeaderboardController extends Controller
             'losses' => ['required', 'min:0'],
             'matches' => ['required', 'min:0'],
         ]);
-
-        
         $leaderboard = Leaderboard::create($data);
         return $leaderboard;
         
@@ -67,7 +66,6 @@ class LeaderboardController extends Controller
             'losses' => ['nullable', 'min:0'],
             'matches' => ['nullable', 'min:0'],
         ]);
-        
         $leaderboard->user_id = $data->user_id ?? $leaderboard->user_id;
         $leaderboard->points = $data->points ?? $leaderboard->points;
         $leaderboard->wins = $data->wins ?? $leaderboard->wins;
@@ -76,7 +74,6 @@ class LeaderboardController extends Controller
         
         $leaderboard->save();
         return $leaderboard;
-        
     }
 
     public function destroy(Leaderboard $leaderboard) {
