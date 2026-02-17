@@ -1487,3 +1487,7 @@ aside.sidebar-container a:hover img {
 
 /* Prism CSS - Solo importar si existe */
 /* @import "./prism-vsc-dark-plus.css"; */
+
+.requiredIcon {
+    color: red;
+}
