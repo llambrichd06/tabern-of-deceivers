@@ -218,7 +218,6 @@ export default [
                     }
                 ]
             },
-
             {
                 name: 'leaderboards',
                 path: 'leaderboards',
@@ -251,6 +250,40 @@ export default [
                             hideBreadcrumb: true
                         }
                     },
+                ]
+            },
+            {
+                name: 'rooms',
+                path: 'rooms',
+                meta: { breadCrumb: 'Rooms' },
+                children: [
+                    {
+                        name: 'rooms.index',
+                        path: '',
+                        component: () => import('../views/admin/rooms/Index.vue'),
+                        meta: {
+                            breadCrumb: 'Rooms',
+                            hideBreadcrumb: true // Ocultar breadcrumb del layout porque la Card tiene su propio header
+                        }
+                    },
+                    {
+                        name: 'rooms.create',
+                        path: 'create',
+                        component: () => import('../views/admin/rooms/Create.vue'),
+                        meta: {
+                            breadCrumb: 'Create Room',
+                            linked: false
+                        }
+                    },
+                    {
+                        name: 'rooms.edit',
+                        path: 'edit/:id',
+                        component: () => import('../views/admin/rooms/Edit.vue'),
+                        meta: {
+                            breadCrumb: 'Update Room',
+                            linked: false
+                        }
+                    }
                 ]
             },
         ]
