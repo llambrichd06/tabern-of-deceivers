@@ -218,6 +218,41 @@ export default [
                     }
                 ]
             },
+
+            {
+                name: 'leaderboards',
+                path: 'leaderboards',
+                meta: { breadCrumb: 'Leaderboards' },
+                children: [
+                    {
+                        name: 'leaderboards.index',
+                        path: '',
+                        component: () => import('../views/admin/leaderboards/Index.vue'),
+                        meta: {
+                            breadCrumb: 'View Leaderboard',
+                            hideBreadcrumb: true
+                        }
+                    },
+                    {
+                        name: 'leaderboards.create',
+                        path: 'create',
+                        component: () => import('../views/admin/leaderboards/Create.vue'),
+                        meta: {
+                            breadCrumb: 'Create Leaderboard Entry',
+                            hideBreadcrumb: true
+                        }
+                    },
+                    {
+                        name: 'leaderboards.edit',
+                        path: 'edit/:id',
+                        component: () => import('../views/admin/leaderboards/Edit.vue'),
+                        meta: {
+                            breadCrumb: 'Edit Leaderboard Entry',
+                            hideBreadcrumb: true
+                        }
+                    },
+                ]
+            },
         ]
     },
     {

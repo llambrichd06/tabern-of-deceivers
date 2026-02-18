@@ -105,22 +105,22 @@ export function useToast() {
   // Métodos específicos para operaciones CRUD comunes
   const crud = {
     created: (entity = 'Registro') => {
-      success('Creado', `${entity} creado correctamente`)
+      success('Created', `${entity} created correctly`)
     },
     updated: (entity = 'Registro') => {
-      success('Actualizado', `${entity} actualizado correctamente`)
+      success('Updated', `${entity} updated correctly`)
     },
     deleted: (entity = 'Registro') => {
-      success('Eliminado', `${entity} eliminado correctamente`)
+      success('Deleted', `${entity} deleted correctly`)
     },
     loaded: (entity = 'Datos') => {
-      success('Cargado', `${entity} cargados correctamente`)
+      success('Loaded', `${entity} loaded correctly`)
     },
     saved: (entity = 'Datos') => {
-      success('Guardado', `${entity} guardados correctamente`)
+      success('Saved', `${entity} saved correctly`)
     },
     error: (action = 'realizar la operación') => {
-      error('Error', `No se pudo ${action}`)
+      error('Error', `Unable to ${action}`)
     }
   }
 
