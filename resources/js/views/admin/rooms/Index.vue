@@ -2,7 +2,7 @@
     <Card>
         <template #title>
             <div class="flex items-center justify-between w-full">
-                <span>Gestión de Usuarios</span>
+                <span>Gestión de Rooms</span>
                 <div class="flex items-center gap-2">
                     <Button 
                         label="Actualizar" 
@@ -11,26 +11,26 @@
                         outlined 
                         severity="secondary" 
                         :loading="loading" 
-                        @click="refreshUsers" 
+                        @click="refreshRooms" 
                     />
                     <Button 
-                        v-if="can('user-create')"
-                        label="Nuevo Usuario" 
+                        v-if="can('room-create')"
+                        label="New Room" 
                         icon="pi pi-plus" 
                         size="small" 
                         severity="primary" 
-                        @click="router.push('/admin/users/create')" 
+                        @click="router.push('/admin/rooms/create')" 
                     />
                 </div>
             </div>
         </template>
 
-        <template #subtitle>Administra y gestiona los usuarios del sistema. Crea, edita y elimina usuarios según tus permisos.</template>
+        <template #subtitle>Administra y gestiona los rooms del sistema. Crea, edita y elimina rooms según tus permisos.</template>
 
         <template #content>
             <DataTable
-                v-model:filters="userFilters"
-                :value="users.data || []"
+                v-model:filters="roomFilters"
+                :value="rooms.data || []"
                 :paginator="true"
                 :rows="10"
                 :rows-per-page-options="[10, 25, 50]"
@@ -40,8 +40,8 @@
                 :loading="loading"
                 filter-display="menu"
                 :filter-delay="300"
-                :global-filter-fields="['alias', 'name', 'surname1', 'surname2', 'email']"
-
+                :global-filter-fields="['id', 'room_code', 'state', 'private', 'host_id']"
+                
             >
                 <Column field="id" header="ID" sortable class="w-[60px]">
                     <template #body="slotProps">
@@ -54,7 +54,7 @@
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="10rem" height="1rem" />
                         <div v-else class="flex items-center space-x-2">
-                            <i class="pi pi-user text-blue-600" />
+                            <i class="pi pi-room text-blue-600" />
                             <span class="font-medium table-cell-name">{{ slotProps.data.name || '-' }}</span>
                         </div>
                     </template>
@@ -119,24 +119,24 @@
                         <Skeleton v-if="loading" width="4rem" height="2rem" />
                         <div v-else class="flex gap-2">
                             <Button
-                                v-if="can('user-edit')"
-                                v-tooltip.top="'Editar usuario'"
+                                v-if="can('room-edit')"
+                                v-tooltip.top="'Editar room'"
                                 icon="pi pi-pencil"
                                 rounded
                                 text
                                 severity="secondary"
                                 size="small"
-                                @click="router.push({ name: 'users.edit', params: { id: slotProps.data.id } })"
+                                @click="router.push({ name: 'rooms.edit', params: { id: slotProps.data.id } })"
                             />
                             <Button
-                                v-if="can('user-delete')"
-                                v-tooltip.top="'Eliminar usuario'"
+                                v-if="can('room-delete')"
+                                v-tooltip.top="'Eliminar room'"
                                 icon="pi pi-trash"
                                 rounded
                                 text
                                 severity="danger"
                                 size="small"
-                                @click="deleteUser(slotProps.data.id, slotProps.index)"
+                                @click="deleteRoom(slotProps.data.id, slotProps.index)"
                             />
                         </div>
                     </template>
@@ -149,16 +149,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import useUsers from "../../../composables/users";
+import useRooms from "../../../composables/rooms";
 import { useAbility } from '@casl/vue';
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
 
 const router = useRouter();
-const { users, getUsers, deleteUser } = useUsers();
+const { rooms, getRooms, deleteRoom } = useRooms();
 const { can } = useAbility();
 const loading = ref(false);
 
-const userFilters = ref({
+const roomFilters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
     alias: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
@@ -169,9 +169,9 @@ const userFilters = ref({
     
 });
 
-const refreshUsers = () => {
+const refreshRooms = () => {
     loading.value = true;
-    getUsers().finally(() => {
+    getRooms().finally(() => {
         loading.value = false;
     });
 };
@@ -180,7 +180,7 @@ const getRoleSeverity = (roleName) => {
     const roleMap = {
         'admin': 'danger',
         'alumne': 'info',
-        'user': 'secondary'
+        'room': 'secondary'
     };
     return roleMap[roleName?.toLowerCase()] || 'secondary';
 };
@@ -206,7 +206,7 @@ const formatDate = (dateString) => {
 
 onMounted(() => {
     loading.value = true;
-    getUsers().finally(() => {
+    getRooms().finally(() => {
         loading.value = false;
     });
 });
