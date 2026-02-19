@@ -223,6 +223,18 @@ class PermissionsTableSeeder extends Seeder
                 'name' => 'user-list',
                 'guard_name' => 'web',
             ),
+            34 =>
+            array (
+                'id' => 35,
+                'name' => 'leaderboard-list',
+                'guard_name' => 'web',
+            ),
+            35 =>
+            array (
+                'id' => 36,
+                'name' => 'room-list',
+                'guard_name' => 'web',
+            ),
         ));
         
         
