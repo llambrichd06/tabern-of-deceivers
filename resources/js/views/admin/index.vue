@@ -74,6 +74,20 @@
                     </div>
                 </template>
             </Card>
+
+            <Card class="dashboard-stat-card">
+                <template #content>
+                    <div class="stat-card-content">
+                        <div class="stat-card-icon stat-icon-users">
+                            <i class="pi pi-users"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <p class="stat-card-label">Leaderboards</p>
+                            <p class="stat-card-value">{{ stats.leaderboards || 0 }}</p>
+                        </div>
+                    </div>
+                </template>
+            </Card>
         </div>
 
         <!-- Quick Actions Card -->

@@ -128,9 +128,11 @@ const menuModel = computed(() => {
         {
             label: 'Contenido',
             items: [
-                { label: 'Categorías', icon: 'pi pi-tags', route: '/admin/categories', permission: 'category-list' }
+                { label: 'Categorías', icon: 'pi pi-tags', route: '/admin/categories', permission: 'category-list' },
+                { label: 'Leaderboards', icon: 'pi pi-chart-bar', route: '/admin/leaderboards', permission: 'leaderboard-list' },
+                { label: 'Rooms', icon: 'pi pi-box', route: '/admin/rooms', permission: 'room-list' },
             ]
-        }
+        } //ADMIN SIDEBAR HERE, JUST LOOK AT THE STRUCTURE, COPY IT FOR NEW ENTRIES
     ];
 
     // Filtrar items según permisos
