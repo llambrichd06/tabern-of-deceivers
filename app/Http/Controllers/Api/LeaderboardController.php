@@ -6,43 +6,46 @@ use App\Http\Controllers\Controller;
 use App\Models\Leaderboard;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LeaderboardController extends Controller
 {
     public function index() {
         $leaderboard = Leaderboard::all();
         return $leaderboard;
-        }
-        
-        public function show(Leaderboard $leaderboard) {
-            return $leaderboard;
-        }
+    }
+    
+    public function show(Leaderboard $leaderboard) {
+        return response()->json([
+            'data' => $leaderboard,
+        ]);
+    }
 
-        public function updateLeaderboards(Request $request) {
-        $leaderboard = Leaderboard::where('user_id', $request->user_id)->first();
-        if (!$leaderboard) {
-            $leaderboard = new Leaderboard();
-            $leaderboard->user_id = $request->user_id;
-            $leaderboard->wins = 0;
-            $leaderboard->losses = 0;
-            $leaderboard->matches = 0;
-            $leaderboard->points = 0;
+    public function updateLeaderboards(Request $request) {
+    $leaderboard = Leaderboard::where('user_id', $request->user_id)->first();
+    if (!$leaderboard) {
+        $leaderboard = new Leaderboard();
+        $leaderboard->user_id = $request->user_id;
+        $leaderboard->wins = 0;
+        $leaderboard->losses = 0;
+        $leaderboard->matches = 0;
+        $leaderboard->points = 0;
 
+    }
+        $leaderboard->matches += 1; 
+        switch ($request->action) {
+            case 'win':
+                $leaderboard->wins += 1; 
+                break;
+            case 'loss':
+                $leaderboard->losses += 1;
+                break;
+            default:
+                return response('action value must be win or loss', 412);
+                break;
         }
-            $leaderboard->matches += 1; 
-            switch ($request->action) {
-                case 'win':
-                    $leaderboard->wins += 1; 
-                    break;
-                case 'loss':
-                    $leaderboard->losses += 1;
-                    break;
-                default:
-                    return response('action value must be win or loss', 412);
-                    break;
-            }
-            $leaderboard->save();
-            return $leaderboard;
+        $leaderboard->save();
+        return $leaderboard;
     }
 
     public function getBestUsers() {
@@ -75,12 +78,12 @@ class LeaderboardController extends Controller
             'losses' => ['nullable', 'min:0'],
             'matches' => ['nullable', 'min:0'],
         ]);
-        $leaderboard->user_id = $data->user_id ?? $leaderboard->user_id;
-        $leaderboard->points = $data->points ?? $leaderboard->points;
-        $leaderboard->wins = $data->wins ?? $leaderboard->wins;
-        $leaderboard->losses = $data->losses ?? $leaderboard->losses;
-        $leaderboard->matches = $data->matches ?? $leaderboard->matches;
-        
+        Log::info($data["matches"]);
+        $leaderboard->user_id = $data['user_id'] ?? $leaderboard->user_id;
+        $leaderboard->points = $data['points'] ?? $leaderboard->points;
+        $leaderboard->wins = $data['wins'] ?? $leaderboard->wins;
+        $leaderboard->losses = $data['losses'] ?? $leaderboard->losses;
+        $leaderboard->matches = $data['matches'] ?? $leaderboard->matches;
         $leaderboard->save();
         return $leaderboard;
     }

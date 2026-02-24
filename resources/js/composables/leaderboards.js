@@ -26,17 +26,18 @@ export default function useLeaderboards() {
     const validationErrors = errors
 
     const leaderboardSchema = yup.object({
-            user_id: yup.integer("The field user_id must be whole number").required("A leaderboard must be linked to a user."),
-            wins: yup.integer("The field wins must be whole number").required("The field wins can't be empty").min(0, "The field wins can't be negative"),
-            losses: yup.integer("The field losses must be whole number").required("The field losses can't be empty").min(0, "The field losses can't be negative"),
-            matches: yup.integer("The field matches must be whole number").required("The field matches can't be empty").min(0, "The field matches can't be negative"),
-            points: yup.integer("The field points must be whole number").nullable().min(0, "The field points can't be negative"),
-        })
+            user_id: yup.number("the field user_id must be a number").integer("The field user_id must be whole number").required("A leaderboard must be linked to a user."),
+            wins: yup.number("the field wins must be a number").integer("The field wins must be whole number").required("The field wins can't be empty").min(0, "The field wins can't be negative"),
+            losses: yup.number("the field losses must be a number").integer("The field losses must be whole number").required("The field losses can't be empty").min(0, "The field losses can't be negative"),
+            matches: yup.number("the field matches must be a number").integer("The field matches must be whole number").required("The field matches can't be empty").min(0, "The field matches can't be negative"),
+            points: yup.number("the field points must be a number").transform((value, originalValue) => (originalValue === "" ? null : value)).integer("The field points must be whole number").nullable().min(0, "The field points can't be negative"),
+        }) //The "transform" thingy is so the validator doesent explode if we put a null, since it does that even if we put nullable.
 
     const getLeaderboards = async () => {
         return axios.get('/api/leaderboards')
             .then(response => {
                 leaderboards.value = response.data;
+                // console.log(leaderboards.value)
                 return response;
             })
     }
@@ -55,15 +56,17 @@ export default function useLeaderboards() {
         isLoading.value = true
         clearErrors()
 
-        const { isValid } = validate(leaderboardSchema, leaderboard)
+        const { isValid } = validate(leaderboardSchema, leaderboard, { abortEarly: false })
         if (!isValid) {
             isLoading.value = false
+            toast.error('Error de validación', 'Revisa los campos resaltados.')
+            console.log(validationErrors.value, 'error 1')
             return
         }
 
         const serializedLeaderboard = serializeLeaderboard(leaderboard)
 
-        axios.leaderboard('/api/leaderboards', serializedLeaderboard, {
+        axios.post('/api/leaderboards', serializedLeaderboard, {
             headers: {
                 "content-type": "multipart/form-data"
             }
@@ -146,6 +149,7 @@ export default function useLeaderboards() {
         hasError,
         getError,
         validationErrors,
-        isLoading
+        isLoading,
+        errors,
     }
 }

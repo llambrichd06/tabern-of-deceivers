@@ -3,14 +3,14 @@
         <form @submit.prevent="submitForm">
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-name">Name:</label>
-                    <InputText v-model="user.name" id="user-name" type="text" size="small" :invalid="!!errors.name" />
+                    <label for="user-name">User Id:</label>
+                    <InputText v-model="leaderboard.user_id" id="user-name" type="number" size="small" :invalid="!!errors.user_id"  />
                 </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.name }}
+                <div v-if="!(validationErrors?.user_id instanceof Array)" class="text-red-400 mt-1">
+                    {{ errors.user_id }}
                 </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.name" class="text-red-400">
+                <div v-else class="mt-1">
+                    <div v-for="message in validationErrors?.user_id" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -18,14 +18,14 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-surname1">Surname 1:</label>
-                    <InputText v-model="user.surname1" id="user-surname1" type="text" size="small" :invalid="!!errors.surname1" />
+                    <label for="user-surname1">Points:</label>
+                    <InputText v-model="leaderboard.points" id="user-surname1" type="number" size="small" :invalid="!!errors.points"/>
                 </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.surname1 }}
+                <div v-if="!(validationErrors?.points instanceof Array)" class="text-red-400 mt-1">
+                    {{ errors.points }}
                 </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.surname1" class="text-red-400">
+                <div v-else class="mt-1">
+                    <div v-for="message in validationErrors?.points" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -33,14 +33,14 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-surname2">Surname 2:</label>
-                    <InputText v-model="user.surname2" id="user-surname2" type="text" size="small" :invalid="!!errors.surname2" />
+                    <label for="user-surname2">Wins:</label>
+                    <InputText v-model="leaderboard.wins" id="user-surname2" type="number" size="small" :invalid="!!errors.wins"/>
                 </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.surname2 }}
+                <div v-if="!(validationErrors?.wins instanceof Array)" class="text-red-400 mt-1">
+                    {{ errors.wins }}
                 </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.surname2" class="text-red-400">
+                <div v-else class="mt-1">
+                    <div v-for="message in validationErrors?.wins" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -48,14 +48,14 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-email">Email:</label>
-                    <InputText v-model="user.email" id="user-email" type="email" size="small" :invalid="!!errors.email" />
+                    <label for="user-email">Losses:</label>
+                    <InputText v-model="leaderboard.losses" id="user-email" type="number" size="small" :invalid="!!errors.losses"/>
                 </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.email }}
+                <div v-if="!(validationErrors?.losses instanceof Array)" class="text-red-400 mt-1">
+                    {{ errors.losses }}
                 </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.email" class="text-red-400">
+                <div v-else class="mt-1">
+                    <div v-for="message in validationErrors?.losses" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -63,24 +63,24 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-password">Password:</label>
-                    <InputText v-model="user.password" id="user-password" type="password" size="small" :invalid="!!errors.password" />
+                    <label for="user-password">Matches:</label>
+                    <InputText v-model="leaderboard.matches" id="user-password" type="number" size="small" :invalid="!!errors.matches"/>
                 </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.password }}
+                <div v-if="!(validationErrors?.matches instanceof Array)" class="text-red-400 mt-1">
+                    {{ errors.matches }}
                 </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.password" class="text-red-400">
+                <div v-else class="mt-1">
+                    <div v-for="message in validationErrors?.matches" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <div class="flex items-center gap-3">
                     <label for="user-role">Role:</label>
                     <MultiSelect
-                        v-model="user.role_id"
+                        v-model="leaderboard.role_id"
                         :options="roles"
                         size="small"
                         display="chip"
@@ -98,7 +98,7 @@
                         {{ message }}
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Buttons -->
             <div class="mt-4 text-right">
@@ -113,17 +113,12 @@
 </template>
 <script setup>
     import { onMounted } from "vue";
-    import useRoles from "@/composables/roles";
-    import useUsers from "@/composables/users";
+    import useLeaderboards from "@/composables/leaderboards";
 
-    const { roles, getRoles } = useRoles();
-    const { user, createUser, validationErrors, isLoading, errors } = useUsers();
+    const { leaderboard, storeLeaderboard, validationErrors, isLoading, errors } = useLeaderboards();
 
     function submitForm() {
-        createUser(user.value)
+        storeLeaderboard(leaderboard.value)
     }
 
-    onMounted(() => {
-        getRoles()
-    })
 </script>
