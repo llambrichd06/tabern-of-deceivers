@@ -152,24 +152,6 @@ const refreshRooms = () => {
     });
 };
 
-// const getRoleSeverity = (roleName) => {
-//     const roleMap = {
-//         'admin': 'danger',
-//         'alumne': 'info',
-//         'room': 'secondary'
-//     };
-//     return roleMap[roleName?.toLowerCase()] || 'secondary';
-// };
-
-// const filterRoles = (value, filter) => {
-//     if (!filter) return true;
-//     if (!value || !Array.isArray(value)) return false;
-//     const filterValue = filter.toString().toLowerCase();
-//     return value.some(role => 
-//         role.name && role.name.toLowerCase().includes(filterValue)
-//     );
-// };
-
 const formatDate = (dateString) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
