@@ -2,7 +2,7 @@
     <Card>
         <template #title>
             <div class="flex items-center justify-between w-full">
-                <span>Gestión de Rooms</span>
+                <span>Gestión de Usuarios</span>
                 <div class="flex items-center gap-2">
                     <Button 
                         label="Actualizar" 
@@ -15,7 +15,7 @@
                     />
                     <Button 
                         v-if="can('room-create')"
-                        label="New Room" 
+                        label="Nuevo Usuario" 
                         icon="pi pi-plus" 
                         size="small" 
                         severity="primary" 
@@ -25,12 +25,12 @@
             </div>
         </template>
 
-        <template #subtitle>Administra y gestiona los rooms del sistema. Crea, edita y elimina rooms según tus permisos.</template>
+        <template #subtitle>Administra y gestiona los usuarios del sistema. Crea, edita y elimina usuarios según tus permisos.</template>
 
         <template #content>
             <DataTable
                 v-model:filters="roomFilters"
-                :value="rooms.data || []"
+                :value="rooms || []"
                 :paginator="true"
                 :rows="10"
                 :rows-per-page-options="[10, 25, 50]"
@@ -40,8 +40,8 @@
                 :loading="loading"
                 filter-display="menu"
                 :filter-delay="300"
-                :global-filter-fields="['id', 'room_code', 'state', 'private', 'host_id']"
-                
+                :global-filter-fields="['alias', 'name', 'surname1', 'surname2', 'email']"
+
             >
                 <Column field="id" header="ID" sortable class="w-[60px]">
                     <template #body="slotProps">
@@ -50,67 +50,43 @@
                     </template>
                 </Column>
 
-                <Column field="name" header="Nombre" sortable filter :filter-placeholder="'Nombre'" class="min-w-[200px]">
+                <Column field="name" header="room_code" sortable filter :filter-placeholder="'room_code'" class="min-w-[200px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="10rem" height="1rem" />
                         <div v-else class="flex items-center space-x-2">
                             <i class="pi pi-room text-blue-600" />
-                            <span class="font-medium table-cell-name">{{ slotProps.data.name || '-' }}</span>
+                            <span class="font-medium table-cell-name">{{ slotProps.data.room_code || '-' }}</span>
                         </div>
-                    </template>
+                    </template> 
                     <template #filter="{ filterModel }">
-                        <InputText v-model="filterModel.value" placeholder="Nombre" class="w-full" />
+                        <InputText v-model="filterModel.value" placeholder="room_code" class="w-full" />
                     </template>
                 </Column>
 
-                <Column field="alias" header="Alias" sortable filter :filter-placeholder="'Alias'" class="min-w-[150px]">
+                <Column field="alias" header="state" sortable filter :filter-placeholder="'state'" class="min-w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="8rem" height="1rem" />
-                        <span v-else class="table-cell-name">{{ slotProps.data.alias || '-' }}</span>
+                        <span v-else class="table-cell-name">{{ slotProps.data.state || '-' }}</span>
                     </template>
                     <template #filter="{ filterModel }">
-                        <InputText v-model="filterModel.value" placeholder="Alias" class="w-full" />
+                        <InputText v-model="filterModel.value" placeholder="state" class="w-full" />
                     </template>
                 </Column>
 
-                <Column field="email" header="Email" sortable filter :filter-placeholder="'Email'" class="min-w-[200px]">
+                <Column field="email" header="private" sortable filter :filter-placeholder="'private'" class="min-w-[200px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="12rem" height="1rem" />
-                        <span v-else class="text-sm table-cell-email">{{ slotProps.data.email || '-' }}</span>
+                        <span v-else class="text-sm table-cell-email">{{ slotProps.data.private || '-' }}</span>
                     </template>
                     <template #filter="{ filterModel }">
-                        <InputText v-model="filterModel.value" placeholder="Email" class="w-full" />
+                        <InputText v-model="filterModel.value" placeholder="private" class="w-full" />
                     </template>
                 </Column>
 
-                <Column field="roles" header="Roles" class="min-w-[200px]" filter :filter-function="filterRoles">
-                    <template #body="slotProps">
-                        <Skeleton v-if="loading" width="6rem" height="1.5rem" />
-                        <div v-else class="flex flex-wrap gap-1">
-                            <Tag
-                                v-for="role in slotProps.data.roles || []"
-                                :key="role.id"
-                                :value="role.name"
-                                :severity="getRoleSeverity(role.name)"
-                                size="small"
-                            />
-                            <Tag
-                                v-if="!slotProps.data.roles?.length"
-                                value="Sin roles"
-                                severity="secondary"
-                                size="small"
-                            />
-                        </div>
-                    </template>
-                    <template #filter="{ filterModel }">
-                        <InputText v-model="filterModel.value" placeholder="Buscar por nombre de rol" class="w-full" />
-                    </template>
-                </Column>
-
-                <Column field="created_at" header="Fecha de Creación" sortable class="min-w-[150px]">
+                <Column field="created_at" header="created_at" sortable class="min-w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="8rem" height="1rem" />
-                        <span v-else class="text-sm table-cell-date">{{ formatDate(slotProps.data.created_at) }}</span>
+                        <span v-else class="text-sm table-cell-date">{{ slotProps.data.host_id }}</span>
                     </template>
                 </Column>
 
@@ -120,7 +96,7 @@
                         <div v-else class="flex gap-2">
                             <Button
                                 v-if="can('room-edit')"
-                                v-tooltip.top="'Editar room'"
+                                v-tooltip.top="'Editar usuario'"
                                 icon="pi pi-pencil"
                                 rounded
                                 text
@@ -130,7 +106,7 @@
                             />
                             <Button
                                 v-if="can('room-delete')"
-                                v-tooltip.top="'Eliminar room'"
+                                v-tooltip.top="'Eliminar usuario'"
                                 icon="pi pi-trash"
                                 rounded
                                 text
@@ -176,23 +152,23 @@ const refreshRooms = () => {
     });
 };
 
-const getRoleSeverity = (roleName) => {
-    const roleMap = {
-        'admin': 'danger',
-        'alumne': 'info',
-        'room': 'secondary'
-    };
-    return roleMap[roleName?.toLowerCase()] || 'secondary';
-};
+// const getRoleSeverity = (roleName) => {
+//     const roleMap = {
+//         'admin': 'danger',
+//         'alumne': 'info',
+//         'room': 'secondary'
+//     };
+//     return roleMap[roleName?.toLowerCase()] || 'secondary';
+// };
 
-const filterRoles = (value, filter) => {
-    if (!filter) return true;
-    if (!value || !Array.isArray(value)) return false;
-    const filterValue = filter.toString().toLowerCase();
-    return value.some(role => 
-        role.name && role.name.toLowerCase().includes(filterValue)
-    );
-};
+// const filterRoles = (value, filter) => {
+//     if (!filter) return true;
+//     if (!value || !Array.isArray(value)) return false;
+//     const filterValue = filter.toString().toLowerCase();
+//     return value.some(role => 
+//         role.name && role.name.toLowerCase().includes(filterValue)
+//     );
+// };
 
 const formatDate = (dateString) => {
     if (!dateString) return '-';

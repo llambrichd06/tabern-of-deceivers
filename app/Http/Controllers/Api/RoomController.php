@@ -26,7 +26,7 @@ class RoomController extends Controller
     public function show(Room $room) {
         $room->load('host');
         return response()->json([
-            'Room' => $room,
+            'data' => $room,
         ]);
     }
     
@@ -52,8 +52,8 @@ class RoomController extends Controller
             'private' => ['required', 'in:0,1']
         ]);
      
-        $room->room_code = $data->room_code ?? $room->room_code;
-        $room->state = $data->state ?? $room->state;
+        $room->room_code = $data['room_code'] ?? $room->room_code;
+        $room->state = $data['state'] ?? $room->state;
      
         $room->save();
         return $room;

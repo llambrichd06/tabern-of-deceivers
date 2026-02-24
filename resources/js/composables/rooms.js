@@ -27,7 +27,7 @@ export default function useRooms() {
     const roomSchema = yup.object({
             room_code: yup.string().trim().required('Error, Room_code has not been put correcly, try again'),
             state: yup.string().trim().oneOf(["lobby","on_going","completed"]).required('The state of the game is required'),
-            host_id: yup.integer().required("You need a host to have a game"),
+            host_id: yup.number().integer().required("You need a host to have a game"),
             private: yup.boolean().nullable(),
         })
 
@@ -61,7 +61,7 @@ export default function useRooms() {
 
         const serializedRoom = serializeRoom(room)
 
-        axios.room('/api/rooms', serializedRoom, {
+        axios.post('/api/rooms', serializedRoom, {
             headers: {
                 "content-type": "multipart/form-data"
             }
@@ -144,6 +144,7 @@ export default function useRooms() {
         hasError,
         getError,
         validationErrors,
-        isLoading
+        isLoading,
+        errors
     }
 }

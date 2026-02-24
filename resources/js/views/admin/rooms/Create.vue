@@ -1,16 +1,17 @@
 <template>
     <Panel class="flex flex-col justify-center my-10">
         <form @submit.prevent="submitForm">
+
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-name">Name:</label>
-                    <InputText v-model="user.name" id="user-name" type="text" size="small" :invalid="!!errors.name" />
+                    <label for="room-room_code">room_code:</label>
+                    <InputText v-model="room.room_code" id="room-room_code" type="text" size="small" :invalid="!!errors.room_code" />
                 </div>
                 <div class="text-red-400 mt-1">
-                    {{ errors.name }}
+                    {{ errors.room_code }}
                 </div>
                 <div class="mt-1">
-                    <div v-for="message in validationErrors?.name" class="text-red-400">
+                    <div v-for="message in validationErrors?.room_code" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -18,14 +19,14 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-surname1">Surname 1:</label>
-                    <InputText v-model="user.surname1" id="user-surname1" type="text" size="small" :invalid="!!errors.surname1" />
+                    <label for="room-state">state:</label>
+                    <InputText v-model="room.state" id="room-state" type="text" size="small" :invalid="!!errors.state" />
                 </div>
                 <div class="text-red-400 mt-1">
-                    {{ errors.surname1 }}
+                    {{ errors.state }}
                 </div>
                 <div class="mt-1">
-                    <div v-for="message in validationErrors?.surname1" class="text-red-400">
+                    <div v-for="message in validationErrors?.state" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -33,14 +34,14 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-surname2">Surname 2:</label>
-                    <InputText v-model="user.surname2" id="user-surname2" type="text" size="small" :invalid="!!errors.surname2" />
+                    <label for="room-private">Private:</label>
+                    <InputText v-model="room.private" id="room-private" type="private" size="small" :invalid="!!errors.private"/>
                 </div>
                 <div class="text-red-400 mt-1">
-                    {{ errors.surname2 }}
+                    {{ errors.private }}
                 </div>
                 <div class="mt-1">
-                    <div v-for="message in validationErrors?.surname2" class="text-red-400">
+                    <div v-for="message in validationErrors?.private" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
@@ -48,64 +49,25 @@
 
             <div class="mb-3">
                 <div class="flex items-center gap-3">
-                    <label for="user-email">Email:</label>
-                    <InputText v-model="user.email" id="user-email" type="email" size="small" :invalid="!!errors.email" />
+                    <label for="room-host_id">host_id:</label>
+                    <InputText v-model="room.host_id" id="room-host_id" type="host_id" size="small" :invalid="!!errors.host_id"/>
                 </div>
                 <div class="text-red-400 mt-1">
-                    {{ errors.email }}
+                    {{ errors.host_id }}
                 </div>
                 <div class="mt-1">
-                    <div v-for="message in validationErrors?.email" class="text-red-400">
+                    <div v-for="message in validationErrors?.host_id" class="text-red-400">
                         {{ message }}
                     </div>
                 </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="flex items-center gap-3">
-                    <label for="user-password">Password:</label>
-                    <InputText v-model="user.password" id="user-password" type="password" size="small" :invalid="!!errors.password" />
-                </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.password }}
-                </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.password" class="text-red-400">
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="flex items-center gap-3">
-                    <label for="user-role">Role:</label>
-                    <MultiSelect
-                        v-model="user.role_id"
-                        :options="roles"
-                        size="small"
-                        display="chip"
-                        optionLabel="name"
-                        optionValue="id"
-                        filter
-                        :invalid="!!errors.role_id"
-                    />
-                </div>
-                <div class="text-red-400 mt-1">
-                    {{ errors.role_id }}
-                </div>
-                <div class="mt-1">
-                    <div v-for="message in validationErrors?.role" class="text-red-400">
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
+            </div> 
 
             <!-- Buttons -->
             <div class="mt-4 text-right">
                 <Button :disabled="isLoading" type="submit">
                     <div v-show="isLoading" class=""></div>
                     <span v-if="isLoading">Processing...</span>
-                    <span v-else>Save</span>
+                    <span v-else>Guardar</span>
                 </Button>
             </div>
         </form>
@@ -113,17 +75,12 @@
 </template>
 <script setup>
     import { onMounted } from "vue";
-    import useRoles from "@/composables/roles";
-    import useUsers from "@/composables/users";
+    import useRooms from "@/composables/rooms";
 
-    const { roles, getRoles } = useRoles();
-    const { user, createUser, validationErrors, isLoading, errors } = useUsers();
+    const { room, storeRoom, validationErrors, isLoading, errors } = useRooms();
 
     function submitForm() {
-        createUser(user.value)
+        storeRoom(room.value)
     }
 
-    onMounted(() => {
-        getRoles()
-    })
 </script>
