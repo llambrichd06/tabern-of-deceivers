@@ -2,7 +2,7 @@
     <Card>
         <template #title>
             <div class="flex items-center justify-between w-full">
-                <span>Gestión de Usuarios</span>
+                <span>Gestión de Rooms</span>
                 <div class="flex items-center gap-2">
                     <Button 
                         label="Actualizar" 
@@ -15,7 +15,7 @@
                     />
                     <Button 
                         v-if="can('room-create')"
-                        label="Nuevo Usuario" 
+                        label="Nuevo Room" 
                         icon="pi pi-plus" 
                         size="small" 
                         severity="primary" 
@@ -25,7 +25,7 @@
             </div>
         </template>
 
-        <template #subtitle>Administra y gestiona los usuarios del sistema. Crea, edita y elimina usuarios según tus permisos.</template>
+        <template #subtitle>Administra y gestiona los usuarios del sistema. Crea, edita y elimina Rooms.</template>
 
         <template #content>
             <DataTable
@@ -96,7 +96,7 @@
                         <div v-else class="flex gap-2">
                             <Button
                                 v-if="can('room-edit')"
-                                v-tooltip.top="'Editar usuario'"
+                                v-tooltip.top="'Editar room'"
                                 icon="pi pi-pencil"
                                 rounded
                                 text
@@ -106,7 +106,7 @@
                             />
                             <Button
                                 v-if="can('room-delete')"
-                                v-tooltip.top="'Eliminar usuario'"
+                                v-tooltip.top="'Eliminar room'"
                                 icon="pi pi-trash"
                                 rounded
                                 text
