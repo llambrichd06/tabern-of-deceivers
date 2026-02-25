@@ -54,6 +54,9 @@ class LeaderboardController extends Controller
             ->orderBy('l.wins')
             ->limit(3)
             ->get();
+        return response()->json([
+            'users' => $bestUsers,
+            ]);
     }
     
     public function store(Request $request) {
