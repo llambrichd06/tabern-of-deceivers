@@ -33,13 +33,6 @@
                             optionValue="code"
                             class="w-full md:w-56"
                         />
-                        <!-- <InputText 
-                            v-model="room.state" 
-                            size="small" 
-                            type="text" 
-                            id="state" 
-                            :class="{ 'p-invalid': hasError('state') }"
-                        /> -->
                         
                     </div>
                     <small v-if="hasError('state')" class="p-error">
@@ -50,11 +43,10 @@
                 <div class="mb-4">
                     <div class="flex items-center gap-3">
                         <label for="private">Private:</label>
-                        <InputText 
-                            v-model="room.private" 
-                            type="text" 
-                            size="small" 
-                            id="private" 
+                        <Checkbox
+                            v-model="room.private"
+                            :binary="true"
+                            inputId="private"
                             :class="{ 'p-invalid': hasError('private') }"
                         />
                     </div>
@@ -111,8 +103,6 @@ const submitForm = async () => {
 
 onMounted(async () => {
     const roomData = await getRoom(route.params.id);
-    console.log(roomData);
-    console.log(room.value.state);
 })
 
 const posibleStates = ref([

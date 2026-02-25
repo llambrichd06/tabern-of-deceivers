@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
@@ -51,9 +52,10 @@ class RoomController extends Controller
             'host_id' => ['required', 'exists:users,id'],
             'private' => ['required', 'in:0,1']
         ]);
-     
         $room->room_code = $data['room_code'] ?? $room->room_code;
         $room->state = $data['state'] ?? $room->state;
+        $room->host_id = $data['host_id'] ?? $room->host_id;
+        $room->private = $data['private'] ?? $room->private;
      
         $room->save();
         return $room;

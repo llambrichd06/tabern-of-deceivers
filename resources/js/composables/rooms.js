@@ -42,6 +42,7 @@ export default function useRooms() {
     const getRoom = async (id) => {
         return axios.get('/api/rooms/' + id)
             .then(response => {
+                response.data.data.private = response.data.data.private == 0 ? false : true;
                 room.value = response.data.data;
                 return response;
             })
@@ -52,6 +53,8 @@ export default function useRooms() {
 
         isLoading.value = true
         clearErrors()
+        
+        room.private = room.private ? 1 : 0;
 
         const { isValid } = validate(roomSchema, room)
         if (!isValid) {
@@ -85,9 +88,11 @@ export default function useRooms() {
 
     const updateRoom = async (room) => {
         if (isLoading.value) return;
-
+        
         isLoading.value = true
         clearErrors()
+        
+        room.private = room.private ? 1 : 0;
 
         const { isValid } = validate(roomSchema, room)
         if (!isValid) {

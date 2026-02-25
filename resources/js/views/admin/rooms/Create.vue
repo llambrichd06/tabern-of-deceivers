@@ -20,7 +20,13 @@
             <div class="mb-3">
                 <div class="flex items-center gap-3">
                     <label for="room-state">state:</label>
-                    <InputText v-model="room.state" id="room-state" type="text" size="small" :invalid="!!errors.state" />
+                    <Select
+                            v-model="room.state"
+                            :options="posibleStates"
+                            optionLabel="name"
+                            optionValue="code"
+                            class="w-full md:w-56"
+                        />
                 </div>
                 <div class="text-red-400 mt-1">
                     {{ errors.state }}
@@ -35,7 +41,11 @@
             <div class="mb-3">
                 <div class="flex items-center gap-3">
                     <label for="room-private">Private:</label>
-                    <InputText v-model="room.private" id="room-private" type="private" size="small" :invalid="!!errors.private"/>
+                    <Checkbox
+                        v-model="room.private"
+                        :binary="true"
+                        inputId="room-private"
+                    />
                 </div>
                 <div class="text-red-400 mt-1">
                     {{ errors.private }}
@@ -74,7 +84,7 @@
     </Panel>
 </template>
 <script setup>
-    import { onMounted } from "vue";
+    import { onMounted, ref } from "vue";
     import useRooms from "@/composables/rooms";
 
     const { room, storeRoom, validationErrors, isLoading, errors } = useRooms();
@@ -82,5 +92,10 @@
     function submitForm() {
         storeRoom(room.value)
     }
-
+    
+    const posibleStates = ref([
+        { name: 'Lobby', code: 'lobby' },
+        { name: 'On_going', code: 'on_going' },
+        { name: 'Completed', code: 'completed' },
+    ]);
 </script>
