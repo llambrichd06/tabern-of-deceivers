@@ -48,14 +48,13 @@ class LeaderboardController extends Controller
         return $leaderboard;
     }
 
-    public function getBestUsers() {
-        $bestUsers = User::from('users as u')
-            ->join('leaderboards as l', 'u.id', '=', 'l.user_id')
-            ->orderBy('l.wins')
+    public function getBestUsers() { //esto deberia estar en users????
+        $bestUsers = Leaderboard::with('user')
+            ->orderBy('wins')
             ->limit(3)
             ->get();
         return response()->json([
-            'users' => $bestUsers,
+            'leaderboards' => $bestUsers,
             ]);
     }
     
