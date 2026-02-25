@@ -10,15 +10,17 @@ use Illuminate\Support\Facades\Log;
 class RoomController extends Controller
 {
     public function index(Request $request) {
-        $room = Room::with('host')->get();
+        $room = Room::with('host')->with('players')->get();
         return $room;
     }
 
     public function openRooms() {
         $pubRooms = Room::with('host')
+            ->with('players')
             ->where('private', '0')
             ->where('state', 'lobby')
-            ->get(); //NEED TO PAGINATE THIS TO LIKE 4
+            ->orderBy('created_at')
+            ->paginate(4); //NEED TO PAGINATE THIS TO LIKE 4
         return response()->json([
             'Public Rooms' => $pubRooms,
         ]);
