@@ -19,9 +19,46 @@
     <section>
         <div>
             <h2>Best Players</h2>
-            <div>best 3</div> <!--Trucar al top 3 de leaderboard-->
-            <div>best 1</div>
-            <div>best 3</div>
+            <div v-if="rankings != 0">
+                    <div v-if="loading">Loading...</div>
+        
+                    <ul v-else>
+                        <li 
+                            v-for="(lb, index) in bestUsers.leaderboards" 
+                            :key="lb.id"
+                        >
+                            #{{ index + 1 }} <br>
+                            <strong>{{ lb.user.name }}</strong> <br>
+                            {{ lb.points }} pts <br>
+                            (W: {{ lb.wins }} / L: {{ lb.losses }})
+                            <br><br>
+                        </li>
+                    
+                        <li v-if="rankings === 2">
+                            #3 <br>
+                            <strong>No one :v</strong> <br>
+                            no pts <br>
+                            (W: none / L: none)
+                            <br><br>
+                        </li>
+                        <li v-else-if="rankings === 1">
+                            #2 <br>
+                            <strong>No one :v</strong> <br>
+                            no pts <br>
+                            (W: none / L: none)
+                            <br><br>
+
+                            #3 <br>
+                            <strong>No one :v</strong> <br>
+                            no pts <br>
+                            (W: none / L: none)
+                            <br><br>
+                        </li>
+                    </ul>
+            </div>
+            <div v-else>
+                <p><b>No ranking found</b></p>
+            </div>
         </div>
         <p>See the ranking of other players around the world! There, you can see your own ranking compared to others. Try to aim for the top!</p>
         <button>View Rankings</button>
@@ -42,4 +79,29 @@
 
 <script setup>
 import { authStore } from "@/store/auth";
+import { ref, onMounted } from "vue";
+import useLeaderboards from "../../../composables/leaderboards";
+
+const { getBestUsers } = useLeaderboards();
+const loading = ref(false);
+const rankings = ref(true);
+
+const bestUsers = ref({ leaderboards: [] });
+
+onMounted(async () => {
+    loading.value = true;
+
+    try {
+        const response = await getBestUsers();
+        
+        bestUsers.value = response.data;
+        rankings.value = bestUsers.value.leaderboards.length;
+        console.log(rankings.value);
+    } catch (error) {
+        console.error("Failed to load leaderboard:", error);
+    }finally {
+        loading.value = false;
+    }
+});
+
 </script>

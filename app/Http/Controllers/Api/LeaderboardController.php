@@ -50,7 +50,7 @@ class LeaderboardController extends Controller
 
     public function getBestUsers() { //esto deberia estar en users????
         $bestUsers = Leaderboard::with('user')
-            ->orderBy('wins')
+            ->orderByDesc('wins', 'points')
             ->limit(3)
             ->get();
         return response()->json([
