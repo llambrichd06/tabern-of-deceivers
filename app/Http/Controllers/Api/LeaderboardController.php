@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class LeaderboardController extends Controller
 {
     public function index() {
-        $leaderboard = Leaderboard::all();
+        $leaderboard = Leaderboard::with('user')->orderByDesc('wins')->get();
         return $leaderboard;
     }
     

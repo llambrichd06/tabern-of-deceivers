@@ -80,6 +80,11 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+            {
+                path: 'leaderboard',
+                name: 'leaderboard',
+                component: () => import('../views/public/leaderboard/leaderboard.vue'),
+            },
         ]
     },
 
