@@ -7,7 +7,7 @@
             <Column field="losses" header="losses"></Column>
             <Column header="W/L ratio">
                 <template #body="{ data }">
-                    {{ data.wins / (data.losses == 0 ? 1 : data.losses) }}
+                    {{ (data.wins / (data.losses == 0 ? 1 : data.losses)).toFixed(2) }}
                 </template>
             </Column>
         </DataTable>
