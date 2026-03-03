@@ -96,7 +96,6 @@ onMounted(async () => {
         
         bestUsers.value = response.data;
         rankings.value = bestUsers.value.leaderboards.length;
-        console.log(rankings.value);
     } catch (error) {
         console.error("Failed to load leaderboard:", error);
     }finally {
