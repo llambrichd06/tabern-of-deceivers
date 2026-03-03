@@ -55,7 +55,12 @@ export default [
                 name: 'home',
                 component: () => import('../views/public/home/index.vue'),
             },
-
+            {
+                path: 'rooms', //INTENTANDO QUE UN BOTON DEL HOME PUEDA MANDAR A PAGINA DE ROOMS
+                name: 'rooms.rooms',
+                component: () => import('../views/public/room/rooms.vue'),
+                beforeEnter: requireLogin,
+            },
             {
                 path: 'login',
                 name: 'auth.login',
@@ -85,8 +90,8 @@ export default [
 
     {
         path: '/app',
-        component: AuthenticatedUserLayout,
         name: 'app',
+        component: AuthenticatedUserLayout,
         beforeEnter: requireLogin,
         meta: { breadCrumb: '.' },
         children: [
@@ -98,6 +103,7 @@ export default [
                     breadCrumb: 'Perfil',
                 },
             },
+            
 
         ]
     },

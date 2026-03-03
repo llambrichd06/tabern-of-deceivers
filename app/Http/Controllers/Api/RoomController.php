@@ -19,10 +19,9 @@ class RoomController extends Controller
             ->with('players')
             ->where('private', '0')
             ->where('state', 'lobby')
-            ->orderBy('created_at')
-            ->paginate(4); //NEED TO PAGINATE THIS TO LIKE 4
+            ->orderBy('created_at')->get();
         return response()->json([
-            'Public Rooms' => $pubRooms,
+            'public_rooms' => $pubRooms,
         ]);
     }
 

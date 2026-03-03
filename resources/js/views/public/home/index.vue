@@ -2,7 +2,7 @@
     <section>
         <h1 class="text-4xl font-bold text-surface-900 dark:text-surface-0 mb-4">Tabern of Deceivers</h1>
         <p class="text-xl text-surface-600 dark:text-surface-400 mb-8">Lie, decieve and scheme! In the tavern of deceivers the best liar is the winner!</p>
-        <button>Play Now</button>
+        <Button label="Play now" as="router-link" to="/rooms" />
     </section>
     <section>
         <h2>How does the game work?</h2>

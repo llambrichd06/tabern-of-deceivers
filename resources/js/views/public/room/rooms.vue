@@ -8,35 +8,54 @@
         </div>
     </section>
     <section class="flex justify-center">
-        <h1>Avalible rooms</h1>
-        <!-- <div> Filtros
-            <div>Players</div>
-            <div>Game Modes</div>
-        </div> -->
-        <div>
-            <!-- fer un bucle per que crei divs semblants al seguent -->
-            <div>
-                <div>
-                    <div>Players: [num jugadores en sala]</div>
-                    <!-- <div>Mode: [mode]</div> -->
-                </div>
-                <div>
-                    <!-- We create the users with a loop. -->
-                    <div>
-                        <div><img src="" alt="fotoPerfil"></div>
-                        <div>UserName</div>
+        <Card>
+            <template #content>
+            <DataView :value="rooms" paginator :rows="4"  :layout="'grid'">
+                <template #header>
+                    <h1>Avalible rooms</h1>
+                    
+                </template>
+                <template #grid="slotProps">
+
+                    <div class="grid grid-cols-12">
+                        <div v-for="(item, index) in slotProps.items" class="col-span-12 sm:col-span-6 xl:col-span-6 p-2">
+                            <div> 
+                                <div>
+                                    <div>Players: {{ item.players.length }}/6</div>
+                                    <!-- <div>Mode: [mode]</div> -->
+                                </div>
+                                <div>
+                                    <!-- We create the users with a loop. -->
+                                    <div v-for="(player) in item.players">
+                                        <img src="" alt="fotoPerfil">
+                                        <p>{{ player.name }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Button label="Join Room" /> 
+                                </div>
+                                <div>
+                                    <p>host: {{item.host.name}}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <p>host: [userName]</p>
-                </div>
-            </div>
-        </div>
+                </template>
+            </DataView>
+            </template>
+        </Card>
     </section>
 </template>
 
 <script setup>
 import { authStore } from "@/store/auth";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import useRooms from "../../../composables/rooms";
+
+const { getOpenRooms, rooms, } = useRooms();
+
+onMounted(async () => {
+    getOpenRooms();
+});
 
 </script>

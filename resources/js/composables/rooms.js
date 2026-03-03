@@ -42,7 +42,8 @@ export default function useRooms() {
     const getRoom = async (id) => {
         return axios.get('/api/rooms/' + id)
             .then(response => {
-                response.data.data.private = response.data.data.private == 0 ? false : true;
+                let responseDatas = response.data.data
+                responseDatas.private = responseDatas.private == 0 ? false : true;
                 room.value = response.data.data;
                 return response;
             })
@@ -124,6 +125,14 @@ export default function useRooms() {
             })
     }
 
+    const getOpenRooms = () => {
+        axios.get('/api/rooms/openRooms')
+            .then(response => {
+                rooms.value = response.data.public_rooms
+                return response;
+            })
+    }
+
     const serializeRoom = (data) => {
         const form = new FormData()
         Object.entries(data).forEach(([key, value]) => {
@@ -142,6 +151,7 @@ export default function useRooms() {
         room,
         getRooms,
         getRoom,
+        getOpenRooms,
         storeRoom,
         updateRoom,
         deleteRoom,

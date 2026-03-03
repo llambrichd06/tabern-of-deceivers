@@ -20,13 +20,13 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
-
+    
+    Route::get('/leaderboards/getBestUsers', [LeaderboardController::class, 'getBestUsers']);
     Route::apiResource('leaderboards', LeaderboardController::class);
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
-    Route::get('getBestUsers', [LeaderboardController::class, 'getBestUsers']);
 
+    Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::apiResource('rooms', RoomController::class);
-    Route::get('openRooms', [RoomController::class, 'openRooms']);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
