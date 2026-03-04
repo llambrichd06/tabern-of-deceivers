@@ -34,7 +34,7 @@ export default function useRooms() {
     const getRooms = async () => {
         return axios.get('/api/rooms')
             .then(response => {
-                rooms.value = response.data;
+                rooms.value = response.data.data || response.data;
                 return response;
             })
     }
@@ -42,7 +42,7 @@ export default function useRooms() {
     const getRoom = async (id) => {
         return axios.get('/api/rooms/' + id)
             .then(response => {
-                let responseDatas = response.data.data
+                let responseDatas = response.data.data || response.data
                 responseDatas.private = responseDatas.private == 0 ? false : true;
                 room.value = response.data.data;
                 return response;

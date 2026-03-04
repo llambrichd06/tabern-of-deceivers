@@ -27,7 +27,7 @@ class RoomController extends Controller
     }
 
     public function show(Room $room) {
-        $room->load('host');
+        $room->load('host', 'players');
         return response()->json([
             'data' => $room,
         ]);

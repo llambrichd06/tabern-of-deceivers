@@ -1,22 +1,44 @@
 <template>
     <section>
         <!-- Opcions de les sales -->
-        <p>Room code: [RoomCode]</p>
-        <p>Private</p>
-        <Image src="" alt="lockRoom"/>
-        <Image src="" alt="unlockRoom"/>
+        <p>Room code: {{room.room_code}}</p>
+        <div v-if="room.private == false">
+            <p>Public</p>
+            <Image src="" alt="unlockRoom"/>
+        </div>
+        <div v-else>
+            <p>Private</p>
+            <Image src="" alt="lockRoom"/>
+        </div>
         <Button label="Edit Match Rules"/>
         <Button label="Leave Room"/>
         <Button label="Start Match"/>
     </section>
     <section>
-        <!-- Usuaris i host -->
-        <div>
-            <Image src="" alt="imgPerfilHost"/>
-            <p>UserName</p>
-        </div>
-        <p>Host</p>
+        
+       
         <!-- bucle per els altres jugadors que es igual que el anterior -->
+        <div v-if="loading"><p>Loading...</p></div>
+        <div v-else>
+            <p>number of players: {{ numPlayers }}</p>
+            <ul><!-- Usuaris i host -->
+                <li> <!--El host sempre sortira primer i tindra el "titol" de host-->
+                    <p>{{room.host?.name}}</p>
+                    <p>host</p>
+                </li>
+                <!--El host mai es repetira i es mostren els altres usuaris-->
+                <li 
+                    v-for="(player, index) in room.players" 
+                    :key="player.id"
+                >
+                    <p v-if="player.id !== room.host.id">
+                        {{ player.name }}
+                    </p>
+                    
+                </li>
+            </ul>
+        </div>
+        <br><br>
     </section>
     <section>
         <!-- Descripcio i gameplay -->
@@ -30,5 +52,35 @@
 </template>
 
 <script setup>
-import { authStore } from "@/store/auth";
+import { ref, onMounted } from "vue";
+import useRooms from "../../../composables/rooms";
+import { useRoute } from 'vue-router'
+import { computed } from "vue";
+
+const route = useRoute()
+const id = route.params.id
+console.log('id de sala: ' + id)
+
+const { getRoom, room } = useRooms();
+const loading = ref(false);
+
+onMounted(async () => {
+    loading.value = true;
+
+    try {
+        await getRoom(id);
+
+        console.log(room.value);
+
+    } catch (error) {
+        console.error("Failed to load Room: ", error);
+    }finally {
+        loading.value = false;
+    }
+});
+
+const numPlayers = computed(() => {
+    const players = room.value?.players?.length ?? 0;
+    return players;
+});
 </script>

@@ -86,6 +86,11 @@ export default [
                 beforeEnter: requireLogin,
             },
             {
+                path: 'room/:id',
+                name: 'lobby',
+                component: () => import('../views/public/room/room.vue'),
+            },
+            {
                 path: 'leaderboard',
                 name: 'leaderboard',
                 component: () => import('../views/public/leaderboard/leaderboard.vue'),
