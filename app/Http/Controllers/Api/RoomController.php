@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\RoomUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -42,6 +43,13 @@ class RoomController extends Controller
             'private' => ['required', 'in:0,1']
         ]);
         $room = Room::create($data);
+        
+        //Add the host as a player aswell.
+        $roomUser = new RoomUsers(); 
+        $roomUser->user_id = $room->host_id;
+        $roomUser->room_id = $room->id;
+        $roomUser->save();
+
         return $room;
     }
 
