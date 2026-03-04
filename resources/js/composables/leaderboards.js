@@ -25,6 +25,8 @@ export default function useLeaderboards() {
 
     const validationErrors = errors
 
+    const totalLeaderboards = ref(); //Variable for backend pagination
+
     const leaderboardSchema = yup.object({
             user_id: yup.number("the field user_id must be a number").integer("The field user_id must be whole number").required("A leaderboard must be linked to a user."),
             wins: yup.number("the field wins must be a number").integer("The field wins must be whole number").required("The field wins can't be empty").min(0, "The field wins can't be negative"),
@@ -137,9 +139,19 @@ export default function useLeaderboards() {
         return form
     }
     const getBestUsers = async () => {
-        return axios.get('/api/getBestUsers')
+        return axios.get('/api/leaderboards/getBestUsers')
             .then(response => {
                 leaderboards.value = response.data;
+                return response;
+            })
+    }
+
+    const getPaginatedLeaderboards = async (page, rownum = 10) => {
+        return axios.get('/api/leaderboards/paginatedLeaderboards?page='+page+'&rows='+rownum)
+            .then(response => {
+                leaderboards.value = response.data.data;
+                totalLeaderboards.value = response.data.total;
+                console.log(response)
                 return response;
             })
     }
@@ -147,6 +159,7 @@ export default function useLeaderboards() {
     return {
         leaderboards,
         leaderboard,
+        totalLeaderboards,
         getLeaderboards,
         getLeaderboard,
         storeLeaderboard,
@@ -156,6 +169,7 @@ export default function useLeaderboards() {
         hasError,
         getError,
         getBestUsers,
+        getPaginatedLeaderboards,
         validationErrors,
         isLoading,
         errors,

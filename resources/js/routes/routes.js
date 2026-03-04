@@ -56,12 +56,6 @@ export default [
                 component: () => import('../views/public/home/index.vue'),
             },
             {
-                path: 'rooms', //INTENTANDO QUE UN BOTON DEL HOME PUEDA MANDAR A PAGINA DE ROOMS
-                name: 'rooms.rooms',
-                component: () => import('../views/public/room/rooms.vue'),
-                beforeEnter: requireLogin,
-            },
-            {
                 path: 'login',
                 name: 'auth.login',
                 component: () => import('../views/auth/login/Login.vue'),
@@ -86,9 +80,16 @@ export default [
                 beforeEnter: guest,
             },
             {
+                path: 'rooms',
+                name: 'room',
+                component: () => import('../views/public/room/rooms.vue'),
+                beforeEnter: requireLogin,
+            },
+            {
                 path: 'leaderboard',
                 name: 'leaderboard',
                 component: () => import('../views/public/leaderboard/leaderboard.vue'),
+                beforeEnter: requireLogin,
             },
         ]
     },

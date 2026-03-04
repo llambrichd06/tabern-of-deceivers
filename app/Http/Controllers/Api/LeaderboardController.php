@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class LeaderboardController extends Controller
 {
     public function index() {
-        $leaderboard = Leaderboard::with('user')->orderByDesc('wins')->get();
+        $leaderboard = Leaderboard::with('user')->get();
         return $leaderboard;
     }
     
@@ -19,6 +19,11 @@ class LeaderboardController extends Controller
         return response()->json([
             'data' => $leaderboard,
         ]);
+    }
+
+    public function indexPaginated(Request $request) {
+        $leaderboard = Leaderboard::with('user')->orderByDesc('wins')->paginate($request->rows ?? 10);
+        return $leaderboard;
     }
 
     public function updateLeaderboards(Request $request) {
