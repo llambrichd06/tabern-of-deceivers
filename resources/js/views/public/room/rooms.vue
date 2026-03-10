@@ -64,9 +64,8 @@ const hostGame = async () => {
     room.value.private = true;
     room.value.state = 'lobby';
     console.log(room.value);
-    await storeRoom(room.value); //IM GETTING A VALIDATION ERROR FOR SOME REASON TRY TO SEE WHAT IS IT
+    await storeRoom(room.value); 
     console.log('end');
-    //TODO: redirect user to room page somehow
 }
 
 </script>
