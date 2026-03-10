@@ -25,7 +25,7 @@ export default function useRooms() {
     const validationErrors = errors
 
     const roomSchema = yup.object({
-            room_code: yup.string().trim().required('Error, Room_code has not been put correcly, try again'),
+            room_code: yup.string().trim(),
             state: yup.string().trim().oneOf(["lobby","on_going","completed"]).required('The state of the game is required'),
             host_id: yup.number().integer().required("You need a host to have a game"),
             private: yup.boolean().nullable(),
@@ -60,6 +60,7 @@ export default function useRooms() {
         const { isValid } = validate(roomSchema, room)
         if (!isValid) {
             isLoading.value = false
+
             return
         }
 
@@ -71,7 +72,8 @@ export default function useRooms() {
             }
         })
             .then(response => {
-                //router.push({ name: 'rooms.index' })
+                console.log(response.data.id);
+                router.push({ name: 'lobby', params: { id: response.data.id } });
                 toast.crud.created('Room')
             })
             .catch(error => {
