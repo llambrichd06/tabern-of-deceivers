@@ -1,5 +1,5 @@
 <template> <!-- Aquesta cosa nomes ho farem un cop acavat el projecta com a extre -->
-    <dialog>
+    <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
         <div>
             <p>Seaching...</p>
         </div>
@@ -9,7 +9,7 @@
         <div>
             <Button label="Cancel Search"/>
         </div>
-    </dialog>
+    </Dialog>
 </template>
 
 <script setups>
