@@ -2,8 +2,8 @@
     <!-- ------------------------------ Menu Buttons ------------------------------ -->
     <section>
         <div class="">
-            <Button label="Search Game" />
-            <Button label="Host Game" />
+            <Button label="Join Game by Code" />
+            <Button label="Host Game" @click="hostGame"/>
             <Button label="Quick Match" />
         </div>
     </section>
@@ -52,10 +52,21 @@ import { authStore } from "@/store/auth";
 import { ref, onMounted } from "vue";
 import useRooms from "../../../composables/rooms";
 
-const { getOpenRooms, rooms, } = useRooms();
-
+const { getOpenRooms, rooms, storeRoom, room} = useRooms();
+const auth = authStore();
 onMounted(async () => {
     getOpenRooms();
 });
+
+const hostGame = async () => {
+    console.log('start');
+    room.value.host_id = auth.user.id;
+    room.value.private = true;
+    room.value.state = 'lobby';
+    console.log(room.value);
+    await storeRoom(room.value); //IM GETTING A VALIDATION ERROR FOR SOME REASON TRY TO SEE WHAT IS IT
+    console.log('end');
+    //TODO: redirect user to room page somehow
+}
 
 </script>

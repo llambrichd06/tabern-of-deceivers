@@ -37,11 +37,20 @@ class RoomController extends Controller
     
     public function store(Request $request) {
         $data = $request->validate([
-            'room_code' => ['required', 'size:8'],
+            'room_code' => ['nullable', 'size:8'],
             'state' => ['required', 'in:lobby,on_going,completed'],
             'host_id' => ['required', 'exists:users,id'],
             'private' => ['required', 'in:0,1']
         ]);
+        if (!$data['room_code']) {//If a room code is not provided, we make a random one
+            do {
+                //We create 4 random bytes, which if we parse into hexadecimal, we get 8 characters, which is exactly what we want for a room code
+                $data['room_code'] = strtoupper(bin2hex(random_bytes(4))); 
+
+                //Check if the randomly generated room code exists already on a non-completed room, if it does, generate a new code and re-check
+                $exists = Room::where('room_code', $data['room_code'])->where('state', '!=', 'completed')->first();
+            } while ($exists);
+        }
         $room = Room::create($data);
         
         //Add the host as a player aswell.
@@ -50,7 +59,7 @@ class RoomController extends Controller
         $roomUser->room_id = $room->id;
         $roomUser->save();
 
-        return $room;
+        return $room; //return created room for front, in case we need its data
     }
 
     public function update(Request $request, Room $room) {
