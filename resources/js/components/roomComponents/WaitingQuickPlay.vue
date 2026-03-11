@@ -1,19 +1,26 @@
-<template> <!-- Aquesta cosa nomes ho farem un cop acavat el projecta com a extre -->
-    <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
+<template>
+    <Dialog 
+        :visible="visible"  modal  header="Waiting quick play"  :style="{ width: '25rem' }" :closable="false">
         <div>
-            <p>Seaching...</p>
+            <p>Searching...</p>
         </div>
         <div>
             <Image src="" alt=""/>
         </div>
         <div>
-            <Button label="Cancel Search"/>
+            <Button label="Cancel Search" @click="closeDialog"/>
         </div>
     </Dialog>
 </template>
 
-<script setups>
+<script setup>
+const props = defineProps({
+    visible: Boolean
+})
 
-import { ref } from 'vue';
-    
+const emit = defineEmits(['update:visible']);
+
+const closeDialog = () => {
+    emit('update:visible', false);
+}
 </script>

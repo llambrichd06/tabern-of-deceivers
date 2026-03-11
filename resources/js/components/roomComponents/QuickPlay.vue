@@ -16,7 +16,7 @@
     </Dialog>
 </template>
 
-<script setups>
+<script setup>
 
 import { ref } from 'vue';
     
