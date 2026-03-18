@@ -57,7 +57,7 @@
 <script setup>
 import { authStore } from "@/store/auth";
 import { ref, onMounted } from "vue";
-import useRooms from "../../../composables/rooms";
+import useRooms from "/resources/js/composables/rooms.js";
 import WaitingQuickPlay from "../../../components/roomComponents/WaitingQuickPlay.vue";
 import JoinRoom from "../../../components/roomComponents/JoinRoom.vue";
 
