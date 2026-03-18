@@ -8,19 +8,12 @@
             <Image src="" alt=""/>
         </div>
         <div>
-            <Button label="Cancel Search" @click="closeDialog"/>
+            <Button label="Cancel Search" @click="visible = false"/>
         </div>
     </Dialog>
 </template>
 
 <script setup>
-const props = defineProps({
-    visible: Boolean
-})
+const visible = defineModel('visible')
 
-const emit = defineEmits(['update:visible']);
-
-const closeDialog = () => {
-    emit('update:visible', false);
-}
 </script>

@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
     Route::apiResource('leaderboards', LeaderboardController::class);
 
+    Route::get('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::apiResource('rooms', RoomController::class);
 

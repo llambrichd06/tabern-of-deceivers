@@ -2,7 +2,7 @@
     <!-- ------------------------------ Menu Buttons ------------------------------ -->
     <section>
         <div class="">
-            <Button label="Join Game by Code" />
+            <Button label="Join Game by Code" @click="openJoinGame"/>
             <Button label="Host Game" @click="hostGame"/>
             <Button label="Quick Match" @click="searchQuickGame"/>
         </div>
@@ -43,10 +43,15 @@
     </section>
 
         <!-- El visible es qui mana si es veu o no -->
+    
+    <!----------------- QUICK PLAY DIALOG WINDOW ------------------>
     <WaitingQuickPlay  
-        :visible="showQuickPlayDialog" 
-        @update:visible="showQuickPlayDialog = $event" 
+        v-model:visible="showQuickPlayDialog" 
     />
+    <!----------------- JOIN ROOM DIALOG WINDOW ------------------>
+    <JoinRoom v-model:visible="joinRoomVisible"/>
+
+    
 </template>
 
 <script setup>
@@ -54,8 +59,12 @@ import { authStore } from "@/store/auth";
 import { ref, onMounted } from "vue";
 import useRooms from "../../../composables/rooms";
 import WaitingQuickPlay from "../../../components/roomComponents/WaitingQuickPlay.vue";
+import JoinRoom from "../../../components/roomComponents/JoinRoom.vue";
 
 const { getOpenRooms, rooms, storeRoom, room } = useRooms();
+
+const showQuickPlayDialog = ref(false);
+const joinRoomVisible = ref(false);
 const auth = authStore();
 
 onMounted(async () => {
@@ -69,9 +78,12 @@ const hostGame = async () => {
     await storeRoom(room.value); 
 }
 
-const showQuickPlayDialog = ref(false);
 
 const searchQuickGame = () => {
     showQuickPlayDialog.value = true;
+}
+
+const openJoinGame = () => {
+    joinRoomVisible.value = true;
 }
 </script>
