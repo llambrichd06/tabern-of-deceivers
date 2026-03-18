@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomUsers;
 use Illuminate\Container\Attributes\DB;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -119,5 +120,71 @@ class RoomController extends Controller
             return response()->json(['error' => 'You are already in this room!'], 422);
         }
     }
+
+    public function changePrivate(Room $room) {
+        $room = Room::find($room->id);
+        $user = Auth::user();
+        $host_id = $room -> host_id;
+        if ($user == $host_id) {
+            if ($room -> state == true) {
+                $room -> state == false;
+            } else {
+                $room -> state == true;
+            }
+            $room->save();
+        } else {
+            return response()->json(['error' => 'The user is not the host of the room, so it can\'t be the one to change if it is private!'], 400);
+        }
+        return $room;
+    }
+
+    public function transferOwnership(Request $request) {
+        $room = Room::find($request->room_id);
+        $user = Auth::user();
+        $host_id = $room -> host_id;
+        $player = $room->players()->where($request -> player_id);
+        if ($user == $host_id) {
+             if ($player) {
+                    $room->host_id = $player;
+                    $room->save();
+                    return $room;
+            } else {
+                return response()->json(['error' => 'The player you want to give host permision is not in this room'], 400);
+            }
+        } else {
+            return response()->json(['error' => 'Only the host can do this action'], 400);
+        }
+    }
+
+    public function leaveRoom(Request $request) {
+        $room = Room::find($request->room_id);
+        $user = Auth::user();
+        $player = $room->players()->where($request -> player_id);
+        if ($user == $player) {
+            $result = $room->players()->detach($request -> player_id); //detach solo borra la relacion entre las filas.
+            return response()->json(['success' => $room, 'action' => 'leaveRoom']);
+        } else {
+            return response()->json(['error' => 'You are not in the room or you have alredy leave it'], 400);
+        }
+        
+    }
+
+    public function kickUser(Request $request) {
+        $room = Room::find($request->room_id);
+        $user = Auth::user();
+        $host_id = $room -> host_id;
+        $player = $room->players()->where($request -> player_id);
+        if ($user == $host_id) {
+             if ($player) {
+                    $result = $room->players()->detach($request -> player_id); //detach solo borra la relacion entre las filas.
+                    return $result;
+            } else {
+                return response()->json(['error' => 'The player you want to kick is not in this room'], 400);
+            }
+        } else {
+            return response()->json(['error' => 'Only the host can do this action'], 400);
+        }
+    }
+    
 }
 
