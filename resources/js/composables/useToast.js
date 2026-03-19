@@ -121,7 +121,17 @@ export function useToast() {
     },
     error: (action = 'realizar la operación') => {
       error('Error', `Unable to ${action}`)
+    },
+    errorMsgFromError: (errorData) => {
+      let errorMessage;
+        if (errorData.name === 'ValidationError') {
+            errorMessage = errorData.message;
+        } else {
+            errorMessage = errorData.response.data.error;
+        }
+      error('Error', `${errorMessage}`);
     }
+    
   }
 
   return {

@@ -80,7 +80,8 @@ class User extends Authenticatable implements HasMedia
 
     public function rooms(): BelongsToMany
     {
-        return $this->belongsToMany(Room::class);
+        return $this->belongsToMany(Room::class)
+            ->withTimestamps();
     }
 
     public function hostedRooms(): HasMany

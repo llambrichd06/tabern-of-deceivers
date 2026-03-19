@@ -18,7 +18,8 @@ class Room extends Model
 
     public function players(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
     }
 
     public function host() : BelongsTo {

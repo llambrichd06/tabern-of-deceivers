@@ -70,11 +70,10 @@ onMounted(async () => {
     try {
         await getRoom(id);
 
-        console.log(room.value);
 
     } catch (error) {
         console.error("Failed to load Room: ", error);
-    }finally {
+    } finally {
         loading.value = false;
     }
 });

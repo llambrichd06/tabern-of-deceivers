@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomUsers;
-use Illuminate\Container\Attributes\DB;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
@@ -87,18 +87,24 @@ class RoomController extends Controller
         return "deleted successfully";
     }
 
+    /**
+     * Function to make the currently logged in user join a room with the code of that room
+     */
     public function joinRoomWithCode(Request $request) {
         $user = Auth::user();
         $room = Room::where('room_code', $request->room_code)
                 ->where('state', 'lobby')
                 ->first();
-        
+        if (!$room) return response()->json(['error' => 'Code doesen\'t belong to any room!'], 404); //If a room wasn't found, return an error
         return $this->joinRoom($user->id, $room->id);
     }
 
+    /**
+     * Function to make a user join a room
+     */
     private function joinRoom($userId, $roomId) {
         try {
-            return DB::transaction(function () use ($roomId, $userId) { //This shows an error but its intelephense having schizofrenia
+            return DB::transaction(function () use ($roomId, $userId) {
                 //first or fail is like a normal first();, but if it doesen't find anything, it throws an exception (error) instead of a null
                 //Since we are locking for update, other calls will have to wait until the first one is finished to run. 
                 $room = Room::where('id', $roomId)->lockForUpdate()->firstOrFail(); 
@@ -107,17 +113,19 @@ class RoomController extends Controller
                 if ($room->players()->count() >= 6) {
                     return response()->json(['error' => 'Room is full!'], 422);
                 }
+                if ($room->players()->where('user_id', $userId)->first()) {
+                    return response()->json(['error' => 'You are already in this room!'], 422);
+                }
 
                 // syncWithoutDetaching adds rows on the pivot table, relating however many users id's we put in the array, to the room that we are calling the players relation from
                 // Basically, we make relations between the room we are calling from, and the id's inside the array that we define.
                 // So if we call the relation from room 4, and we put the user id's 1, 2, and 3, on the pivot table, we add 3 rows of the 3 users all related to room 4 
                 $room->players()->syncWithoutDetaching([$userId]);
 
-                return response()->json(['message' => 'Joined the room successfully!']);
+                return response()->json(['message' => 'Joined the room successfully!', 'id' => $room->id]);
             });
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Throwable $e) {
             // if the user is already as a player of the room, it will send an error cause its failing the primary key constraint
-            return response()->json(['error' => 'You are already in this room!'], 422);
         }
     }
 

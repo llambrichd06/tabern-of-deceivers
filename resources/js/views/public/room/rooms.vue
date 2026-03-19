@@ -75,7 +75,11 @@ const hostGame = async () => {
     room.value.host_id = auth.user.id;
     room.value.private = true;
     room.value.state = 'lobby';
-    await storeRoom(room.value); 
+    const id = await storeRoom(room.value); 
+    if (id) {
+        router.push({ name: 'lobby', params: { id: id } });
+    }
+
 }
 
 

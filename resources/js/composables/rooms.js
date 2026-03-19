@@ -30,6 +30,7 @@ export default function useRooms() {
             host_id: yup.number().integer().required("You need a host to have a game"),
             private: yup.boolean().nullable(),
         })
+    const roomCodeSchema = yup.string().required('Code is required').length(6, 'Must be 6 characters')
 
     const getRooms = async () => {
         return axios.get('/api/rooms')
@@ -66,15 +67,14 @@ export default function useRooms() {
 
         const serializedRoom = serializeRoom(room)
 
-        axios.post('/api/rooms', serializedRoom, {
+        return axios.post('/api/rooms', serializedRoom, {
             headers: {
                 "content-type": "multipart/form-data"
             }
         })
             .then(response => {
-                console.log(response.data.id);
-                router.push({ name: 'lobby', params: { id: response.data.id } });
                 toast.crud.created('Room')
+                return response.data.id;
             })
             .catch(error => {
                 if (error.response?.data) {
@@ -123,7 +123,7 @@ export default function useRooms() {
                 toast.crud.deleted('Room')
             })
             .catch(error => {
-                toast.error('Error', 'Can\'t delate room')
+                toast.crud.error('Delete room. Message:'+error.response?.data)
             })
     }
 
@@ -133,6 +133,36 @@ export default function useRooms() {
                 rooms.value = response.data.public_rooms
                 return response;
             })
+    }
+
+
+    const joinRoomByCode = async (roomCode) => {
+        if (isLoading.value) return;
+        isLoading.value = true;
+
+        const { isValid } = validate(roomCodeSchema, roomCode);
+        // if (!isValid) {
+        //     isLoading.value = false
+        //     return
+        // }
+        return await axios.get('/api/rooms/joinRoomWithCode', { //WE HAVE TO RETURN THE CALL ITSELF TO RETURN A PROMISE
+            //if we dont return the call, whatever is calling this wont get a promise and will immediatelly execute even with an await
+            params: { //A cleaner way to do get parameters
+                room_code: roomCode
+            }
+        })
+        .then(response => {
+            return response.data
+        }).catch(error =>{
+            // let errorMessage;
+            // if (error.name === 'ValidationError') {
+            //     errorMessage = error.message;
+            // } else {
+            //     errorMessage = error.response.data.error;
+            // }
+            // toast.crud.error('Join room. Message:'+errorMessage);
+            toast.crud.errorMsgFromError(error);
+        }).finally(isLoading.value = false)
     }
 
     const serializeRoom = (data) => {
@@ -148,6 +178,8 @@ export default function useRooms() {
         return form
     }
 
+
+
     return {
         rooms,
         room,
@@ -158,6 +190,7 @@ export default function useRooms() {
         updateRoom,
         deleteRoom,
         resetRoom,
+        joinRoomByCode,
         hasError,
         getError,
         validationErrors,
