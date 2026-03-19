@@ -11,23 +11,25 @@
         </div>
 
     </dialog> -->
-    <Dialog :visible="visible" modal  :style="{ width: '25rem' }">
+    <Dialog :visible="visible" modal :style="{ width: '25rem' }">
         <template #header>
             <h2 class="flex justify-center">Join room</h2>
         </template>
-        <FloatLabel variant="on"> 
-            <InputText id="code" v-model="code"/>
-            <label for="code">Room Code: <span class="requiredIcon">*</span></label>
-        </FloatLabel>
-        <!-- <FloatLabel variant="on">
+        <template #content>
+            <FloatLabel variant="on">
+                <InputText id="code" v-model="code" />
+                <label for="code">Room Code: <span class="requiredIcon">*</span></label>
+            </FloatLabel>
+            <!-- <FloatLabel variant="on">
             <InputText id="password" v-model="password" />
             <Message size="small" severity="secondary" variant="simple">If the room has no password, leave this empty.</Message>
             <label for="password">Password</label>
         </FloatLabel> -->
-        <div class="flex justify-around gap-2">
-            <Button label="Enter" @click="joinRoomWithCode" />
-            <Button label="Cancel" severity="danger" @click="visible = false" />
-        </div>
+            <div class="flex justify-around gap-2">
+                <Button label="Enter" @click="joinRoomWithCode" />
+                <Button label="Cancel" severity="danger" @click="visible = false" />
+            </div>
+        </template>
     </Dialog>
 </template>
 
@@ -44,14 +46,11 @@ let visible = defineModel('visible');
 
 const joinRoomWithCode = async () => {
     joinRoomByCode(code.value)
-    .then(data => {
-        router.push({ name: 'lobby', params: { id: data.id } });
-    })
+        .then(data => {
+            router.push({ name: 'lobby', params: { id: data.id } });
+        })
 }
-    
+
 </script>
 
-<style lang="scss" scoped>
-
-</style>
-
+<style lang="scss" scoped></style>
