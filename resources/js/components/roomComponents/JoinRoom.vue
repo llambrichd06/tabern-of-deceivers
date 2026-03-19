@@ -15,7 +15,6 @@
         <template #header>
             <h2 class="flex justify-center">Join room</h2>
         </template>
-        <template #content>
             <FloatLabel variant="on">
                 <InputText id="code" v-model="code" />
                 <label for="code">Room Code: <span class="requiredIcon">*</span></label>
@@ -29,7 +28,6 @@
                 <Button label="Enter" @click="joinRoomWithCode" />
                 <Button label="Cancel" severity="danger" @click="visible = false" />
             </div>
-        </template>
     </Dialog>
 </template>
 
