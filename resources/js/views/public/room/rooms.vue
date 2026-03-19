@@ -57,15 +57,18 @@
 <script setup>
 import { authStore } from "@/store/auth";
 import { ref, onMounted } from "vue";
-import useRooms from "/resources/js/composables/rooms.js";
+import useRooms from "@/composables/rooms.js";
 import WaitingQuickPlay from "../../../components/roomComponents/WaitingQuickPlay.vue";
 import JoinRoom from "../../../components/roomComponents/JoinRoom.vue";
+import { useRouter } from 'vue-router'
+
 
 const { getOpenRooms, rooms, storeRoom, room } = useRooms();
 
 const showQuickPlayDialog = ref(false);
 const joinRoomVisible = ref(false);
 const auth = authStore();
+const router = useRouter();
 
 onMounted(async () => {
     getOpenRooms();
@@ -77,6 +80,7 @@ const hostGame = async () => {
     room.value.state = 'lobby';
     const id = await storeRoom(room.value); 
     if (id) {
+        console.log(id)
         router.push({ name: 'lobby', params: { id: id } });
     }
 

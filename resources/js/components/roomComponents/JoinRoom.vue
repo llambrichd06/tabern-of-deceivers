@@ -11,11 +11,12 @@
         </div>
 
     </dialog> -->
-    <Dialog :visible="visible" modal :style="{ width: '25rem' }">
+    <Dialog :visible="visible" modal :style="{ width: '25rem' }" >
         <template #header>
             <h2 class="flex justify-center">Join room</h2>
         </template>
-            <FloatLabel variant="on">
+        <template #default>
+            <FloatLabel variant="on" class="my-1.5">
                 <InputText id="code" v-model="code" />
                 <label for="code">Room Code: <span class="requiredIcon">*</span></label>
             </FloatLabel>
@@ -28,6 +29,7 @@
                 <Button label="Enter" @click="joinRoomWithCode" />
                 <Button label="Cancel" severity="danger" @click="visible = false" />
             </div>
+        </template>
     </Dialog>
 </template>
 
