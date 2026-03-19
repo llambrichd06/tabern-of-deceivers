@@ -26,6 +26,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
     Route::apiResource('leaderboards', LeaderboardController::class);
 
+    Route::get('/rooms/leaveRoom', [RoomController::class, 'leaveRoom']);
+    Route::get('/rooms/changePrivate', [RoomController::class, 'changePrivate']);
+    Route::get('/rooms/transferOwnership', [RoomController::class, 'transferOwnership']);
+    Route::get('/rooms/kickUser', [RoomController::class, 'kickUser']);
     Route::get('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::apiResource('rooms', RoomController::class);

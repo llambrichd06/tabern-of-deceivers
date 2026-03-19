@@ -11,7 +11,7 @@
             <Image src="" alt="lockRoom"/>
         </div>
         <Button label="Edit Match Rules"/>
-        <Button label="Leave Room"/>
+        <Button label="Leave Room" @click="leaveTheRoom"/>
         <Button label="Start Match"/>
     </section>
     <section>
@@ -59,9 +59,9 @@ import { computed } from "vue";
 
 const route = useRoute()
 const id = route.params.id
-console.log('id de sala: ' + id)
+// console.log('id de sala: ' + id)
 
-const { getRoom, room } = useRooms();
+const { getRoom, room, leaveRoom } = useRooms();
 const loading = ref(false);
 
 onMounted(async () => {
@@ -70,6 +70,7 @@ onMounted(async () => {
     try {
         await getRoom(id);
 
+        // console.log(room.value);
 
     } catch (error) {
         console.error("Failed to load Room: ", error);
@@ -82,4 +83,8 @@ const numPlayers = computed(() => {
     const players = room.value?.players?.length ?? 0;
     return players;
 });
+
+const leaveTheRoom = async () => {
+  await leaveRoom(room.value.id);
+};
 </script>

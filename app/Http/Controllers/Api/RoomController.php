@@ -130,14 +130,13 @@ class RoomController extends Controller
     }
 
     public function changePrivate(Room $room) {
-        $room = Room::find($room->id);
         $user = Auth::user();
         $host_id = $room -> host_id;
-        if ($user == $host_id) {
-            if ($room -> state == true) {
-                $room -> state == false;
+        if ($user -> id == $host_id) {
+            if ($room -> private == 1) {
+                $room -> private = 0;
             } else {
-                $room -> state == true;
+                $room -> private = 1;
             }
             $room->save();
         } else {
@@ -150,10 +149,10 @@ class RoomController extends Controller
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
-        $player = $room->players()->where($request -> player_id);
-        if ($user == $host_id) {
+        $player = $room->players()->where('user_id', $request -> player_id)->first();
+        if ($user -> id == $host_id) {
              if ($player) {
-                    $room->host_id = $player;
+                    $room->host_id = $player -> id;
                     $room->save();
                     return $room;
             } else {
@@ -167,10 +166,10 @@ class RoomController extends Controller
     public function leaveRoom(Request $request) {
         $room = Room::find($request->room_id);
         $user = Auth::user();
-        $player = $room->players()->where($request -> player_id);
-        if ($user == $player) {
-            $result = $room->players()->detach($request -> player_id); //detach solo borra la relacion entre las filas.
-            return response()->json(['success' => $room, 'action' => 'leaveRoom']);
+        $player = $room->players()->where('user_id', $user -> id)->first();
+        if ($player) {
+            $result = $room->players()->detach($user -> id); //detach solo borra la relacion entre las filas.
+            return response()->json(['success' => $result]);
         } else {
             return response()->json(['error' => 'You are not in the room or you have alredy leave it'], 400);
         }
@@ -181,8 +180,8 @@ class RoomController extends Controller
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
-        $player = $room->players()->where($request -> player_id);
-        if ($user == $host_id) {
+        $player = $room->players()->where('user_id', $request -> player_id)->exists();
+        if ($user -> id == $host_id) {
              if ($player) {
                     $result = $room->players()->detach($request -> player_id); //detach solo borra la relacion entre las filas.
                     return $result;

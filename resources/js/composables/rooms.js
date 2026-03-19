@@ -177,8 +177,26 @@ export default function useRooms() {
         })
         return form
     }
+    const leaveRoom = async (room_id) => {
+        if (isLoading.value) return;
 
+        isLoading.value = true;
 
+        try {
+            await axios.get('/api/rooms/leaveRoom', {
+            params: {
+                room_id,
+            },
+            });
+
+            await router.push({ name: 'rooms' });
+        } catch (error) {
+            // console.log(error.response?.data);
+            toast.crud.errorMsgFromError(error)
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     return {
         rooms,
@@ -191,6 +209,7 @@ export default function useRooms() {
         deleteRoom,
         resetRoom,
         joinRoomByCode,
+        leaveRoom,
         hasError,
         getError,
         validationErrors,
