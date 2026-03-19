@@ -177,6 +177,41 @@ export default function useRooms() {
         })
         return form
     }
+
+    const changePrivate = async (room_id) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+
+        try {
+            await axios.get('/api/rooms/changePrivate', {
+            params: {
+                room_id,
+            },
+            });
+        } catch (error) {
+            toast.crud.errorMsgFromError(error)
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
+    const transferOwnership = async (room_id, player_id) => {
+        if (isLoading.value) return;
+        isLoading.value = true;
+        try {
+            await axios.get('/api/rooms/transferOwnership', {
+            params: {
+                room_id,
+                player_id,
+            },
+            });
+        } catch (error) {
+            toast.crud.errorMsgFromError(error)
+        } finally {
+            isLoading.value = false;
+        }
+    };
     const leaveRoom = async (room_id) => {
         if (isLoading.value) return;
 
@@ -191,7 +226,6 @@ export default function useRooms() {
 
             await router.push({ name: 'rooms' });
         } catch (error) {
-            // console.log(error.response?.data);
             toast.crud.errorMsgFromError(error)
         } finally {
             isLoading.value = false;
@@ -209,6 +243,8 @@ export default function useRooms() {
         deleteRoom,
         resetRoom,
         joinRoomByCode,
+        changePrivate,
+        transferOwnership,
         leaveRoom,
         hasError,
         getError,

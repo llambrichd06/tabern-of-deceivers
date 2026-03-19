@@ -13,6 +13,14 @@
         <Button label="Edit Match Rules"/>
         <Button label="Leave Room" @click="leaveTheRoom"/>
         <Button label="Start Match"/>
+        <div v-if="loading"><p>Loading...</p></div>
+        <div v-else>
+            <div v-if="authUser.user.id == room.host?.id">
+                <Button v-if="room.private == true" label="Unprivate the room" @click="privateChange"/>
+                <Button v-if="room.private == false" label="Private the room" @click="privateChange"/>
+            </div>
+        </div>
+        <p>{{ room.private }}</p>
     </section>
     <section>
         
@@ -34,6 +42,9 @@
                     <p v-if="player.id !== room.host.id">
                         {{ player.name }}
                     </p>
+                    <div v-if="authUser.user.id == room.host.id">
+                        <Button v-if="player.id !== room.host.id" label="Make Owner" @click="makePlayerOwner(player.id)"/>
+                    </div>
                     
                 </li>
             </ul>
@@ -52,6 +63,7 @@
 </template>
 
 <script setup>
+import { authStore } from "@/store/auth";
 import { ref, onMounted } from "vue";
 import useRooms from "../../../composables/rooms";
 import { useRoute } from 'vue-router'
@@ -61,16 +73,16 @@ const route = useRoute()
 const id = route.params.id
 // console.log('id de sala: ' + id)
 
-const { getRoom, room, leaveRoom } = useRooms();
+const { getRoom, room, leaveRoom, transferOwnership, changePrivate } = useRooms();
+const authUser = authStore();
 const loading = ref(false);
 
 onMounted(async () => {
     loading.value = true;
-
     try {
         await getRoom(id);
 
-        // console.log(room.value);
+        console.log(room.value);
 
     } catch (error) {
         console.error("Failed to load Room: ", error);
@@ -87,4 +99,10 @@ const numPlayers = computed(() => {
 const leaveTheRoom = async () => {
   await leaveRoom(room.value.id);
 };
+const makePlayerOwner = async(player_id) => {
+    await transferOwnership(room.value.id, player_id);
+}
+const privateChange = async() => {
+    await changePrivate(room.value.id); //No canvia de privado a no privado mirar el RoomController
+}
 </script>

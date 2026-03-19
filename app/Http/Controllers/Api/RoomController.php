@@ -129,18 +129,19 @@ class RoomController extends Controller
         }
     }
 
-    public function changePrivate(Room $room) {
+    public function changePrivate(Request $request) {
+        $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
         if ($user -> id == $host_id) {
-            if ($room -> private == 1) {
-                $room -> private = 0;
+            if ($room -> private == '1') {
+                $room -> private = '0';
             } else {
-                $room -> private = 1;
+                $room -> private = '1';
             }
             $room->save();
         } else {
-            return response()->json(['error' => 'The user is not the host of the room, so it can\'t be the one to change if it is private!'], 400);
+            return response()->json(['error' => 'Only the admin of the room can change if the room is private or not'], 400);
         }
         return $room;
     }
