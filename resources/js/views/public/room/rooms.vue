@@ -28,7 +28,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <Button label="Join Room" /> 
+                                        <Button label="Join Room" @click="joinPublic(item.id)"/> 
                                     </div>
                                     <div>
                                         <p>host: {{item.host.name}}</p>
@@ -63,7 +63,7 @@ import JoinRoom from "../../../components/roomComponents/JoinRoom.vue";
 import { useRouter } from 'vue-router'
 
 
-const { getOpenRooms, rooms, storeRoom, room } = useRooms();
+const { getOpenRooms, joinPublicRoom, rooms, storeRoom, room } = useRooms();
 
 const showQuickPlayDialog = ref(false);
 const joinRoomVisible = ref(false);
@@ -78,12 +78,10 @@ const hostGame = async () => {
     room.value.host_id = auth.user.id;
     room.value.private = true;
     room.value.state = 'lobby';
-    const id = await storeRoom(room.value); 
-    if (id) {
-        console.log(id)
-        router.push({ name: 'lobby', params: { id: id } });
-    }
-
+    storeRoom(room.value)
+    .then(data => {
+        router.push({ name: 'lobby', params: { id: data.id } })
+    })
 }
 
 
@@ -93,5 +91,12 @@ const searchQuickGame = () => {
 
 const openJoinGame = () => {
     joinRoomVisible.value = true;
+}
+
+const joinPublic = async (id) => {
+    joinPublicRoom(id)
+    .then(data => {
+        router.push({ name: 'lobby', params: { id: data.id } })
+    })
 }
 </script>

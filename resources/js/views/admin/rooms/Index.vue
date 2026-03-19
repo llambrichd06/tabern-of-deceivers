@@ -25,7 +25,7 @@
             </div>
         </template>
 
-        <template #subtitle>Administra y gestiona los usuarios del sistema. Crea, edita y elimina Rooms.</template>
+        <template #subtitle class="">Administra y gestiona los usuarios del sistema. Crea, edita y elimina Rooms.</template>
 
         <template #content>
             <DataTable

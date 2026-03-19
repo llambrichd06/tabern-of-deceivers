@@ -74,7 +74,7 @@ export default function useRooms() {
         })
             .then(response => {
                 toast.crud.created('Room')
-                return response.data.id;
+                return response.data;
             })
             .catch(error => {
                 if (error.response?.data) {
@@ -130,37 +130,44 @@ export default function useRooms() {
     const getOpenRooms = () => {
         axios.get('/api/rooms/openRooms')
             .then(response => {
-                rooms.value = response.data.public_rooms
+                rooms.value = response.data.public_rooms;
                 return response;
             })
     }
 
 
-    const joinRoomByCode = async (roomCode) => {
+    const joinPublicRoom = async (roomId) => {
         if (isLoading.value) return;
         isLoading.value = true;
 
-        const { isValid } = validate(roomCodeSchema, roomCode);
-        // if (!isValid) {
-        //     isLoading.value = false
-        //     return
-        // }
-        return await axios.get('/api/rooms/joinRoomWithCode', { //WE HAVE TO RETURN THE CALL ITSELF TO RETURN A PROMISE
+        return await axios.get('/api/rooms/joinPublicRoom', { //WE HAVE TO RETURN THE CALL ITSELF TO RETURN A PROMISE
             //if we dont return the call, whatever is calling this wont get a promise and will immediatelly execute even with an await
             params: { //A cleaner way to do get parameters
-                room_code: roomCode
+                room_id: roomId
             }
         })
         .then(response => {
             return response.data
         }).catch(error =>{
-            // let errorMessage;
-            // if (error.name === 'ValidationError') {
-            //     errorMessage = error.message;
-            // } else {
-            //     errorMessage = error.response.data.error;
-            // }
-            // toast.crud.error('Join room. Message:'+errorMessage);
+            toast.crud.errorMsgFromError(error);
+        }).finally(isLoading.value = false)
+    }
+
+    const joinRoomByCode = async (roomCode) => {
+        if (isLoading.value) return;
+        isLoading.value = true;
+        const { isValid } = validate(roomCodeSchema, roomCode);
+        // if (!isValid) {
+        //     isLoading.value = false
+        //     return
+        // }
+        return await axios.get('/api/rooms/joinRoomWithCode', { 
+            params: { //A cleaner way to do get parameters
+                room_code: roomCode
+            }
+        }).then(response => {
+            return response.data
+        }).catch(error =>{
             toast.crud.errorMsgFromError(error);
         }).finally(isLoading.value = false)
     }
@@ -243,6 +250,7 @@ export default function useRooms() {
         deleteRoom,
         resetRoom,
         joinRoomByCode,
+        joinPublicRoom,
         changePrivate,
         transferOwnership,
         leaveRoom,

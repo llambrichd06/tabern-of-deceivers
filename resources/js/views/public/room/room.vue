@@ -11,7 +11,8 @@
             <Image src="" alt="lockRoom"/>
         </div>
         <Button label="Edit Match Rules"/>
-        <Button label="Leave Room" @click="leaveTheRoom"/>
+        <!-- GOTTA MAKE AN "Are you sure?" WINDOW FOR THIS, MAKE IT SO IT CAN BE REUSED WITH OTHER STUFF -->
+        <Button label="Leave Room" @click="leaveTheRoom"/> 
         <Button label="Start Match"/>
         <div v-if="loading"><p>Loading...</p></div>
         <div v-else>

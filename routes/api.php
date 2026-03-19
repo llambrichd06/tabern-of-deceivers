@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/rooms/transferOwnership', [RoomController::class, 'transferOwnership']);
     Route::get('/rooms/kickUser', [RoomController::class, 'kickUser']);
     Route::get('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
+    Route::get('/rooms/joinPublicRoom', [RoomController::class, 'joinPublicRoom']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::apiResource('rooms', RoomController::class);
 

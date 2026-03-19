@@ -99,6 +99,16 @@ class RoomController extends Controller
         return $this->joinRoom($user->id, $room->id);
     }
 
+    public function joinPublicRoom(Request $request) {
+        $user = Auth::user();
+        $room = Room::where('id', $request->room_id)
+                ->where('state', 'lobby')
+                ->where('private', '0')
+                ->first();
+        if (!$room) return response()->json(['error' => 'Id doesen\'t belong to any open room!'], 404); //If a room wasn't found, return an error
+        return $this->joinRoom($user->id, $room->id);
+    }
+
     /**
      * Function to make a user join a room
      */
@@ -114,7 +124,7 @@ class RoomController extends Controller
                     return response()->json(['error' => 'Room is full!'], 422);
                 }
                 if ($room->players()->where('user_id', $userId)->first()) {
-                    return response()->json(['error' => 'You are already in this room!'], 422);
+                    return response()->json(['message' => 'You are already in this room!', 'id' => $room->id]);
                 }
 
                 // syncWithoutDetaching adds rows on the pivot table, relating however many users id's we put in the array, to the room that we are calling the players relation from
@@ -170,9 +180,16 @@ class RoomController extends Controller
         $player = $room->players()->where('user_id', $user -> id)->first();
         if ($player) {
             $result = $room->players()->detach($user -> id); //detach solo borra la relacion entre las filas.
+            Log::info('stuff:',['userId' => $user->id, 'roomhostID' => $room->host_id]); 
+            if ($user->id == $room->host_id) { //THEY ARE THE SAME WHY NO WORK
+                $room->host_id = $room->players()->first()->id ?? $player->id;
+                $room->save();
+            }
+            // $this->deleteRoomIfEmpty($room); //if room is empty, we delete it, since we don't want to log an empty room
+            // COMMENTED FOR NOW, WHEN WE COMPLETE THE APLICATION UNCOMMENT
             return response()->json(['success' => $result]);
         } else {
-            return response()->json(['error' => 'You are not in the room or you have alredy leave it'], 400);
+            return response()->json(['error' => 'You aren\'t in this room'], 400);
         }
         
     }
@@ -193,6 +210,13 @@ class RoomController extends Controller
             return response()->json(['error' => 'Only the host can do this action'], 400);
         }
     }
-    
+    /**
+     * Function to delete a room if its empty
+     */
+    private function deleteRoomIfEmpty(Room $room) {
+        if ($room->players()->count() <= 0) {
+            $room->delete();
+        }
+    }
 }
 
