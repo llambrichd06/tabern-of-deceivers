@@ -81,7 +81,7 @@ export default [
             },
             {
                 path: 'rooms',
-                name: 'room',
+                name: 'rooms',
                 component: () => import('../views/public/room/rooms.vue'),
                 beforeEnter: requireLogin,
             },
@@ -271,12 +271,12 @@ export default [
                 ]
             },
             {
-                name: 'rooms',
+                name: 'roomsAdmin',
                 path: 'rooms',
                 meta: { breadCrumb: 'Rooms' },
                 children: [
                     {
-                        name: 'rooms.index',
+                        name: 'roomsAdmin.index',
                         path: '',
                         component: () => import('../views/admin/rooms/Index.vue'),
                         meta: {
@@ -285,7 +285,7 @@ export default [
                         }
                     },
                     {
-                        name: 'rooms.create',
+                        name: 'roomsAdmin.create',
                         path: 'create',
                         component: () => import('../views/admin/rooms/Create.vue'),
                         meta: {
@@ -294,7 +294,7 @@ export default [
                         }
                     },
                     {
-                        name: 'rooms.edit',
+                        name: 'roomsAdmin.edit',
                         path: 'edit/:id',
                         component: () => import('../views/admin/rooms/Edit.vue'),
                         meta: {

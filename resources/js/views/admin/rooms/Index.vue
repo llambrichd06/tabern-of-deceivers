@@ -102,7 +102,7 @@
                                 text
                                 severity="secondary"
                                 size="small"
-                                @click="router.push({ name: 'rooms.edit', params: { id: slotProps.data.id } })"
+                                @click="router.push({ name: 'roomsAdmin.edit', params: { id: slotProps.data.id } })"
                             />
                             <Button
                                 v-if="can('room-delete')"
