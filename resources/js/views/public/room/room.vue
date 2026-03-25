@@ -1,62 +1,114 @@
 <template>
-    <section>
+    <section class="px-6 py-6">
         <!-- Opcions de les sales -->
-        <p>Room code: {{room.room_code}}</p>
-        <div v-if="room.private == false">
-            <p>Public</p>
-            <Image src="" alt="unlockRoom"/>
-        </div>
-        <div v-else>
-            <p>Private</p>
-            <Image src="" alt="lockRoom"/>
-        </div>
-        <Button label="Edit Match Rules"/>
-        <!-- GOTTA MAKE AN "Are you sure?" WINDOW FOR THIS, MAKE IT SO IT CAN BE REUSED WITH OTHER STUFF -->
-        <Button label="Leave Room" @click="leaveTheRoom"/> 
-        <Button label="Start Match"/>
-        <div v-if="loading"><p>Loading...</p></div>
-        <div v-else>
-            <div v-if="authUser.user.id == room.host?.id">
-                <Button v-if="room.private == true" label="Unprivate the room" @click="privateChange"/>
-                <Button v-if="room.private == false" label="Private the room" @click="privateChange"/>
+        <div class="mx-auto max-w-5xl">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-10">
+                    <p class="text-3xl font-normal">Room code: {{ room.room_code }}</p>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <p class="text-3xl font-normal">
+                                {{ room.private == false ? 'Public' : 'Private' }}
+                            </p>
+
+                            <Image
+                                v-if="room.private == false"
+                                src=""
+                                alt="unlockRoom"
+                            />
+                            <Image
+                                v-else
+                                src=""
+                                alt="lockRoom"
+                            />
+                        </div>
+
+                        <div v-if="!loading && authUser.user.id == room.host?.id">
+                            <Button
+                                v-if="room.private == true"
+                                label="Unprivate the room"
+                                outlined
+                                @click="privateChange"
+                            />
+                            <Button
+                                v-if="room.private == false"
+                                label="Private the room"
+                                outlined
+                                @click="privateChange"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <Button label="Edit Match Rules" size="small" />
+
+                    <!-- GOTTA MAKE AN "Are you sure?" WINDOW FOR THIS, MAKE IT SO IT CAN BE REUSED WITH OTHER STUFF -->
+                    <Button label="Leave Room" severity="danger" size="small" @click="leaveTheRoom" />
+
+                    <Button label="Start Match" severity="success" size="small" />
+                </div>
+            </div>
+
+            <div v-if="loading" class="mt-6">
+                <p>Loading...</p>
+            </div>
+
+            <div v-else class="mt-6">
+                <div class="bg-gray-200 px-8 py-6">
+                    <p class="mb-6 text-lg font-medium">Players in room: {{ numPlayers }}</p>
+
+                    <div
+                        class="flex min-h-[140px] flex-wrap items-start justify-center gap-x-10 gap-y-8"
+                    >
+                        <!-- Host -->
+                        <div class="flex w-[90px] flex-col items-center text-center">
+                            <div class="h-16 w-16 rounded-full border-4 border-black"></div>
+                            <p class="mt-3 text-sm">{{ room.host?.name }}</p>
+                            <p class="text-xs uppercase">HOST</p>
+                        </div>
+
+                        <!-- El host mai es repetira i es mostren els altres usuaris -->
+                        <div
+                            v-for="player in otherPlayers"
+                            :key="player.id"
+                            class="flex w-[90px] flex-col items-center text-center"
+                        >
+                            <div class="h-16 w-16 rounded-full border-4 border-black"></div>
+                            <p class="mt-3 text-sm">{{ player.name }}</p>
+
+                            <div v-if="authUser.user.id == room.host.id" class="mt-2">
+                                <Button
+                                    label="Make Owner"
+                                    size="small"
+                                    text
+                                    @click="makePlayerOwner(player.id)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <p>{{ room.private }}</p>
     </section>
-    <section>
-        
-       
-        <!-- bucle per els altres jugadors que es igual que el anterior -->
-        <div v-if="loading"><p>Loading...</p></div>
-        <div v-else>
-            <p>number of players: {{ numPlayers }}</p>
-            <ul><!-- Usuaris i host -->
-                <li> <!--El host sempre sortira primer i tindra el "titol" de host-->
-                    <p>{{room.host?.name}}</p>
-                    <p>host</p>
-                </li>
-                <!--El host mai es repetira i es mostren els altres usuaris-->
-                <li 
-                    v-for="(player, index) in room.players" 
-                    :key="player.id"
-                >
-                    <p v-if="player.id !== room.host.id">
-                        {{ player.name }}
-                    </p>
-                    <div v-if="authUser.user.id == room.host.id">
-                        <Button v-if="player.id !== room.host.id" label="Make Owner" @click="makePlayerOwner(player.id)"/>
-                    </div>
-                    
-                </li>
-            </ul>
+
+    <section class="px-6">
+        <div class="mx-auto max-w-5xl">
+            <!-- bucle per els altres jugadors que es igual que el anterior -->
+            <div v-if="loading"><p>Loading...</p></div>
+            <br><br>
         </div>
-        <br><br>
     </section>
-    <section>
-        <!-- Descripcio i gameplay -->
-        <!-- Agafarem una descripcio de una taula si ho acabem fent el seguent text es un exemplpe que s'ha de modificar-->
-        <h2>Aqui anira una descripcio del game mode</h2>
+
+    <section class="px-6">
+        <div class="mx-auto max-w-5xl">
+            <!-- Descripcio i gameplay -->
+            <!-- Agafarem una descripcio de una taula si ho acabem fent el seguent text es un exemplpe que s'ha de modificar-->
+            <h2>Aqui anira una descripcio del game mode</h2>
+        </div>
     </section>
+
     <section>
         <!-- chat -->
 
@@ -97,6 +149,10 @@ const numPlayers = computed(() => {
     return players;
 });
 
+const otherPlayers = computed(() => {
+    return room.value?.players?.filter(player => player.id !== room.value?.host?.id) ?? [];
+});
+
 const leaveTheRoom = async () => {
   await leaveRoom(room.value.id);
 };
@@ -104,6 +160,6 @@ const makePlayerOwner = async(player_id) => {
     await transferOwnership(room.value.id, player_id);
 }
 const privateChange = async() => {
-    await changePrivate(room.value.id); //No canvia de privado a no privado mirar el RoomController
+    await changePrivate(room.value.id);
 }
 </script>
