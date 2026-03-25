@@ -58,39 +58,98 @@
         <h2>Aqui anira una descripcio del game mode</h2>
     </section>
     <section>
-        <!-- chat -->
+        <Card>
+            <template #content>
+                <div class="flex flex-col justify-end mb-2">
+                    <p v-for="message in messages">
+                        {{ message.user_name }}: {{ message.text }}
+                    </p>
+                </div>
+                <InputText id="chat" placeholder="Write message..." v-model="currentMessage"/>
+                <Button label="Send Message" @click="sendMessage"/>
+            </template>
+        </Card>
 
     </section>
 </template>
 
 <script setup>
 import { authStore } from "@/store/auth";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import useRooms from "../../../composables/rooms";
 import { useRoute } from 'vue-router'
 import { computed } from "vue";
+import axios from "axios";
 
 const route = useRoute()
 const id = route.params.id
+const currentMessage = ref('')
+const messages = ref([])
 // console.log('id de sala: ' + id)
 
 const { getRoom, room, leaveRoom, transferOwnership, changePrivate } = useRooms();
 const authUser = authStore();
 const loading = ref(false);
+const chatLoading = ref(false);
 
 onMounted(async () => {
     loading.value = true;
     try {
         await getRoom(id);
 
-        console.log(room.value);
-
+        // console.log(room.value);
+        
+        window.Echo.join(`chat.room.${id}`)
+            .here((users) => {
+                // Runs immediately: gives you a list of everyone currently in the room
+                console.log('Currently online:', users);
+            })
+            .joining((user) => {
+                // Runs when a new person joins
+                console.log(`${user.name} joined the room.`);
+                getRoom(id);
+            })
+            .leaving((user) => {
+                // Runs when someone closes the tab or disconnects
+                console.log(`${user.name} left the room.`);
+                getRoom(id);
+            })
+            .error((error) => {
+                console.error('Connection error:', error);
+            })
+            .listen('MessageSent', (e) => {
+                // Standard event listener for messages within that room
+                console.log(e);
+                console.log('testing aaaa');
+                messages.value.push(e.message)
+            });
+        
     } catch (error) {
         console.error("Failed to load Room: ", error);
     } finally {
         loading.value = false;
     }
 });
+
+onBeforeUnmount( () => {
+    window.Echo.leave(`chat.room.${room.value.id}`)
+})
+
+const sendMessage = () => { //SHOULD PROBABLLY MOVE THIS TO EITHER ROOM COMPOSER OR MAKE A MESSAGE COMPOSER
+    if (!chatLoading.value) {
+        chatLoading.value = true;
+        
+        axios.post('/api/messages/sent/'+room.value.id,{text: currentMessage.value})
+        .then(response => {
+            console.log(response);
+        }).catch(error =>{
+            console.log(error);
+        }).finally(
+            chatLoading.value = false,
+            currentMessage.value = ''
+        )
+    }
+}
 
 const numPlayers = computed(() => {
     const players = room.value?.players?.length ?? 0;
@@ -102,8 +161,10 @@ const leaveTheRoom = async () => {
 };
 const makePlayerOwner = async(player_id) => {
     await transferOwnership(room.value.id, player_id);
+    await getRoom(id);
 }
 const privateChange = async() => {
     await changePrivate(room.value.id); //No canvia de privado a no privado mirar el RoomController
+    await getRoom(id);
 }
 </script>
