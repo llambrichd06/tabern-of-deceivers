@@ -85,7 +85,6 @@ class LeaderboardController extends Controller
             'losses' => ['nullable', 'min:0'],
             'matches' => ['nullable', 'min:0'],
         ]);
-        Log::info($data["matches"]);
         $leaderboard->user_id = $data['user_id'] ?? $leaderboard->user_id;
         $leaderboard->points = $data['points'] ?? $leaderboard->points;
         $leaderboard->wins = $data['wins'] ?? $leaderboard->wins;
