@@ -110,7 +110,18 @@
     </section>
 
     <section>
-        <!-- chat -->
+        <Card> 
+            <!-- para iniciar el chat poner php artisan reverb:start en cmd -->
+            <template #content>
+                <div class="flex flex-col justify-end mb-2 w-full wrap-anywhere">
+                    <p v-for="message in messages">
+                        {{ message.user_name }}: {{ message.text }}
+                    </p>
+                </div>
+                <InputText id="chat" placeholder="Write message..." v-model="currentMessage"/>
+                <Button label="Send Message" @click="sendMessage"/>
+            </template>
+        </Card>
 
     </section>
 </template>
