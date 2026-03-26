@@ -180,7 +180,6 @@ class RoomController extends Controller
         $player = $room->players()->where('user_id', $user -> id)->first();
         if ($player) {
             $result = $room->players()->detach($user -> id); //detach solo borra la relacion entre las filas.
-            Log::info('stuff:',['userId' => $user->id, 'roomhostID' => $room->host_id]); 
             if ($user->id == $room->host_id) { //THEY ARE THE SAME WHY NO WORK
                 $room->host_id = $room->players()->first()->id ?? $player->id;
                 $room->save();
@@ -191,7 +190,6 @@ class RoomController extends Controller
         } else {
             return response()->json(['error' => 'You aren\'t in this room'], 400);
         }
-        
     }
 
     public function kickUser(Request $request) {
