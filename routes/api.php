@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\LeaderboardController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\PermissionController;
-
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RoomController;
@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/rooms/joinPublicRoom', [RoomController::class, 'joinPublicRoom']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::apiResource('rooms', RoomController::class);
+
+    Route::post('/messages/sent/{room}', [MessageController::class, 'sent']);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
