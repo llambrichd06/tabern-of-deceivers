@@ -58,7 +58,8 @@
         <h2>Aqui anira una descripcio del game mode</h2>
     </section>
     <section>
-        <Card>
+        <Card> 
+            <!-- para iniciar el chat poner php artisan reverb:start en cmd -->
             <template #content>
                 <div class="flex flex-col justify-end mb-2">
                     <p v-for="message in messages">
