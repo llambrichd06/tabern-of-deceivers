@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\StartGame;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
+use App\Models\Room;
 use App\Models\RoomUsers;
 use Illuminate\Http\Request;
 use stdClass;
@@ -12,12 +14,11 @@ use stdClass;
 class GameController extends Controller
 {
     public function getUserGameStateById(Request $request) {
-        $game = Game::find($request->id);
+        $game = Game::find($request->game_id);
 
         if (!$game) return response()->json(['error' => 'Game not found'], 404);
-    
 
-        return response()->json(['game_state' => $game->game_state]);
+        return response()->json(['game_state' => $game->game_state]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
     public function saveGameStateById(Request $request) {
@@ -31,15 +32,28 @@ class GameController extends Controller
 
 
     public function create(Request $request) {
+        $room_id = $request->room_id;
+        $gameForRoomExists = Game::where('room_id', $room_id)->where('is_finished', '0');
+
+        if ($gameForRoomExists) return response()->json(['error' => 'This room has an unfinished game']);
+
+        $room = Room::where('room_id', $room_id)->first();
+        $room->state = 'on_going';
+        $room->save();
+
         $game = new Game;
-        $game->room_id = $request->room_id;
-        $game->is_finished = 0;
-        $game->game_state = $this->createNewGameState($request->room_id);
+        $game->room_id = $room_id;
+        $game->is_finished = '0';
+        $game->game_state = $this->createNewGameState($room_id);
         $game->save();
 
-        return response()->json(['game_state' => $game->game_state]);
+
+
+        broadcast(new StartGame($game));
+        // return response()->json(['game_state' => $game->game_state]);
     }
     
+
 
     private function createNewGameState($room_id) {
         $cardsPerPlayer = 6;
@@ -88,8 +102,13 @@ class GameController extends Controller
         $jsonGameState = json_encode($gameState);
 
         return $jsonGameState;
-        }
+    }
+
+    private function validAction() {
+
+    }
 }
+
 
 /*
 {

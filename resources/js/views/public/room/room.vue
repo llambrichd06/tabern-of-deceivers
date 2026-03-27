@@ -123,6 +123,12 @@ onMounted(async () => {
                 console.log(e);
                 console.log('testing aaaa');
                 messages.value.push(e.message)
+            })
+            .listen('StartGame', (e) => {
+                // Standard event listener for messages within that room
+                console.log(e.game_id);
+                // router.push({ name: 'game', params: { id: data.id } })
+
             });
         
     } catch (error) {
@@ -132,11 +138,7 @@ onMounted(async () => {
     }
 });
 
-onBeforeUnmount( () => {
-    window.Echo.leave(`chat.room.${room.value.id}`)
-})
-
-const sendMessage = () => { //SHOULD PROBABLLY MOVE THIS TO EITHER ROOM COMPOSER OR MAKE A MESSAGE COMPOSER
+const sendMessage = () => { //SHOULD PROBABLLY MOVE THIS TO EITHER ROOM COMPOSER OR MAKE A MESSAGE COMPONENT
     if (!chatLoading.value) {
         chatLoading.value = true;
         
@@ -158,7 +160,9 @@ const numPlayers = computed(() => {
 });
 
 const leaveTheRoom = async () => {
-  await leaveRoom(room.value.id);
+    await leaveRoom(room.value.id);
+    window.Echo.leave(`chat.room.${room.value.id}`)
+
 };
 const makePlayerOwner = async(player_id) => {
     await transferOwnership(room.value.id, player_id);
