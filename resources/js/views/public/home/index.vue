@@ -229,5 +229,5 @@ onMounted(async () => {
     background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     color: white !important;
-}
+};
 </style>
