@@ -20,13 +20,15 @@ class CardSeeder extends Seeder
                 $cards[] = [
                     'id'   => $id++,
                     'name' => "$rank of $suit",
+                    'suit' => "$suit",
+                    'rank' => "$rank",
                 ];
             }
         }
 
         // Add 2 Jokers to complete the 54-card set
-        $cards[] = ['id' => 53, 'name' => 'Black Joker'];
-        $cards[] = ['id' => 54, 'name' => 'Red Joker'];
+        $cards[] = ['id' => 53, 'name' => 'Black Joker', 'suit' => null, 'rank' => null];
+        $cards[] = ['id' => 54, 'name' => 'Red Joker', 'suit' => null, 'rank' => null];
 
         DB::table('cards')->insert($cards);
     }
