@@ -92,6 +92,12 @@ export default [
                 beforeEnter: requireLogin,
             },
             {
+                path: 'match/:id',
+                name: 'game',
+                component: () => import('../views/public/match/match.vue'),
+                beforeEnter: requireLogin,
+            },
+            {
                 path: 'leaderboard',
                 name: 'leaderboard',
                 component: () => import('../views/public/leaderboard/leaderboard.vue'),

@@ -107,6 +107,12 @@ class GameController extends Controller
     private function validAction() {
 
     }
+    private function getDecodedGameStateById($gameId) {
+        $gameState = Game::find($gameId)->game_state;
+        $decodedGameState = json_decode($gameState);
+        return $decodedGameState;
+    }
+
 }
 
 
