@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\StartGame;
 use App\Events\UpdateGameState;
+use App\Events\GameWon;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -194,7 +195,7 @@ class GameController extends Controller
         foreach ($lastPlayedCards as $card) {
             $currentCard = Card::find($card);
             $rankOfCard = $currentCard->rank;
-            if ($rankOfCard != $calledRank) {
+            if ($rankOfCard != $calledRank && $rankOfCard != null) {
                 $lie = true;
             }
         }
@@ -204,6 +205,13 @@ class GameController extends Controller
         } else {
             $gameState = $this->takeCards($gameId, $lastPlayer);
         } //encara falta la funcio per canviar de torn, un cop creat hem de possar que depenen de si es mentida o no començi el que no roba cartes d'aquesta funcio (si manteix el que ha delatat, si no el que della la veritat)
+    }
+
+    private function gameWon($gameId){
+        $game = Game::find($gameId);
+        $game->is_finished = '1';
+        broadcast(new GameWon($game));
+        $game->save();
     }
     /*
     pile:{
