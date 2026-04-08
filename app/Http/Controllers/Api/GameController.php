@@ -203,7 +203,7 @@ class GameController extends Controller
             $gameState = $this->takeCards($gameId, $user);
         } else {
             $gameState = $this->takeCards($gameId, $lastPlayer);
-        }
+        } //encara falta la funcio per canviar de torn, un cop creat hem de possar que depenen de si es mentida o no començi el que no roba cartes d'aquesta funcio (si manteix el que ha delatat, si no el que della la veritat)
     }
     /*
     pile:{
