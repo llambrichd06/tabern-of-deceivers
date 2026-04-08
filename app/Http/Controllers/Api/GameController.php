@@ -202,11 +202,6 @@ class GameController extends Controller
         } else {
             $gameState = $this->takeCards($gameId, $lastPlayer);
         }
-
-        //cridar la funcio getDecodedGameStateById
-        //cridar la funcio update gameState
-
-        // return $gameState;
     }
     /*
     pile:{
