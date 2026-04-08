@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\GameController;
 use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\PermissionController;
@@ -36,6 +37,11 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResource('rooms', RoomController::class);
 
     Route::post('/messages/sent/{room}', [MessageController::class, 'sent']);
+
+    Route::post('/match/startGame', [GameController::class, 'startGame']);
+    Route::post('/match/getGameState', [GameController::class, 'getUserGameStateById']);
+    Route::post('/match/playCard', [GameController::class, 'playCard']);
+    Route::post('/match/callLie', [GameController::class, 'callLie']);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);

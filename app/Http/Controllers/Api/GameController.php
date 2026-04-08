@@ -26,16 +26,7 @@ class GameController extends Controller
         return response()->json(['game_state' => $game->game_state]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
-    public function saveGameStateById(Request $request)
-    {
-        $game = Game::find($request->id);
-
-        return response()->json(['game_state' => $game->game_state]);
-    }
-
-
-
-    public function create(Request $request)
+    public function startGame(Request $request)
     {
         $room_id = $request->room_id;
         $gameForRoomExists = Game::where('room_id', $room_id)->where('is_finished', '0');
