@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\StartGame;
+use App\Events\UpdateGameState;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -109,6 +110,18 @@ class GameController extends Controller
         return $jsonGameState;
     }
 
+    private function updateGameState($gameId, $gameState) {
+        $game = Game::find($gameId);
+        if (!$game) {
+            $game->gameState = $gameState;
+            $game->save();
+            broadcast(new UpdateGameState($gameId, $gameState));
+            return "Succes in updating the gameState";
+        } else {
+            return "Unsuccesfull to update gameState";
+        }
+    }
+
     private function validAction() {
 
     }
@@ -117,17 +130,6 @@ class GameController extends Controller
         $gameState = Game::find($gameId)->game_state;
         $decodedGameState = json_decode($gameState);
         return $decodedGameState;
-    }
-
-    private function updateGameState($gameId, $gameState) {
-        $game = Game::find($gameId);
-        if (!$game) {
-            $game->gameState = $gameState;
-            $game->save();
-            return "Succes in updating the gameState";
-        } else {
-            return "Unsuccesfull to update gameState";
-        }
     }
 
     private function takeCards($gameId, $idPlayerTaker) {
