@@ -110,7 +110,7 @@ onMounted(async () => {
             .listen('StartGame', (e) => {
                 // Standard event listener for messages within that room
                 console.log(e.game_id);
-                router.push({ name: 'game', params: { id: e.game_id } })
+                route.push({ name: 'game', params: { id: e.game_id } })
 
             });
         
