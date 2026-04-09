@@ -47,7 +47,7 @@
                     <!-- GOTTA MAKE AN "Are you sure?" WINDOW FOR THIS, MAKE IT SO IT CAN BE REUSED WITH OTHER STUFF -->
                     <Button label="Leave Room" severity="danger" size="small" @click="leaveTheRoom" />
 
-                    <Button label="Start Match" severity="success" size="small" />
+                    <Button label="Start Match" severity="success" size="small" @click="start" />
                 </div>
             </div>
 
@@ -110,19 +110,7 @@
     </section>
 
     <section>
-        <Card> 
-            <!-- para iniciar el chat poner php artisan reverb:start en cmd -->
-            <template #content>
-                <div class="flex flex-col justify-end mb-2 w-full wrap-anywhere">
-                    <p v-for="message in messages">
-                        {{ message.user_name }}: {{ message.text }}
-                    </p>
-                </div>
-                <InputText id="chat" placeholder="Write message..." v-model="currentMessage"/>
-                <Button label="Send Message" @click="sendMessage"/>
-            </template>
-        </Card>
-
+        <Chat :roomId="id"/>
     </section>
 </template>
 
@@ -130,20 +118,21 @@
 import { authStore } from "@/store/auth";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import useRooms from "../../../composables/rooms";
+import useGames from "../../../composables/games";
 import { useRoute } from 'vue-router'
 import { computed } from "vue";
 import axios from "axios";
+import Chat from '../../../components/roomComponents/Chat.vue'
 
 const route = useRoute()
 const id = route.params.id
-const currentMessage = ref('')
-const messages = ref([])
+
 // console.log('id de sala: ' + id)
 
 const { getRoom, room, leaveRoom, transferOwnership, changePrivate } = useRooms();
+const { startGame } = useGames();
 const authUser = authStore();
 const loading = ref(false);
-const chatLoading = ref(false);
 
 onMounted(async () => {
     loading.value = true;
@@ -170,11 +159,11 @@ onMounted(async () => {
             .error((error) => {
                 console.error('Connection error:', error);
             })
-            .listen('MessageSent', (e) => {
+            .listen('StartGame', (e) => {
                 // Standard event listener for messages within that room
-                console.log(e);
-                console.log('testing aaaa');
-                messages.value.push(e.message)
+                console.log(e.game_id);
+                route.push({ name: 'game', params: { id: e.game_id } })
+
             });
         
     } catch (error) {
@@ -183,26 +172,6 @@ onMounted(async () => {
         loading.value = false;
     }
 });
-
-onBeforeUnmount( () => {
-    window.Echo.leave(`chat.room.${room.value.id}`)
-})
-
-const sendMessage = () => { //SHOULD PROBABLLY MOVE THIS TO EITHER ROOM COMPOSER OR MAKE A MESSAGE COMPOSER
-    if (!chatLoading.value) {
-        chatLoading.value = true;
-        
-        axios.post('/api/messages/sent/'+room.value.id,{text: currentMessage.value})
-        .then(response => {
-            console.log(response);
-        }).catch(error =>{
-            console.log(error);
-        }).finally(
-            chatLoading.value = false,
-            currentMessage.value = ''
-        )
-    }
-}
 
 const numPlayers = computed(() => {
     const players = room.value?.players?.length ?? 0;
@@ -214,14 +183,22 @@ const otherPlayers = computed(() => {
 });
 
 const leaveTheRoom = async () => {
-  await leaveRoom(room.value.id);
+    await leaveRoom(room.value.id);
+    window.Echo.leave(`chat.room.${room.value.id}`)
+
 };
+
 const makePlayerOwner = async(player_id) => {
     await transferOwnership(room.value.id, player_id);
     await getRoom(id);
 }
+
 const privateChange = async() => {
     await changePrivate(room.value.id);
     await getRoom(id);
+}
+
+const start = () => {
+    startGame(room.value.id)
 }
 </script>

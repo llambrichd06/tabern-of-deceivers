@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('suit')->nullable();
+            $table->string('rank')->nullable();
         });
     }
 

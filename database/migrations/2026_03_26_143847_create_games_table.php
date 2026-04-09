@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
 
             $table->enum('is_finished', ['0','1']);
+            $table->longText('game_state');
             $table->timestamps();
         });
     }
