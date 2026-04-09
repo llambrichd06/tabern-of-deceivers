@@ -97,6 +97,17 @@ export default [
                 component: () => import('../views/public/leaderboard/leaderboard.vue'),
                 beforeEnter: requireLogin,
             },
+            {
+                path: 'rules',
+                name: 'rules',
+                component: () => import('../views/public/rules/rules.vue'),
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: () => import('../views/public/profile/profile.vue'),
+                beforeEnter: requireLogin,
+            },
         ]
     },
 
