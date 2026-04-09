@@ -17,30 +17,34 @@ use stdClass;
 
 class GameController extends Controller
 {
-    public function getUserGameStateById(Request $request)
+    public function getUserGameStateById(Game $game)
     {
-        $game = Game::find($request->game_id);
-
-        if (!$game) return response()->json(['error' => 'Game not found'], 404);
+        if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);
 
         return response()->json(['game_state' => $game->game_state]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
+    public function getGame(Game $game) {
+
+        if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+        return response()->json(['game' => $game]);
+    }
+
     public function startGame(Request $request)
     {
-        $room_id = $request->room_id;
-        $gameForRoomExists = Game::where('room_id', $room_id)->where('is_finished', '0');
+        $roomId = $request->room_id;
+        $gameForRoomExists = Game::where('room_id', $roomId)->where('is_finished', '0');
 
         if ($gameForRoomExists) return response()->json(['error' => 'This room has an unfinished game'], 409);
 
-        $room = Room::where('room_id', $room_id)->first();
+        $room = Room::where('room_id', $roomId)->first();
         $room->state = 'on_going';
         $room->save();
 
         $game = new Game;
-        $game->room_id = $room_id;
+        $game->room_id = $roomId;
         $game->is_finished = '0';
-        $game->game_state = $this->createNewGameState($room_id);
+        $game->game_state = $this->createNewGameState($roomId);
         $game->save();
 
         broadcast(new StartGame($game));
@@ -48,9 +52,9 @@ class GameController extends Controller
     }
 
 
-    private function createNewGameState($room_id) {
+    private function createNewGameState($roomId) {
         //number of cards per player
-        $cardsPerPlayer = 6;
+        // $cardsPerPlayer = 6; //WE ARE ACTUALLY GONNA SHUFFLE AS MANY CARDS IN THE DECK BETWEEN ALL PLAYERS, the cards that can't be shuffled equally wont be used
         $gameState = new stdClass;
 
         $gameState->pile = [
@@ -76,7 +80,10 @@ class GameController extends Controller
         $gameState->turn = 0;
 
         //setting the players in a random order
-        $players = RoomUsers::select('user_id')->where('room_id')->inRandomOrder()->get();
+        $players = RoomUsers::select('user_id')->where('room_id', $roomId)->inRandomOrder()->get();
+        $cardAmount = Card::count();
+        $cardsPerPlayer = floor(count($players)/$cardAmount);
+        
         foreach ($players as $player) {
             array_push($gameState->players, $player->id);
         }
