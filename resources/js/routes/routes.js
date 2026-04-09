@@ -101,13 +101,7 @@ export default [
                 path: 'rules',
                 name: 'rules',
                 component: () => import('../views/public/rules/rules.vue'),
-            },
-            {
-                path: 'profile',
-                name: 'profile',
-                component: () => import('../views/public/profile/profile.vue'),
-                beforeEnter: requireLogin,
-            },
+            }
         ]
     },
 
