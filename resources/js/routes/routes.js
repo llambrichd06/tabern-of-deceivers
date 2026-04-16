@@ -107,6 +107,11 @@ export default [
                 path: 'rules',
                 name: 'rules',
                 component: () => import('../views/public/rules/rules.vue'),
+            },
+            {
+                path: 'contactUs',
+                name: 'contactUs',
+                component: () => import('../views/public/contactUs/contactUs.vue'),
             }
         ]
     },

@@ -1,63 +1,56 @@
 <template>
-    <div 
-        class="fixed w-full z-50 border-b border-gray-200 dark:border-gray-800 transition-all duration-300"
-        :class="isDarkTheme ? 'bg-gray-900' : 'bg-white'">
-        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
-            <!-- Logo -->
-            <router-link to="/" class="flex items-center gap-2">
-                <img src="/images/logo.svg" alt="logo" class="h-10 w-auto"/>
-            </router-link>
-
-            <!-- Mobile Menu Button -->
-            <button
-                v-if="!isDesktop"
-                @click="visibleMobileMenu = true"
-                class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <i class="pi pi-bars text-2xl"></i>
-            </button>
-
-            <!-- Desktop Menu -->
-            <div v-if="isDesktop" class="flex items-center gap-6">
-                <router-link 
-                    v-for="link in navLinks" 
-                    :key="link.route" 
-                    :to="link.route" 
-                    class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                >
-                    {{ link.label }}
+    <div class="fixed inset-x-0 top-0 z-50 transition-all duration-300 bg-[#520B93] text-white">
+        <nav class="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
+            <!-- Left side: logo + desktop links -->
+            <div class="flex items-center gap-8">
+                <!-- Logo -->
+                <router-link to="/" class="flex items-center gap-2 shrink-0">
+                    <img src="/images/logo.svg" alt="logo" class="h-10 w-auto"/>
                 </router-link>
-                
-                <!-- Actions -->
-                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
-                    <LocaleSwitcher />
-                    
+
+                <!-- Desktop Menu Links -->
+                <div v-if="isDesktop" class="flex items-center gap-6">
+                    <router-link 
+                        v-for="link in navLinks" 
+                        :key="link.route" 
+                        :to="link.route" 
+                        class="text-white hover:text-white/80 font-medium transition-colors"
+                    >
+                        {{ link.label }}
+                    </router-link>
+                </div>
+            </div>
+
+            <!-- Right side -->
+            <div v-if="!isDesktop">
+                <button
+                    @click="visibleMobileMenu = true"
+                    class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i class="pi pi-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Desktop Actions -->
+            <div v-else class="flex items-center gap-3">
+                <template v-if="!authStore().user?.name">
+                    <router-link to="/login">
+                        <Button label="Login" text size="small" />
+                    </router-link>
+                    <router-link to="/register">
+                        <Button label="Registro" severity="primary" size="small" />
+                    </router-link>
+                </template>
+
+                <div v-else>
                     <button 
                         type="button" 
-                        @click="toggleDarkMode"
-                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <i :class="isDarkTheme ? 'pi-moon' : 'pi-sun'" class="pi text-lg"></i>
+                        @click="toggle"
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <Avatar :image="authStore().user.avatar" :label="authStore().user.name[0]" shape="circle" size="small" />
+                        <span class="text-sm font-medium hidden xl:inline">{{ authStore().user?.name }}</span>
+                        <i class="pi pi-chevron-down text-xs"></i>
                     </button>
-
-                    <template v-if="!authStore().user?.name">
-                        <router-link to="/login">
-                            <Button label="Login" text size="small" />
-                        </router-link>
-                        <router-link to="/register">
-                            <Button label="Registro" severity="primary" size="small" />
-                        </router-link>
-                    </template>
-
-                    <div v-else>
-                        <button 
-                            type="button" 
-                            @click="toggle"
-                            class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <Avatar :image="authStore().user.avatar" :label="authStore().user.name[0]" shape="circle" size="small" />
-                            <span class="text-sm font-medium hidden xl:inline">{{ authStore().user?.name }}</span>
-                            <i class="pi pi-chevron-down text-xs"></i>
-                        </button>
-                        <Menu ref="menu" :model="items" popup />
-                    </div>
+                    <Menu ref="menu" :model="items" popup />
                 </div>
             </div>
         </nav>

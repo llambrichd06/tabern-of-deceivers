@@ -15,6 +15,10 @@ export default {
             '2xl': '1920px'
         },
         extend: {
+            fontFamily: {
+                baloo: ['"Baloo 2"', 'cursive'],
+                exo: ['"Exo 2"', 'sans-serif'],
+            },
             colors: {
                 current: 'currentColor',
                 transparent: 'transparent',

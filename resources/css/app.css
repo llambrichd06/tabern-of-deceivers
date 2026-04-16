@@ -153,23 +153,27 @@
 @layer tailwind-base {
     html {
         @apply transition-colors duration-200 ease-in-out;
-        
-        font-family:
-        'Roboto',
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        sans-serif;
-        font-size: 15px; /* Reduce el tamaño base de 16px a 14px */
-  
+        font-size: 15px;
     }
-    
 
     body {
-        @apply font-sans antialiased transition-colors duration-200 ease-in-out;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        @apply antialiased transition-colors duration-200 ease-in-out;
+        font-family: "Baloo 2",;
+        font-optical-sizing: auto;
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: "Exo 2";
+        font-optical-sizing: auto;
+        font-weight: bold;
+        font-style: normal;
+        
+        /* font-family: "Jaro";
+        font-optical-sizing: auto;
+        font-weight: bold;
+        font-style: normal; */
     }
 }
 
@@ -1490,4 +1494,76 @@ aside.sidebar-container a:hover img {
 
 .requiredIcon {
     color: red;
+}
+/* Canvis boto principal de prime VUE */
+.p-button.p-button-primary {
+    /* Gradient */
+    background: linear-gradient(90deg, #13D6D9 0%, #95BAB7 57%, #60C2D6 100%) !important;
+    color: white !important;
+    border: none !important;
+
+    /* Tailwind equivalent */
+    border-radius: 9999px !important; /* rounded-full */
+    /* padding-left: 2.5rem !important;  px-10 */
+    /* padding-right: 2.5rem !important; */
+    /* padding-top: 1rem !important;     py-4 */
+    /* padding-bottom: 1rem !important; */
+
+    /* font-size: 1.5rem !important;     text-2xl */
+    font-weight: 800 !important;     /* font-extrabold */
+    letter-spacing: 0.2em !important; /* tracking-[0.2em] */
+    text-transform: uppercase !important;
+}
+
+.p-button.p-button-primary:hover {
+    filter: brightness(0.95);
+}
+
+.p-button.p-button-primary:active {
+    filter: brightness(0.9);
+}
+
+/* Canvis boto principal de prime VUE */
+
+.p-button.p-button-secondary {
+    /* Gradient with 20% opacity */
+    background: linear-gradient(
+        90deg,
+        rgba(19, 214, 217, 0.2) 0%,
+        rgba(149, 186, 183, 0.2) 57%,
+        rgba(96, 194, 214, 0.2) 100%
+    ) !important;
+
+    /* Border */
+    border: 2px solid #60C2D6 !important;
+
+    /* Text */
+    color: #6ED1D2 !important;
+
+    /* Optional: smooth look like your image */
+    backdrop-filter: blur(2px);
+}
+
+/* Hover */
+.p-button.p-button-secondary:hover {
+    filter: brightness(1.1);
+}
+
+/* Active */
+.p-button.p-button-secondary:active {
+    filter: brightness(0.95);
+}
+
+
+.exo-2 {
+  font-family: "Exo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.baloo-2 {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
 }
