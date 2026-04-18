@@ -6,6 +6,8 @@ use App\Events\CardPlayed;
 use App\Events\StartGame;
 use App\Events\UpdateGameState;
 use App\Events\GameWon;
+use App\Events\LieCalled;
+use App\Events\TakenCards;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -87,20 +89,27 @@ class GameController extends Controller
 
             $gameState->pile->last_played_cards = $cardsPlayed;
             $gameState->pile->last_played_cards_count = count($cardsPlayed);
-
+                Log::info($cardsPlayedIds);
+            
             foreach ($cardsPlayed as $card) { 
                 // Create an array of just the IDs from the player's hand (yes array_column can grab the id's from card objects, so smart it gave me a headache)
                 $playerCardIds = array_column($gameState->player_decks->{$playerGrabbed}->cards, 'id');
 
                 // Search for the current card's ID in that list
                 $cardPosition = array_search($card->id, $playerCardIds);
-
+                Log::info($playerCardIds);
+                Log::info($card->id);
+                Log::info($cardPosition);
                 if ($cardPosition !== false) {
                     // remove the card from the player's deck
+                    Log::info(json_encode($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition], JSON_PRETTY_PRINT) );
                     unset($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition]);
 
                     // add the card to the pile
                     array_push($gameState->pile->cards, $card);
+
+                    //re index array cause unset leaves empty spots and it breaks it
+                    $gameState->player_decks->{$playerGrabbed}->cards = array_values($gameState->player_decks->{$playerGrabbed}->cards);
                 }
             }
             // re-index the array after using unset
@@ -120,13 +129,20 @@ class GameController extends Controller
         }
     }
 
-    public function callLie($gameId) {
-        $user = Auth::user();
+    public function callLie(Request $request) {
+        $gameId = $request->gameId;
+
+        broadcast(new LieCalled(Game::find($gameId)));
+
         $gameState = $this->getDecodedGameStateById($gameId);
+        $callerNum = $this->getLoggedPlayerNumFromState($gameState);
 
         $players = $gameState->players;
-        $lastPlayedCards = $gameState->last_played_cards;
-        $calledRank = $gameState->called_rank;
+        $lastPlayedCards = $gameState->pile->last_played_cards;
+        if (empty($lastPlayedCards)) {
+            return response()->json(['error' => 'A lie was called already!'], 400);
+        }
+        $calledRank = $gameState->pile->called_rank;
 
         $lastPlayer = $players[$gameState->last_player_turn-1]; //minus one because array is 0 index (starts at 0 and not at 1)
 
@@ -140,13 +156,15 @@ class GameController extends Controller
         }
 
         if ($lie == true) {
-            $this->changeTurnTo($gameId, $user);
+            $this->changeTurnTo($gameId, $callerNum);
             $result = $this->takeCards($gameId, $lastPlayer);
+            $resultMessage = 'It was a lie!';
         } else {
             $this->changeTurnTo($gameId, $lastPlayer);
-            $result = $this->takeCards($gameId, $user->id);
+            $result = $this->takeCards($gameId, $callerNum);
+            $resultMessage = 'It was the truth!';
         } 
-
+        broadcast(new TakenCards(Game::find($gameId), $resultMessage));
         if ($result) {
             return response()->json('success');
         } else {
@@ -163,8 +181,8 @@ class GameController extends Controller
 
         $gameState->pile = [
             'count' => 0,
-            'last_played_cards_count' => 0,
             'cards' => [],
+            'last_played_cards_count' => 0,
             'last_played_cards' => [],
             'called_rank' => '0',
         ];
@@ -289,15 +307,14 @@ class GameController extends Controller
         $gameState->pile = [ //reset de la pila
             'count' => 0,
             'cards' => [],
-            'last_played_cards' => [],
             'last_played_cards_count' => 0,
+            'last_played_cards' => [],
             'called_rank' => '0',
         ];
 
         $jsonGameState = json_encode($gameState);
 
         $result = $this->updateGameState($gameId, $jsonGameState);
-
         return $result;
     }
 

@@ -59,6 +59,8 @@ export default function useGames() {
     }
     const game = ref({...initialGame})
 
+    const lieResult = ref('')
+
     const validationErrors = errors
 
     const gameSchema = yup.object({
@@ -95,7 +97,21 @@ export default function useGames() {
         
         axios.post('/api/games/playCards', {gameId:gameId, idCards: cardIds, calledRank: calledRank})
             .then(response => {
-                // console.log(response.data)
+                console.log(response.data)
+            }).catch(error =>{
+                toast.crud.errorMsgFromError(error);
+            })
+    }
+    const callLie = (gameId) => {
+        if (isLoading.value) {
+            toast.error('Currently loading! Wait a bit and try again.')
+            return
+        }
+        isLoading.value = true; 
+        
+        axios.post('/api/games/callLie', {gameId:gameId})
+            .then(response => {
+                console.log(response.data)
             }).catch(error =>{
                 toast.crud.errorMsgFromError(error);
             })
@@ -106,6 +122,7 @@ export default function useGames() {
         startGame,
         getGame,
         playCards,
+        callLie,
         hasError,
         getError,
         validationErrors,

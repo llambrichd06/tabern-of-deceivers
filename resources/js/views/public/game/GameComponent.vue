@@ -4,8 +4,8 @@
 	        ha robat x cartes, o ha tirat 3 reis-->
 			{{ game }}
 	        <div class="flex justify-center gap-4"><!--Up row--> 
-	            <div v-for="(decks, player) in otherPlayerDecks">
-					<div v-if="player !== 'player'+myPlayerNum && decks.count > 0" class="bg-gray-500 p-4 w-full flex justify-center">
+	            <div v-for="(decks, player) in otherPlayerDecks" class="bg-gray-500">
+					<div v-if="player !== 'player'+myPlayerNum && decks.count > 0" class="p-4 w-full flex flex-col items-center justify-center">
 	                	<div  class="flex flex-col items-center">
 							<div>
 								<!-- Currently just the player number, we should probs get the player names in the game state -->
@@ -21,7 +21,12 @@
 
 	        <div class="flex justify-center my-20 w-full gap-4"><!--Mid row-->
 				
-				<div class="flex-1"></div>
+				<div class="flex-1 flex justify-end">
+					<div class=" w-30 h-21 bg-gray-400 border-white border rounded-md flex flex-col justify-center items-center">
+						<p class="text-center">Turn: {{ turn }}</p>
+						<p class="text-center">Player {{ turnOf }}'s turn</p>
+					</div>
+				</div>
 
 				<div class="w-20 h-30 bg-gray-400 border-white border rounded-md flex">
 					<p class="text-center">Backwards card</p>
@@ -42,7 +47,14 @@
 	            <div></div>
 	        </div><!--End of almost Bottom row-->
 			<div class="flex justify-center w-full">
-				<div class="flex-1"></div>
+				<div class="flex-1 flex justify-center items-center">
+					<Button
+						label="Call lie"
+						severity="primary"
+						:disabled="isLieButtonDisabled"
+						@click="callALie()"
+					/>
+				</div>
 	        	<div class="flex justify-center"><!--Bottom row-->
 						<!-- Ready this to play cards -->
 					<div v-for="card in myCards" :key="card.id" :class="{'-translate-y-2': mySelectedCards.includes(card.id)}" class="w-20 h-30 bg-gray-400 border-white border rounded-md transition-transform duration-300 ease-in-out 
@@ -52,15 +64,15 @@
 	        	    <!--Cartes del usuari-->
 	        	</div>
 
-				<div class="flex-1 flex justify-center items-center">
+				<div class="flex-1 flex justify-center items-center gap-2">
 					<Button
 						label="Play Cards"
 						severity="primary"
-						:disabled="isButtonDisabled"
+						:disabled="isCardButtonDisabled"
 						@click="playSelectedCards()"
 					/>
-					<div v-if="pileCalledRank == 0">
-						<Select v-model="selectedRank" :options="ranks" optionLabel="name" optionValue="code" placeholder="Select a rank to call" />
+					<div v-if="pileCalledRank == 0 && turnOf == myPlayerNum">
+						<Select v-model="selectedRank" :options="ranks" optionLabel="name" optionValue="code" placeholder="Select a rank" />
 					</div>
 				</div>
 				
@@ -73,7 +85,7 @@
 	import useGames from '../../../composables/games';
 	import { useRoute } from 'vue-router';
 
-	const { playCards, isLoading } = useGames()
+	const { playCards, callLie, isLoading } = useGames()
 	const route = useRoute()
 	const authUser = authStore()
 
@@ -83,21 +95,21 @@
 	const game = defineModel<any>('game'); 
 	const gameId = route.params.id;
 	console.log(game.value.game_state.players)
-	const players = computed(() => game.value.game_state.players);
 	const turnOf = computed(() => game.value.game_state.current_player_turn);
+	const turn = computed(() => game.value.game_state.turn)
 	/**
 	 * Logged player data
 	 */
-	const myPlayerNum = players.value.indexOf(authUser.user.id) + 1;
+	const myPlayerNum = computed(() => game.value.game_state.players.indexOf(authUser.user.id) + 1);
 	const myCards = computed(() => {
-  		return game.value.game_state.player_decks['player'+myPlayerNum]['cards']
+  		return game.value.game_state.player_decks['player'+myPlayerNum.value]['cards']
 	});
 	// const myCards = toRef(game.value.game_state, 'player_decks');
 	const mySelectedCards = ref([])
 	/**
 	 * Other player data
 	 */
-
+	const lastPlayerTurn = computed(() =>  game.value.game_state.last_player_turn)
 	const otherPlayerDecks = computed(() =>  game.value.game_state.player_decks)
 
 	/**
@@ -105,6 +117,7 @@
 	 */
 	const pileCount = computed(() => game.value.game_state.pile.count);
 	const pileCalledRank = computed(() => game.value.game_state.pile.called_rank);
+	const pileLastPlayedCardsCount = computed(() => game.value.game_state.pile.last_played_cards_count);
 
 	/**
 	 * Called rank select
@@ -125,10 +138,14 @@
 	    { name: 'Queen', code: 'Queen' },
 	    { name: 'King', code: 'King' }
 	]);
-	const isButtonDisabled = computed(() => {
-		let notMyTurn = turnOf.value != myPlayerNum;
+	const isCardButtonDisabled = computed(() => {
+		let notMyTurn = turnOf.value != myPlayerNum.value;
 		let cardsNotSelected = mySelectedCards.value.length < 1;
   		return isRankNotSelected.value || notMyTurn || isLoading.value || cardsNotSelected;
+	});
+	const isLieButtonDisabled = computed(() => {
+		let lastPlayer = lastPlayerTurn.value == myPlayerNum.value;
+  		return pileCalledRank.value == 0 || isLoading.value || lastPlayer;
 	});
 	const isRankNotSelected = computed(() => {
 		return pileCalledRank.value == 0 && !selectedRank.value
@@ -136,16 +153,6 @@
 
 
 	const cardSelect = (card) => {
-		// if (card.selected) {
-		// 	let cardIndex = mySelectedCards.value.indexOf(card.id);
-		// 	if (cardIndex > 0) mySelectedCards.value.splice(cardIndex, 1)
-		// } else if (mySelectedCards.value.length >= 4) {
-		// 	return
-		// } else {
-		// 	mySelectedCards.value.push(card.id)
-		// }
-		
-		// card.selected = !card.selected
 		const index = mySelectedCards.value.indexOf(card.id);
     	if (index > -1) {
     	    mySelectedCards.value.splice(index, 1);
@@ -155,10 +162,15 @@
 	}
 
 	const playSelectedCards = () => {
-				
 		playCards(gameId, mySelectedCards.value, selectedRank.value)
 		mySelectedCards.value = []
-		
+		selectedRank = ref('');
+	}
+
+	const callALie = () => {
+		mySelectedCards.value = []
+		selectedRank = ref('');
+		callLie(gameId)
 	}
 
 	/**
@@ -166,7 +178,7 @@
 	 * gamestate: {
 	 * 	pile: {
 	 * 		'count' => 0,
-	 * 		'last_played_cards_count' => [],
+	 * 		'last_played_cards_count' => 0,
      *      'cards' => [],
      *      'last_played_cards' => [],
      *      'called_rank' => '0',

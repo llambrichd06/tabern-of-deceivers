@@ -39,21 +39,31 @@ onBeforeMount(async () => {
                 console.log('GAME UPDATED! GET MY STATE');
                 await getGame(gameId);
             })
-            .listen('CardPlayed', async (e) => {
+            .listen('CardPlayed', (e) => {
                 
                 console.log('CARD PLAYED, PAUSE FOR A SECOND');
                 isLoading.value = true;
             })
-            .listen('GameWon', async (e) => {
+            .listen('LieCalled', (e) => {
                 
-                console.log('GAME WIN YOOOO');
+                console.log('LIE CALLED, PAUSE FOR A SECOND');
+                isLoading.value = true;
+            })
+            .listen('TakenCards', (e) => {
+                console.log("CARDS WERE TAKEN, THE RESULT IS... "+e.result);
+            })
+            .listen('GameWon', (e) => {
+                
+                console.log('GAME WIN WOW');
             });;
 });
 
 onUnmounted(()=>{
     window.Echo.join(`game.room.${game.value.room_id}`)
     .stopListening('UpdateGameState')
-    .stopListening('UpdateGameState')
+    .stopListening('CardPlayed')
+    .stopListening('LieCalled')
+    .stopListening('TakenCards')
     .stopListening('GameWon');
 })
 // onMounted(async() => {
