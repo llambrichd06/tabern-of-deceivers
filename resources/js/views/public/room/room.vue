@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
+                <div v-if="!loading && authUser.user.id == room.host?.id" class="flex flex-wrap items-center gap-3">
                     <Button label="Edit Match Rules" size="small" />
 
                     <!-- GOTTA MAKE AN "Are you sure?" WINDOW FOR THIS, MAKE IT SO IT CAN BE REUSED WITH OTHER STUFF -->
@@ -119,12 +119,13 @@ import { authStore } from "@/store/auth";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import useRooms from "../../../composables/rooms";
 import useGames from "../../../composables/games";
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed } from "vue";
 import axios from "axios";
 import Chat from '../../../components/roomComponents/Chat.vue'
 
 const route = useRoute()
+const router = useRouter()
 const id = route.params.id
 
 // console.log('id de sala: ' + id)
@@ -158,16 +159,18 @@ onMounted(async () => {
             })
             .error((error) => {
                 console.error('Connection error:', error);
-            })
+            });
+        window.Echo.join(`game.room.${id}`)
             .listen('StartGame', (e) => {
                 // Standard event listener for messages within that room
                 console.log(e.game_id);
-                route.push({ name: 'game', params: { id: e.game_id } })
+                router.push({ name: 'game', params: { id: e.game_id } })
 
             });
         
     } catch (error) {
         console.error("Failed to load Room: ", error);
+        router.push({ name: 'rooms'})
     } finally {
         loading.value = false;
     }

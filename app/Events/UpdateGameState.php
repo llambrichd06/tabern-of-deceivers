@@ -9,21 +9,20 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class UpdateGameState
+class UpdateGameState implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $gameId;
-    private $gameState;
+    private $game;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($gameId, $gameState)
+    public function __construct($game)
     {
-        $this->gameId = $gameId;
-        $this->gameState = $gameState;
+        $this->game = $game;
     }
 
     /**
@@ -34,13 +33,7 @@ class UpdateGameState
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('chat.room.'.$this->gameState->room_id),
-        ];
-    }
-
-    public function broadcastWith() { //data the event brings with it (THESE FUNCTIONS NEED EXACT NAMES OR THEY DON'T WORK)
-        return [
-            'game_state' => $this->gameState,
+            new PresenceChannel('game.room.'.$this->game->room_id),
         ];
     }
 }

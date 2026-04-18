@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Game;
 
-class GameWon
+class GameWon implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,7 +33,7 @@ class GameWon
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('chat.room.'.$this->game->room_id),
+            new PresenceChannel('game.room.'.$this->game->room_id),
         ];
     }
 

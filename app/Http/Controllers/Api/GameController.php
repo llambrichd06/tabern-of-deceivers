@@ -13,6 +13,7 @@ use App\Models\Room;
 use App\Models\RoomUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class GameController extends Controller
@@ -21,23 +22,27 @@ class GameController extends Controller
     {
         if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);
 
+        //we need to send the whole game object, but edit the gamestate so that its only for the logged user
         return response()->json(['game_state' => $game->game_state]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
     public function getGame(Game $game) {
-
         if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+
+        $game->game_state = json_decode($game->game_state);
         return response()->json(['game' => $game]);
     }
 
     public function startGame(Request $request)
     {
         $roomId = $request->room_id;
-        $gameForRoomExists = Game::where('room_id', $roomId)->where('is_finished', '0');
+        $gameForRoomExists = Game::where('room_id', $roomId)->where('is_finished', '0')->first();
 
         if ($gameForRoomExists) return response()->json(['error' => 'This room has an unfinished game'], 409);
-
-        $room = Room::where('room_id', $roomId)->first();
+        // Log::info($roomId);
+        $room = Room::where('id', $roomId)->first();
+        // Log::info($room);
+        if ($room->players()->count() < 2) return response()->json(['error' => 'You need at least 2 players to start a game!'], 409);
         $room->state = 'on_going';
         $room->save();
 
@@ -51,14 +56,114 @@ class GameController extends Controller
         $this->updateGameState($game->id, $game->game_state);
     }
 
+    public function playCards(Request $request) {
+        broadcast(new CardPlayed(Game::find($request->gameId)));
+        $gameState = $this->getDecodedGameStateById($request->gameId);
+        $playerNum = $this->getLoggedPlayerNumFromState($gameState); //player playing the cards
+        $playerGrabbed = 'player'.$playerNum;
+
+
+        /**
+         * we are getting the ids and then turning the array of ids into an array of cards
+         */
+        $cardsPlayedIds = $request->idCards;
+        $lastCalledRank = $request?->calledRank;
+
+        $cardsPlayed = Card::whereIn('id', $cardsPlayedIds)->get();
+
+        try {
+            $nextPlayerNum = isset($gameState->players[$playerNum]) ? $playerNum+1 : 1;
+
+            $isGameFinished = $this->changeTurnTo($request->gameId, $nextPlayerNum);
+            if ($isGameFinished) {
+                return;
+            }
+            $gameState = $this->getDecodedGameStateById($request->gameId); //Grab the game state again after changin turn
+
+            //if there was no called rank
+            if ($gameState->pile->called_rank <= 0) {
+               $gameState->pile->called_rank = $lastCalledRank;
+            }
+
+            $gameState->pile->last_played_cards = $cardsPlayed;
+            $gameState->pile->last_played_cards_count = count($cardsPlayed);
+
+            foreach ($cardsPlayed as $card) { 
+                // Create an array of just the IDs from the player's hand (yes array_column can grab the id's from card objects, so smart it gave me a headache)
+                $playerCardIds = array_column($gameState->player_decks->{$playerGrabbed}->cards, 'id');
+
+                // Search for the current card's ID in that list
+                $cardPosition = array_search($card->id, $playerCardIds);
+
+                if ($cardPosition !== false) {
+                    // remove the card from the player's deck
+                    unset($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition]);
+
+                    // add the card to the pile
+                    array_push($gameState->pile->cards, $card);
+                }
+            }
+            // re-index the array after using unset
+            $gameState->player_decks->{$playerGrabbed}->cards = array_values($gameState->player_decks->{$playerGrabbed}->cards);
+            
+            //change the card count of the player to the new card count
+            $gameState->player_decks->{$playerGrabbed}->count = count($gameState->player_decks->{$playerGrabbed}->cards);
+            //change the pile count to the new count
+            $gameState->pile->count = count($gameState->pile->cards);
+            
+            $jsonGameState = json_encode($gameState);
+
+            $this->updateGameState($request->gameId, $jsonGameState);
+            return response()->json('success');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function callLie($gameId) {
+        $user = Auth::user();
+        $gameState = $this->getDecodedGameStateById($gameId);
+
+        $players = $gameState->players;
+        $lastPlayedCards = $gameState->last_played_cards;
+        $calledRank = $gameState->called_rank;
+
+        $lastPlayer = $players[$gameState->last_player_turn-1]; //minus one because array is 0 index (starts at 0 and not at 1)
+
+        $lie = false;
+        foreach ($lastPlayedCards as $card) {
+            $currentCard = Card::find($card->id);
+            $rankOfCard = $currentCard->rank;
+            if ($rankOfCard != $calledRank && !is_null($rankOfCard)) {
+                $lie = true;
+            }
+        }
+
+        if ($lie == true) {
+            $this->changeTurnTo($gameId, $user);
+            $result = $this->takeCards($gameId, $lastPlayer);
+        } else {
+            $this->changeTurnTo($gameId, $lastPlayer);
+            $result = $this->takeCards($gameId, $user->id);
+        } 
+
+        if ($result) {
+            return response()->json('success');
+        } else {
+            return response()->json(['error' => 'Something went wrong when calling a lie!'], 400);
+        }
+    }
+
+    //PRIVATE FUNCTIONS----------------------------------------------------
 
     private function createNewGameState($roomId) {
         //number of cards per player
-        // $cardsPerPlayer = 6; //WE ARE ACTUALLY GONNA SHUFFLE AS MANY CARDS IN THE DECK BETWEEN ALL PLAYERS, the cards that can't be shuffled equally wont be used
+        $cardsPerPlayer = 6; //WE ARE ACTUALLY GONNA SHUFFLE AS MANY CARDS IN THE DECK BETWEEN ALL PLAYERS, the cards that can't be shuffled equally wont be used
         $gameState = new stdClass;
 
         $gameState->pile = [
             'count' => 0,
+            'last_played_cards_count' => 0,
             'cards' => [],
             'last_played_cards' => [],
             'called_rank' => '0',
@@ -75,17 +180,17 @@ class GameController extends Controller
 
         $gameState->players = [];
 
-        $gameState->current_player_turn = 0;
+        $gameState->current_player_turn = 1;
         $gameState->last_player_turn = 0;
-        $gameState->turn = 0;
+        $gameState->turn = 1;
 
         //setting the players in a random order
         $players = RoomUsers::select('user_id')->where('room_id', $roomId)->inRandomOrder()->get();
-        $cardAmount = Card::count();
-        $cardsPerPlayer = floor(count($players)/$cardAmount);
+        $cardAmount = Card::count(); 
+        // $cardsPerPlayer = floor($cardAmount/count($players)); // USE THIS WHEN WE STOP TESTING
         
         foreach ($players as $player) {
-            array_push($gameState->players, $player->id);
+            array_push($gameState->players, $player->user_id);
         }
         
         //depending on player number, how many cards do we need to use in the game
@@ -112,76 +217,41 @@ class GameController extends Controller
         return $jsonGameState;
     }
 
-    private function updateGameState($gameId, $gameState) {
+    private function updateGameState($gameId, $gameState, $broadcast = true) {
         $game = Game::find($gameId);
-        if (!$game) {
-            $game->gameState = $gameState;
+        if ($game) {
+            $game->game_state = $gameState;
             $game->save();
-            broadcast(new UpdateGameState($gameId, $gameState));
-            return "Succes in updating the gameState";
+            Log::info("broadcast: $broadcast");
+            if ($broadcast) {
+                Log::info($game);
+                broadcast(new UpdateGameState($game));
+            }
+            Log::info('Updated game state successfully!');
+            return true;
         } else {
-            return "Unsuccesfull to update gameState";
+            Log::error('Something went wrong while updating state!');
+            return false;
         }
     }
 
-    private function validateAction() {
-
-    }
-
-    public function playCards(Request $request) {
-        $gameState = $this->getDecodedGameStateById($request->gameId);
-        $playerNum = $this->getLoggedPlayerNumFromState($gameState);
-        $cardsPlayed = $request->idCards;
-        $lastCalledRank = $request->calledRank;
-        
-        try {
-            //Check if the game is finished
-            $isGameFinished = $this->changeTurn($request->gameId, $playerNum);
-            if ($isGameFinished) {
-                return;
-            }
-
-            //if there was no called rank
-            if ($gameState->pile['called_rank'] <= 0) {
-               $gameState->pile['called_rank'] = $lastCalledRank;
-            }
-
-            $gameState->pile['last_played_cards'] = $cardsPlayed;
-
-            //for each card played we do the same
-            foreach ($cardsPlayed as $cardId) {
-                //look for the card position in the array
-                $cardPosition = array_search($cardId, $gameState->player_decks["player$playerNum"]['cards']);
-                //remove the card from the player's deck
-                unset($gameState->player_decks["player$playerNum"]['cards'][$cardPosition]);
-                //add the cards to the pile
-                array_push($gameState->pile['cards'], $cardId);
-            }
-            //change the card count of the player to the new card count
-            $gameState->player_decks["player$playerNum"]['count'] = count($gameState->player_decks["player$playerNum"]['cards']);
-            //change the pile count to the new count
-            $gameState->pile['count'] = count($gameState->pile['cards']);
-            
-            $jsonGameState = json_encode($gameState);
-
-            $this->updateGameState($request->gameId, $jsonGameState);
-            broadcast(new CardPlayed(Game::find($request->gameId)));
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
-
-    private function changeTurn($gameId, $playerNum) {
+    private function changeTurnTo($gameId, $playerNum) {
+        $game = Game::find($gameId);
         $gameState = $this->getDecodedGameStateById($gameId);
         $lastPlayerTurn = $gameState->last_player_turn;
+        Log::info($lastPlayerTurn);
+        $lastPlayer = 'player'.$lastPlayerTurn;
 
-        if ($gameState->player_decks["player$lastPlayerTurn"]["count"] >= 0) {
+        if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
             $this->gameWon($gameId);
             return true;
         }
         $gameState->last_player_turn = $gameState->current_player_turn;
         $gameState->current_player_turn = $playerNum;
         $gameState->turn = $gameState->turn + 1;
+
+        $jsonGameState = json_encode($gameState);
+        $this->updateGameState($gameId, $jsonGameState, false);
         return false;
     }
     
@@ -202,26 +272,25 @@ class GameController extends Controller
 
         $players = $gameState->players;
 
-        $PositionPlayerTaker = array_search($idPlayerTaker, $players); //rep la posicio del jugador amb id idPlayerTaker de la array players
-        $playerNum = $PositionPlayerTaker + 1;
-        $playerTaker = $gameState->player_decks["player$playerNum"];
+        $positionPlayerTaker = array_search($idPlayerTaker, $players); //rep la posicio del jugador amb id idPlayerTaker de la array players
+        $playerNum = $positionPlayerTaker + 1;
+        $playerGrabbed = 'player'.$playerNum;
+        $playerTakerDeck = $gameState->player_decks->{$playerGrabbed};
 
-        $playerTakerCardsCount = $playerTaker->count;
-        $playerTakerCards = $playerTaker->cards;
+        $playerTakerCards = $playerTakerDeck->cards;
 
-        $countCardsInPile = $gameState->pile->count;
-        $CardsInPile = $gameState->pile->cards;
+        $cardsInPile = $gameState->pile->cards;
 
-        $newPlayerTakerCardsCount = $countCardsInPile + $playerTakerCardsCount;
-        $newPlayerTakerCards = array_merge($CardsInPile, $playerTakerCards);
+        $newPlayerTakerCards = array_merge($cardsInPile, $playerTakerCards);
 
-        $gameState->player_decks["player$playerNum"]->count[$newPlayerTakerCardsCount];
-        $gameState->player_decks["player$playerNum"]->cards[$newPlayerTakerCards];
+        $gameState->player_decks->{$playerGrabbed}->count = count($newPlayerTakerCards);
+        $gameState->player_decks->{$playerGrabbed}->cards = $newPlayerTakerCards;
 
         $gameState->pile = [ //reset de la pila
             'count' => 0,
             'cards' => [],
             'last_played_cards' => [],
+            'last_played_cards_count' => 0,
             'called_rank' => '0',
         ];
 
@@ -229,40 +298,7 @@ class GameController extends Controller
 
         $result = $this->updateGameState($gameId, $jsonGameState);
 
-        if ($result == "Succes in updating the gameState") {
-            return "Taken cards succesfuly";
-        } else {
-            return "Error at tring to take cards";
-        }
-    }
-
-    public function callLie($gameId) {
-        $user = Auth::user();
-        $gameState = $this->getDecodedGameStateById($gameId);
-
-        $players = $gameState->players;
-        $lastPlayedCards = $gameState->last_played_cards;
-        $calledRank = $gameState->called_rank;
-
-
-        $lastPlayer = $players[$gameState->last_player_turn-1];
-
-        $lie = false;
-        foreach ($lastPlayedCards as $card) {
-            $currentCard = Card::find($card);
-            $rankOfCard = $currentCard->rank;
-            if ($rankOfCard != $calledRank && $rankOfCard != null) {
-                $lie = true;
-            }
-        }
-
-        if ($lie == true) {
-            $gameState = $this->takeCards($gameId, $lastPlayer);
-            $this->changeTurn($gameId, $user);
-        } else {
-            $gameState = $this->takeCards($gameId, $user);
-            $this->changeTurn($gameId, $lastPlayer);
-        } //encara falta la funcio per canviar de torn, un cop creat hem de possar que depenen de si es mentida o no començi el que no roba cartes d'aquesta funcio (si manteix el que ha delatat, si no el que della la veritat)
+        return $result;
     }
 
     private function gameWon($gameId){

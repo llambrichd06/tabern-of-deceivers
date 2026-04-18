@@ -31,3 +31,14 @@ Broadcast::channel('chat.room.{roomId}', function ($user, $roomId) {
         ];
     }
 });
+
+Broadcast::channel('game.room.{roomId}', function ($user, $roomId) {
+    $playerInRoom = Room::find($roomId)->players->contains($user->id);
+    if ($playerInRoom) {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            // 'avatar' => $user->profile_photo_url, // PUT THIS LATER IF WE WANT PFP's
+        ];
+    }
+});

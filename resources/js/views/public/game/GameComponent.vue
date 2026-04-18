@@ -2,18 +2,37 @@
 	<!--Tendrem el nom del jugador potser amb la imatge del perfil, despres la imatge de l'equena de la carta amb un numero que 
 	        indica quantes cartes te i en cas de que podem posar un "xat" o text que digui cosses com:
 	        ha robat x cartes, o ha tirat 3 reis-->
-	        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"><!--Up row--> 
-	            <!--Aqui estaran els jugadors 1-3 que no siguix tu-->
-	            <!--foreach players as player-->
-	            <div v-for="item in items" class="bg-gray-200 p-4">
-	                {{ item }}
+			{{ game }}
+	        <div class="flex justify-center gap-4"><!--Up row--> 
+	            <div v-for="(decks, player) in otherPlayerDecks">
+					<div v-if="player !== 'player'+myPlayerNum && decks.count > 0" class="bg-gray-500 p-4 w-full flex justify-center">
+	                	<div  class="flex flex-col items-center">
+							<div>
+								<!-- Currently just the player number, we should probs get the player names in the game state -->
+								{{ player }} 
+							</div>
+							<div class="w-20 h-30 bg-gray-400 border-white border rounded-md flex justify-end p-1">
+								<p class="w-6 h-6 bg-gray-800 p-0 text-center">{{ decks.count }}</p>
+							</div>
+						</div>
+					</div>
 	            </div>
 	        </div><!--End Up row-->
-	
-	
-	        <div><!--Mid row-->
-	            <div></div><!--Aquesta tindra una foto de una carta (esquena d'ella) i tambe possara quin rang sesta jugant i quantes cartes s'han jugat la ultima vegada-->
-	            <div></div><!--Aquesta tindra la foto de l'equena de la carta i posara el numero total de cartes que hi ha a la pila-->
+
+	        <div class="flex justify-center my-20 w-full gap-4"><!--Mid row-->
+				
+				<div class="flex-1"></div>
+
+				<div class="w-20 h-30 bg-gray-400 border-white border rounded-md flex">
+					<p class="text-center">Backwards card</p>
+				</div>
+				<div class="flex-1">
+					<div class=" w-30 h-21 bg-gray-400 border-white border rounded-md flex flex-col justify-center items-center">
+						<p class="text-center">Cards: {{ pileCount }}</p>
+						<p class="text-center">Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}</p>
+					</div>
+				</div>
+				<!--Aquesta tindra una foto de una carta (esquena d'ella) i tambe possara quin rang sesta jugant i quantes cartes s'han jugat la ultima vegada-->
 	        </div><!--End Mid row-->
 	
 	
@@ -22,13 +41,149 @@
 	            <div></div>
 	            <div></div>
 	        </div><!--End of almost Bottom row-->
-	        <div><!--Bottom row-->
-	            <!--Cartes del usuari-->
-	        </div><!--End of Bottom row-->
+			<div class="flex justify-center w-full">
+				<div class="flex-1"></div>
+	        	<div class="flex justify-center"><!--Bottom row-->
+						<!-- Ready this to play cards -->
+					<div v-for="card in myCards" :key="card.id" :class="{'-translate-y-2': mySelectedCards.includes(card.id)}" class="w-20 h-30 bg-gray-400 border-white border rounded-md transition-transform duration-300 ease-in-out 
+            	hover:-translate-y-4 cursor-pointer" @click="cardSelect(card)"> 
+						{{ card.name }}
+					</div>
+	        	    <!--Cartes del usuari-->
+	        	</div>
+
+				<div class="flex-1 flex justify-center items-center">
+					<Button
+						label="Play Cards"
+						severity="primary"
+						:disabled="isButtonDisabled"
+						@click="playSelectedCards()"
+					/>
+					<div v-if="pileCalledRank == 0">
+						<Select v-model="selectedRank" :options="ranks" optionLabel="name" optionValue="code" placeholder="Select a rank to call" />
+					</div>
+				</div>
+				
+			</div><!--End of Bottom row-->
 </template>
 
 <script setup lang="ts">
-defineProps<{
-	items: any;
-}>()
+	import { computed, ref,toRef } from 'vue';
+	import { authStore } from '../../../store/auth';
+	import useGames from '../../../composables/games';
+	import { useRoute } from 'vue-router';
+
+	const { playCards, isLoading } = useGames()
+	const route = useRoute()
+	const authUser = authStore()
+
+	/**
+	 * General game data
+	 */
+	const game = defineModel<any>('game'); 
+	const gameId = route.params.id;
+	console.log(game.value.game_state.players)
+	const players = computed(() => game.value.game_state.players);
+	const turnOf = computed(() => game.value.game_state.current_player_turn);
+	/**
+	 * Logged player data
+	 */
+	const myPlayerNum = players.value.indexOf(authUser.user.id) + 1;
+	const myCards = computed(() => {
+  		return game.value.game_state.player_decks['player'+myPlayerNum]['cards']
+	});
+	// const myCards = toRef(game.value.game_state, 'player_decks');
+	const mySelectedCards = ref([])
+	/**
+	 * Other player data
+	 */
+
+	const otherPlayerDecks = computed(() =>  game.value.game_state.player_decks)
+
+	/**
+	 * Pile data
+	 */
+	const pileCount = computed(() => game.value.game_state.pile.count);
+	const pileCalledRank = computed(() => game.value.game_state.pile.called_rank);
+
+	/**
+	 * Called rank select
+	 */
+	const selectedRank = ref('');
+	const ranks = ref([
+	    { name: 'Ace', code: 'Ace' },
+	    { name: '2', code: '2' },
+	    { name: '3', code: '3' },
+	    { name: '4', code: '4' },
+	    { name: '5', code: '5' },
+	    { name: '6', code: '6' },
+	    { name: '7', code: '7' },
+	    { name: '8', code: '8' },
+	    { name: '9', code: '9' },
+	    { name: '10', code: '10' },
+	    { name: 'Jack', code: 'Jack' },
+	    { name: 'Queen', code: 'Queen' },
+	    { name: 'King', code: 'King' }
+	]);
+	const isButtonDisabled = computed(() => {
+		let notMyTurn = turnOf.value != myPlayerNum;
+		let cardsNotSelected = mySelectedCards.value.length < 1;
+  		return isRankNotSelected.value || notMyTurn || isLoading.value || cardsNotSelected;
+	});
+	const isRankNotSelected = computed(() => {
+		return pileCalledRank.value == 0 && !selectedRank.value
+	})
+
+
+	const cardSelect = (card) => {
+		// if (card.selected) {
+		// 	let cardIndex = mySelectedCards.value.indexOf(card.id);
+		// 	if (cardIndex > 0) mySelectedCards.value.splice(cardIndex, 1)
+		// } else if (mySelectedCards.value.length >= 4) {
+		// 	return
+		// } else {
+		// 	mySelectedCards.value.push(card.id)
+		// }
+		
+		// card.selected = !card.selected
+		const index = mySelectedCards.value.indexOf(card.id);
+    	if (index > -1) {
+    	    mySelectedCards.value.splice(index, 1);
+    	} else if (mySelectedCards.value.length < 4) {
+    	    mySelectedCards.value.push(card.id);
+    	}
+	}
+
+	const playSelectedCards = () => {
+				
+		playCards(gameId, mySelectedCards.value, selectedRank.value)
+		mySelectedCards.value = []
+		
+	}
+
+	/**
+	 * USER GAME STATE STRUCTURE:
+	 * gamestate: {
+	 * 	pile: {
+	 * 		'count' => 0,
+	 * 		'last_played_cards_count' => [],
+     *      'cards' => [],
+     *      'last_played_cards' => [],
+     *      'called_rank' => '0',
+	 * 	},
+	 * 	player_decks: { (player number based on their position in the array minus one)
+     *      'player1' => {'count' => 0, 'cards' => {}},
+     *      'player2' => {'count' => 0, 'cards' => {}},
+     *      'player3' => {'count' => 0, 'cards' => {}},
+     *      'player4' => {'count' => 0, 'cards' => {}},
+     *      'player5' => {'count' => 0, 'cards' => {}},
+     *      'player6' => {'count' => 0, 'cards' => {}},
+     *  },
+	 * 	players = [],
+	 *  current_player_turn = 0,
+	 *  last_player_turn = 0,
+	 *  turn = 0,
+	 * }
+	 */
+
 </script>
