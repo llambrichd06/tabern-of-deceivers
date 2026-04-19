@@ -103,7 +103,7 @@
                     </template>
                     <!-- In case there arent any public rooms, we show this (thank god there is an #empty tag for this) -->
                     <template #empty>
-                        <div class="flex justify-center w-full">
+                        <div class="flex justify-center w-full my-3">
                             <h2 class="text-5xl">There aren't any open rooms currently.</h2>
                         </div>
                     </template>

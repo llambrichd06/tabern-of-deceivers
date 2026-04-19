@@ -2,9 +2,8 @@
 	<!--Tendrem el nom del jugador potser amb la imatge del perfil, despres la imatge de l'equena de la carta amb un numero que 
 	        indica quantes cartes te i en cas de que podem posar un "xat" o text que digui cosses com:
 	        ha robat x cartes, o ha tirat 3 reis-->
-			{{ game }}
 	        <div class="flex justify-center gap-4"><!--Up row--> 
-	            <div v-for="(decks, player) in otherPlayerDecks" class="bg-gray-500">
+	            <div v-for="(decks, player) in otherPlayerDecks" class="">
 					<div v-if="player !== 'player'+myPlayerNum && decks.count > 0" class="p-4 w-full flex flex-col items-center justify-center">
 	                	<div  class="flex flex-col items-center">
 							<div>
@@ -24,7 +23,10 @@
 				<div class="flex-1 flex justify-end">
 					<div class=" w-30 h-21 bg-gray-400 border-white border rounded-md flex flex-col justify-center items-center">
 						<p class="text-center">Turn: {{ turn }}</p>
-						<p class="text-center">Player {{ turnOf }}'s turn</p>
+						<p v-if="myPlayerNum == turnOf" class="text-center">Your turn</p>
+						<p v-else class="text-center">Player {{ turnOf }}'s turn</p>
+						<p class="text-center">You are Player {{ myPlayerNum }}</p>
+						
 					</div>
 				</div>
 
@@ -61,6 +63,9 @@
             	hover:-translate-y-4 cursor-pointer" @click="cardSelect(card)"> 
 						{{ card.name }}
 					</div>
+					<div v-if="myCards.length == 0" class="w-20 h-30">
+						You have no cards!
+					</div>
 	        	    <!--Cartes del usuari-->
 	        	</div>
 
@@ -80,9 +85,9 @@
 </template>
 
 <script setup lang="ts">
-	import { computed, ref,toRef } from 'vue';
-	import { authStore } from '../../../store/auth';
-	import useGames from '../../../composables/games';
+	import { computed, ref, watch } from 'vue';
+	import { authStore } from '../../store/auth';
+	import useGames from '../../composables/games';
 	import { useRoute } from 'vue-router';
 
 	const { playCards, callLie, isLoading } = useGames()
@@ -92,7 +97,13 @@
 	/**
 	 * General game data
 	 */
-	const game = defineModel<any>('game'); 
+	const game = defineModel<any>('game');
+	const gameLoading = defineModel<any>('loading'); 
+
+	watch(gameLoading, (value) => { //This "links" both loading states on the component
+		if (value !== undefined) isLoading.value = value;
+	}, { immediate: true })
+
 	const gameId = route.params.id;
 	console.log(game.value.game_state.players)
 	const turnOf = computed(() => game.value.game_state.current_player_turn);
@@ -141,6 +152,7 @@
 	const isCardButtonDisabled = computed(() => {
 		let notMyTurn = turnOf.value != myPlayerNum.value;
 		let cardsNotSelected = mySelectedCards.value.length < 1;
+		
   		return isRankNotSelected.value || notMyTurn || isLoading.value || cardsNotSelected;
 	});
 	const isLieButtonDisabled = computed(() => {
@@ -164,12 +176,12 @@
 	const playSelectedCards = () => {
 		playCards(gameId, mySelectedCards.value, selectedRank.value)
 		mySelectedCards.value = []
-		selectedRank = ref('');
+		selectedRank.value = '';
 	}
 
 	const callALie = () => {
 		mySelectedCards.value = []
-		selectedRank = ref('');
+		selectedRank.value = '';
 		callLie(gameId)
 	}
 

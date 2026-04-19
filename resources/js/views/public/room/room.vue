@@ -6,7 +6,7 @@
                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-10">
                     <p class="text-3xl font-normal">Room code: {{ room.room_code }}</p>
 
-                    <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex flex-wrap items-center justify-around gap-3">
                         <div class="flex items-center gap-2">
                             <p class="text-3xl font-normal">
                                 {{ room.private == false ? 'Public' : 'Private' }}
@@ -48,6 +48,9 @@
                     <Button label="Leave Room" severity="danger" size="small" @click="leaveTheRoom" />
 
                     <Button label="Start Match" severity="success" size="small" @click="start" />
+                </div>
+                <div v-else class="">
+                    <p>Waiting for the host to start the match...</p>
                 </div>
             </div>
 

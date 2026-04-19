@@ -29,7 +29,7 @@ class GameController extends Controller
     }
 
     public function getGame(Game $game) {
-        if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+        if (!$game->id || $game->is_finished) return response()->json(['error' => 'Game not found'], 404);
 
         $game->game_state = json_decode($game->game_state);
         return response()->json(['game' => $game]);

@@ -1,31 +1,31 @@
 <template>
     <div v-if="game.game_state && game.room_id">
         <section> <!--Game-->
-            <GameComponent v-model:game="game"/>
-            <p>{{ game.game_state }}</p>
+            <GameComponent v-model:game="game" v-model:loading="isLoading"/>
         </section>
         <section>
             <Chat :roomId="game.room_id"/>
-            <p>{{ game.room_id }}</p>
         </section>
-        {{isLoading}}
     </div>
     <div v-else class="flex justify-center w-full pt-8">
         <p class="text-5xl">Loading...</p>
     </div>
+    <GameResult v-model:visible="gameWon" v-model:game="game" /> 
+    <Button label="simulate game win" @click="gameWon = true"/>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, onUnmounted } from "vue";
+import { onBeforeMount, onUnmounted, ref } from "vue";
 import Chat from "../../../components/roomComponents/Chat.vue";
-import GameComponent from './GameComponent.vue'
+import GameComponent from '../../../components/gameComponent/GameComponent.vue'
 import { useRoute, useRouter } from 'vue-router'
 import useGames from "../../../composables/games";
+import GameResult from "../../../components/gameComponent/GameResult.vue";
 
 const route = useRoute()
-const router = useRouter()
 const { game, getGame, isLoading } = useGames()
 const gameId = route.params.id
+const gameWon = ref(false)
 
 onBeforeMount(async () => {
     await getGame(gameId)
@@ -37,7 +37,9 @@ onBeforeMount(async () => {
             .listen('UpdateGameState', async (e) => {
                 
                 console.log('GAME UPDATED! GET MY STATE');
-                await getGame(gameId);
+                await getGame(gameId).then(isLoading.value = false);
+                console.log('WHY DOES IT STAY AS TRUE '+isLoading.value);
+                
             })
             .listen('CardPlayed', (e) => {
                 
@@ -53,8 +55,9 @@ onBeforeMount(async () => {
                 console.log("CARDS WERE TAKEN, THE RESULT IS... "+e.result);
             })
             .listen('GameWon', (e) => {
-                
                 console.log('GAME WIN WOW');
+                window.Echo.leave(`game.room.${game.value.room_id}`)
+                gameWon.value = true;
             });;
 });
 
