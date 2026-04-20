@@ -41,10 +41,11 @@ class GameController extends Controller
         $gameForRoomExists = Game::where('room_id', $roomId)->where('is_finished', '0')->first();
 
         if ($gameForRoomExists) return response()->json(['error' => 'This room has an unfinished game'], 409);
-        // Log::info($roomId);
+
         $room = Room::where('id', $roomId)->first();
-        // Log::info($room);
+
         if ($room->players()->count() < 2) return response()->json(['error' => 'You need at least 2 players to start a game!'], 409);
+        
         $room->state = 'on_going';
         $room->save();
 
@@ -89,7 +90,6 @@ class GameController extends Controller
 
             $gameState->pile->last_played_cards = $cardsPlayed;
             $gameState->pile->last_played_cards_count = count($cardsPlayed);
-                Log::info($cardsPlayedIds);
             
             foreach ($cardsPlayed as $card) { 
                 // Create an array of just the IDs from the player's hand (yes array_column can grab the id's from card objects, so smart it gave me a headache)
@@ -97,12 +97,9 @@ class GameController extends Controller
 
                 // Search for the current card's ID in that list
                 $cardPosition = array_search($card->id, $playerCardIds);
-                Log::info($playerCardIds);
-                Log::info($card->id);
-                Log::info($cardPosition);
                 if ($cardPosition !== false) {
                     // remove the card from the player's deck
-                    Log::info(json_encode($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition], JSON_PRETTY_PRINT) );
+                    // Log::info(json_encode($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition], JSON_PRETTY_PRINT) );
                     unset($gameState->player_decks->{$playerGrabbed}->cards[$cardPosition]);
 
                     // add the card to the pile
@@ -144,8 +141,9 @@ class GameController extends Controller
         }
         $calledRank = $gameState->pile->called_rank;
 
-        $lastPlayer = $players[$gameState->last_player_turn-1]; //minus one because array is 0 index (starts at 0 and not at 1)
-
+        $lastPlayer = $gameState->last_player_turn;
+        Log::info($lastPlayer);
+        Log::info($callerNum);
         $lie = false;
         foreach ($lastPlayedCards as $card) {
             $currentCard = Card::find($card->id);
@@ -240,9 +238,7 @@ class GameController extends Controller
         if ($game) {
             $game->game_state = $gameState;
             $game->save();
-            Log::info("broadcast: $broadcast");
             if ($broadcast) {
-                Log::info($game);
                 broadcast(new UpdateGameState($game));
             }
             Log::info('Updated game state successfully!');
@@ -257,7 +253,7 @@ class GameController extends Controller
         $game = Game::find($gameId);
         $gameState = $this->getDecodedGameStateById($gameId);
         $lastPlayerTurn = $gameState->last_player_turn;
-        Log::info($lastPlayerTurn);
+        Log::info("last player was".$lastPlayerTurn);
         $lastPlayer = 'player'.$lastPlayerTurn;
 
         if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
