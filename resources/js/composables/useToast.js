@@ -129,7 +129,7 @@ export function useToast() {
         } else {
             errorMessage = errorData.response.data.error;
         }
-      error('Error', `${errorMessage}`);
+      error('Error', `${errorMessage ?? 'Something went wrong!'}`);
     }
     
   }

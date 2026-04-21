@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
         <!-- TOP SECTION -->
-        <section class="px-4 py-8">
+        <section class="px-4 pb-8 pt-4">
             <div class="mx-auto max-w-5xl">
                 <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
                     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -38,25 +38,24 @@
                             </div>
                         </div>
 
-                        <div v-if="!loading && authUser.user.id === room?.host?.id" class="flex flex-wrap items-center gap-2">
+                        <div  class="flex flex-wrap items-center gap-2">
+                            <Button
+                            v-if="!loading && authUser.user.id === room?.host?.id"
+                            label="Start Match"
+                            severity="success"
+                            class="rounded-2xl! px-5! py-2! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
+                            @click="start"
+                            />
+                            <!-- <Button label="Edit Match Rules" size="small" /> -->
+                            <div v-else class="mt-4">
+                                <p>Waiting for the host to start the match...</p>
+                            </div>
                             <Button
                                 label="Leave Room"
                                 severity="danger"
                                 class="rounded-2xl! px-5! py-2! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
                                 @click="leaveTheRoom"
                             />
-
-                            <Button
-                                v-if="!loading && authUser.user.id === room?.host?.id"
-                                label="Start Match"
-                                severity="success"
-                                class="rounded-2xl! px-5! py-2! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
-                                @click="start"
-                            />
-                            <!-- <Button label="Edit Match Rules" size="small" /> -->
-                        </div>
-                        <div v-else class="mt-4">
-                            <p>Waiting for the host to start the match...</p>
                         </div>
                     </div>
                     
@@ -112,25 +111,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- EXTRA INFO -->
-        <section class="px-4 pb-6">
-            <div class="mx-auto max-w-5xl">
-                <div v-if="loading" class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
-                    <p>Loading...</p>
-                </div>
-
-                <div v-else class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
-                    <h2 class="text-2xl font-bold md:text-3xl">
-                        Game Mode
-                    </h2>
-                    <p class="mt-4 text-white/90">
-                        Aqui anira una descripcio del game mode.
-                    </p>
-                </div>
-            </div>
-        </section>
-
         <!-- CHAT -->
         <section class="px-4 pb-8">
             <div class="mx-auto max-w-5xl rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-6">

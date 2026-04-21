@@ -38,7 +38,6 @@ onBeforeMount(async () => {
                 
                 console.log('GAME UPDATED! GET MY STATE');
                 await getGame(gameId).then(isLoading.value = false);
-                console.log('WHY DOES IT STAY AS TRUE '+isLoading.value);
                 
             })
             .listen('CardPlayed', (e) => {
