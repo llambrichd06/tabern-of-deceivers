@@ -1,6 +1,6 @@
 <template>
     <div class="page-content min-h-screen bg-[#520B93] text-white">
-        <!-- HERO -->
+        <!-- HERO (UNCHANGED) -->
         <section class="relative overflow-hidden min-h-70 md:min-h-80">
             <div class="absolute inset-0 bg-emerald-900"></div>
             
@@ -20,7 +20,6 @@
                 <div class="mx-auto w-full max-w-5xl px-4">
                     <div class="grid grid-cols-1 md:grid-cols-[240px_1fr] pt-20 pb-8 md:pt-8">
 
-                        <!-- TITLE + BUTTON (FIRST IN MOBILE) -->
                         <div class="order-1 md:order-2 flex flex-col items-center justify-center text-center">
                             <h1 class="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
                                 Tabern of Deceivers
@@ -35,7 +34,6 @@
                             />
                         </div>
 
-                        <!-- LEFT TEXT -->
                         <div class="order-2 md:order-1 mt-8 md:mt-0 flex flex-col justify-center items-center md:items-start text-center md:text-left text-white max-w-full md:max-w-55">
                             <h3 class="font-semibold leading-tight mb-4 text-3xl md:text-4xl">
                                 Lie, decieve and scheme!
@@ -124,126 +122,105 @@
                     />
                 </div>
 
-                <div v-if="rankings != 0">
+                <div v-if="hasRankings">
                     <div v-if="loading" class="text-center">
                         Loading...
                     </div>
 
                     <div v-else class="flex items-end justify-center gap-4 md:gap-10 text-black">
-                        <!-- 2nd place -->
-                        <div
-                            v-if="bestUsers.leaderboards?.length >= 2"
-                            class="flex flex-col items-center justify-end"
-                        >
+                        <!-- 2nd -->
+                        <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
                             <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
 
-                            <div class="mt-2 flex min-h-37.5 w-24 flex-col justify-start rounded-t-xl bg-slate-200 px-3 pt-3 pb-3 text-center md:min-h-42.5 md:w-28">
-                                <p class="font-bold wrap-break-word leading-tight">
+                            <div class="mt-2 flex min-h-[150px] w-24 flex-col rounded-t-xl bg-slate-200 px-3 pt-3 pb-3 text-center md:w-28">
+                                <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[1]?.user?.name ?? "No one :v" }}
                                 </p>
-                                <p class="mt-2 text-sm md:text-base">
-                                    Wins: {{ bestUsers.leaderboards[1]?.wins ?? "none" }}
-                                </p>
-                                <p class="text-sm md:text-base">
-                                    Points: {{ bestUsers.leaderboards[1]?.points ?? "no pts" }}
-                                </p>
+                                <p class="mt-2">Wins: {{ bestUsers.leaderboards[1]?.wins ?? "none" }}</p>
+                                <p>Points: {{ bestUsers.leaderboards[1]?.points ?? "no pts" }}</p>
                             </div>
                         </div>
 
-                        <!-- 1st place -->
-                        <div
-                            v-if="bestUsers.leaderboards?.length >= 1"
-                            class="flex flex-col items-center justify-end"
-                        >
+                        <!-- 1st -->
+                        <div v-if="bestUsers.leaderboards?.length >= 1" class="flex flex-col items-center justify-end">
                             <div class="relative flex items-center justify-center">
                                 <img 
                                     src="/images/crown.svg"
-                                    alt="crown"
-                                    class="absolute -top-7 left-1/2 z-10 w-10 h-10 translate-x-[0%] rotate-24 pointer-events-none"
+                                    class="absolute -top-7 left-1/2 -translate-x-1/2 w-10 h-10 rotate-12"
                                 />
-
                                 <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
                             </div>
-                            
-                            <div class="mt-2 flex min-h-47.5 w-24 flex-col justify-start rounded-t-xl bg-yellow-300 px-3 pt-3 pb-3 text-center md:min-h-55 md:w-28">
-                                <p class="font-bold wrap-break-word leading-tight">
+
+                            <div class="mt-2 flex min-h-[190px] w-24 flex-col rounded-t-xl bg-yellow-300 px-3 pt-3 pb-3 text-center md:w-28">
+                                <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[0]?.user?.name ?? "No one :v" }}
                                 </p>
-                                <p class="mt-2 text-sm md:text-base">
-                                    Wins: {{ bestUsers.leaderboards[0]?.wins ?? "none" }}
-                                </p>
-                                <p class="text-sm md:text-base">
-                                    Points: {{ bestUsers.leaderboards[0]?.points ?? "no pts" }}
-                                </p>
+                                <p class="mt-2">Wins: {{ bestUsers.leaderboards[0]?.wins ?? "none" }}</p>
+                                <p>Points: {{ bestUsers.leaderboards[0]?.points ?? "no pts" }}</p>
                             </div>
                         </div>
 
-                        <!-- 3rd place -->
-                        <div
-                            v-if="bestUsers.leaderboards?.length >= 3"
-                            class="flex flex-col items-center justify-end"
-                        >
+                        <!-- 3rd -->
+                        <div v-if="bestUsers.leaderboards?.length >= 3" class="flex flex-col items-center justify-end">
                             <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
-                            
-                            <div class="mt-2 flex min-h-30 w-24 flex-col justify-start rounded-t-xl bg-orange-500 px-3 pt-3 pb-3 text-center md:min-h-35 md:w-28">
-                                <p class="font-bold wrap-break-word leading-tight">
+
+                            <div class="mt-2 flex min-h-[120px] w-24 flex-col rounded-t-xl bg-orange-500 px-3 pt-3 pb-3 text-center md:w-28">
+                                <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[2]?.user?.name ?? "No one :v" }}
                                 </p>
-                                <p class="mt-2 text-sm md:text-base">
-                                    Wins: {{ bestUsers.leaderboards[2]?.wins ?? "none" }}
-                                </p>
-                                <p class="text-sm md:text-base">
-                                    Points: {{ bestUsers.leaderboards[2]?.points ?? "no pts" }}
-                                </p>
+                                <p class="mt-2">Wins: {{ bestUsers.leaderboards[2]?.wins ?? "none" }}</p>
+                                <p>Points: {{ bestUsers.leaderboards[2]?.points ?? "no pts" }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div v-else class="text-center">
                     <p><b>No ranking found</b></p>
                 </div>
             </div>
         </section>
-            <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
-                <div class="flex gap-4">
-                    <template v-if="!authStore().user?.name">
-                        <Button label="Iniciar Sesión" as="router-link" to="/login" size="large" />
-                        <Button label="Registrarse" as="router-link" to="/register" severity="secondary" size="large" />
-                    </template>
-                    <template v-else>
-                        <Button 
-                            label="Ir al Dashboard" 
-                            as="router-link" 
-                            to="/app" 
-                            size="large" 
-                            severity="secondary"
-                        />
-                    </template>
-                </div>
+
+        <!-- CTA (UNCHANGED) -->
+        <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <div class="flex gap-4">
+                <template v-if="!auth.user?.name">
+                    <Button label="Iniciar Sesión" as="router-link" to="/login" size="large" />
+                    <Button label="Registrarse" as="router-link" to="/register" severity="secondary" size="large" />
+                </template>
+                <template v-else>
+                    <Button 
+                        label="Ir al Dashboard" 
+                        as="router-link" 
+                        to="/app" 
+                        size="large" 
+                        severity="secondary"
+                    />
+                </template>
             </div>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { authStore } from "@/store/auth";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import useLeaderboards from "../../../composables/leaderboards";
 
+const auth = authStore();
 const { getBestUsers } = useLeaderboards();
-const loading = ref(false);
-const rankings = ref(true);
 
+const loading = ref(false);
 const bestUsers = ref({ leaderboards: [] });
+
+const hasRankings = computed(() => bestUsers.value.leaderboards.length > 0);
 
 onMounted(async () => {
     loading.value = true;
 
     try {
         const response = await getBestUsers();
-
         bestUsers.value = response.data;
-        rankings.value = bestUsers.value.leaderboards.length;
     } catch (error) {
         console.error("Failed to load leaderboard:", error);
     } finally {
@@ -253,12 +230,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.hero-play-btn {
-    background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-    color: white !important;
-};
-
 .page-content :deep(p) {
     font-size: 1rem;
     line-height: 1.75rem;

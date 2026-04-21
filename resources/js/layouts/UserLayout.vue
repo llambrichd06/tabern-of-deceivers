@@ -8,16 +8,16 @@ import MainLayout from './MainLayout.vue';
 
 const items = ref([
    
-    {
-        label: 'Contenido',
-        items: [
-            {
-                label: 'Posts',
-                icon: 'pi pi-th-large',
-                route: '/app/posts'
-            },
-        ]
-    },
+    // {
+    //     label: 'Contenido',
+    //     items: [
+    //         {
+    //             label: 'Posts',
+    //             icon: 'pi pi-th-large',
+    //             route: '/app/posts'
+    //         },
+    //     ]
+    // },
     {
         label: 'Cuenta',
         items: [

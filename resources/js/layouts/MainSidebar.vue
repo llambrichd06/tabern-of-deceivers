@@ -20,7 +20,7 @@
         <!-- Sidebar Menu -->
         <div class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden p-3 gap-1 scrollbar-hide">
             <template v-for="(item, index) in menuModel" :key="index">
-                <!-- Group Label -->
+                <!-- Group Label -->     
                 <!-- Group Label -->
                 <div v-if="item.label && item.items" class="px-3 mt-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap transition-opacity duration-200"
                      :class="props.isCollapsed ? 'hidden' : 'opacity-100'">

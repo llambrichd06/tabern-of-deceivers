@@ -1,103 +1,113 @@
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <!-- Avatar Section -->
-        <div class="col-span-1 md:col-span-4 lg:col-span-3">
-            <Card>
-                <template #title>Avatar</template>
-                <template #content>
+    <div class="w-full min-h-screen bg-[#520B93] text-white">
+        <div class="w-full space-y-6">
+            <!-- Avatar Section -->
+            <!--
+            <section class="w-full">
+                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
+                    <h2 class="mb-6 text-2xl font-bold text-white">Avatar</h2>
+
                     <div class="flex flex-col items-center">
-                        <!-- File Upload -->
                         <FileUpload
                             name="picture"
                             url="/api/users/updateimg"
                             @before-upload="onBeforeUpload"
-                            @upload="onTemplatedUpload($event)"
+                            @upload="onTemplatedUpload"
                             accept="image/*"
                             :maxFileSize="1500000"
                             @select="onSelectedFiles"
                             mode="basic"
                             :auto="true"
                             chooseLabel="Cambiar Avatar"
-                            class="w-full"
+                            class="avatar-upload w-full"
                         />
-                        
-                        <div class="mt-4 w-full flex justify-center">
-                            <Avatar 
-                                :image="user.avatar || 'https://bootdey.com/img/Content/avatar/avatar7.png'" 
-                                class="w-32 h-32" 
-                                size="xlarge" 
+
+                        <div class="mt-6 flex w-full justify-center">
+                            <Avatar
+                                :image="user.avatar || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                                class="h-32! w-32!"
                                 shape="circle"
                             />
                         </div>
                     </div>
-                </template>
-            </Card>
-        </div>
+                </div>
+            </section>
+            -->
 
-        <!-- Personal Data Section -->
-        <div class="col-span-1 md:col-span-8 lg:col-span-9">
-            <Card>
-                <template #title>Datos Personales</template>
-                <template #content>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="field">
-                            <label class="font-bold block mb-2">Nombre</label>
-                            <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded border border-surface-200 dark:border-surface-700">
-                                {{ user.name }}
-                            </div>
-                        </div>
-                        
-                        <div class="field">
-                            <label class="font-bold block mb-2">Email</label>
-                            <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded border border-surface-200 dark:border-surface-700">
-                                {{ user.email }}
+            <!-- Personal Data Section -->
+            <section class="w-full">
+                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
+                    <h2 class="mb-6 text-2xl font-bold text-white">Datos Personales</h2>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Nombre</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.name || "-" }}
                             </div>
                         </div>
 
-                        <div class="field">
-                            <label class="font-bold block mb-2">Primer Apellido</label>
-                            <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded border border-surface-200 dark:border-surface-700">
-                                {{ user.surname1 || '-' }}
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Email</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.email || "-" }}
                             </div>
                         </div>
 
-                        <div class="field">
-                            <label class="font-bold block mb-2">Segundo Apellido</label>
-                            <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded border border-surface-200 dark:border-surface-700">
-                                {{ user.surname2 || '-' }}
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Primer Apellido</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.surname1 || "-" }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Segundo Apellido</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.surname2 || "-" }}
                             </div>
                         </div>
                     </div>
-                </template>
-            </Card>
+                </div>
+            </section>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { usePrimeVue } from 'primevue/config';
+import { onMounted } from "vue";
 import useUsers from "@/composables/users";
 import { authStore } from "@/store/auth";
 
 const auth = authStore();
-const $primevue = usePrimeVue();
 const { getUser, user } = useUsers();
 
 onMounted(() => {
-    getUser(auth.user.id)
-})
+    getUser(auth.user.id);
+});
 
 const onBeforeUpload = (event) => {
-    event.formData.append('id', user.value.id)
+    event.formData.append("id", user.value.id);
 };
 
-const onTemplatedUpload = (event) => {
-    // Recargar usuario para actualizar avatar
+const onTemplatedUpload = () => {
     getUser(auth.user.id);
 };
 
-const onSelectedFiles = (event) => {
+const onSelectedFiles = () => {
     // Lógica adicional si es necesaria
 };
 </script>
+
+<style scoped>
+:deep(.p-fileupload-basic) {
+    width: 100%;
+}
+
+:deep(.avatar-upload .p-button),
+:deep(.p-fileupload-basic .p-button) {
+    width: 100%;
+    border-radius: 1rem !important;
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.28) !important;
+}
+</style>
