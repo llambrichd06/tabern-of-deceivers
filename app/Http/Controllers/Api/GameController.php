@@ -11,6 +11,7 @@ use App\Events\TakenCards;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
+use App\Models\Leaderboard;
 use App\Models\Room;
 use App\Models\RoomUsers;
 use Illuminate\Http\Request;
@@ -30,8 +31,13 @@ class GameController extends Controller
 
     public function getGame(Game $game) {
         if (!$game->id || $game->is_finished) return response()->json(['error' => 'Game not found'], 404);
-
+        
         $game->game_state = json_decode($game->game_state);
+        // $myPlayerNum = $this->getLoggedPlayerNumFromState($game->game_state);
+        
+        // foreach ($game->game_state->player_decks as $playerNum => $playerDeck) {
+        //     if ($playerNum == $myPlayerNum) continue;
+        // }
         return response()->json(['game' => $game]);
     }
 
@@ -319,28 +325,60 @@ class GameController extends Controller
         $game->is_finished = '1';
         broadcast(new GameWon($game));
         $game->save();
+
+        $room = $game->room;
+        $room->state = 'lobby';
+        $room->private = '1';
+        $room->save();
+
+        //Save the win and give points accordingly
+        $gameState = $this->getDecodedGameStateById($gameId);
+
+        $playerAmount = count($gameState->players);
+        $podium = [];
+
+        for ($i=1; $i <= $playerAmount; $i++) { 
+            $playerResult = new stdClass;
+            $playerResult->count = $gameState->player_decks->{'player'.$i}->count;
+            $playerResult->playerId = $gameState->players[$i-1];
+            array_push($podium, $playerResult);
+        }
+        //turn into a collection to sort it in a cleaner way
+        $podium = collect($podium);
+        $podium = $podium->sortBy('count');
+        $podium = $podium->values()->all();
+
+        //Save the positions and amount of points gained in the database
+        $position = 1;
+        $points = [50, 40, 30, 20, 10, 5];
+        foreach ($podium as $playerResult) { 
+            $winner = $position === 1;
+            $pointsGained = $points[$position-1];
+            $leaderboardId = $this->updateLeaderboard($playerResult->playerId, $pointsGained, $winner);
+            $game->leaderboards()->syncWithoutDetaching([
+                $leaderboardId => [
+                    'points_gained' => $pointsGained,
+                    'position' => $position++,
+                ]
+            ]);
+        }
+
     }
-    /*
-    pile:{
-        count:3,
-        cards:[1,3,5,7],
-        last_played_cards:[5,7],
-        last_called_rank:[10],
-        },
-        
-        player_decks:[
-            'player1' => ['count' => 0, 'cards' => []],
-            'player2' => ['count' => 0, 'cards' => []],
-            'player3' => ['count' => 0, 'cards' => []],
-            'player4' => ['count' => 0, 'cards' => []],
-            'player5' => ['count' => 0, 'cards' => []],
-            'player6' => ['count' => 0, 'cards' => []],
-            ],
-            
-            players:[5,3,8,2,1,10],
-            
-            
-            current_player_turn: 2,
+
+    private function updateLeaderboard($userId, $pointsGained, $wonGame) {
+        $leaderboard = Leaderboard::where('user_id', $userId)->first();
+        if (!$leaderboard) {
+            $leaderboard = new Leaderboard();
+            $leaderboard->user_id = $userId;
+            $leaderboard->wins = 0;
+            $leaderboard->losses = 0;
+            $leaderboard->matches = 0;
+            $leaderboard->points = 0;
+        }
+        $leaderboard->matches += 1;
+        if ($wonGame) $leaderboard->wins += 1;
+        $leaderboard->points += $pointsGained;
+        $leaderboard->save();
+        return $leaderboard->id;
     }
-    */
 }

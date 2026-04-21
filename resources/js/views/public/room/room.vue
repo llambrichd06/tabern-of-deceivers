@@ -47,7 +47,7 @@
                             @click="start"
                             />
                             <!-- <Button label="Edit Match Rules" size="small" /> -->
-                            <div v-else class="mt-4">
+                            <div v-else class="">
                                 <p>Waiting for the host to start the match...</p>
                             </div>
                             <Button

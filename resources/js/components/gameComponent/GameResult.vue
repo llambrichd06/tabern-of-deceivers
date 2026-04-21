@@ -17,7 +17,7 @@
                 <div class="flex flex-col justify-between items-center gap-5 flex-3">
                     <h2 class="text-2xl">Players</h2>
                     <div v-for="(player, index) in playerArraySorted" class="w-full">
-                        <div class="flex justify-between gap-3">
+                        <div class="flex justify-around gap-3">
                             <div class="flex justify-center items-center">
                                 <Image src="" alt="pfp"/>
                             </div>
@@ -83,7 +83,7 @@
             });
         });
         playerArraySorted.value.sort((a, b) => {
-            return b.cardCount-a.cardCount
+            return a.cardCount-b.cardCount
         })
     }
 

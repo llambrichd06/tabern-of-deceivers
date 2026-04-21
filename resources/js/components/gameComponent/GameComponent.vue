@@ -3,8 +3,8 @@
 	        indica quantes cartes te i en cas de que podem posar un "xat" o text que digui cosses com:
 	        ha robat x cartes, o ha tirat 3 reis-->
 	        <div class="flex justify-center gap-4"><!--Up row--> 
-	            <div v-for="(decks, player) in otherPlayerDecks" class="">
-					<div v-if="player !== 'player'+myPlayerNum && decks.count > 0" class="p-4 w-full flex flex-col items-center justify-center">
+	            <div v-for="(decks, player) in otherPlayerDecks" class="" :class="{'hidden': player === 'player'+myPlayerNum || decks.count < 1}">
+					<div class="p-4 w-full flex flex-col items-center justify-center">
 	                	<div  class="flex flex-col items-center">
 							<div>
 								<!-- Currently just the player number, we should probs get the player names in the game state -->
