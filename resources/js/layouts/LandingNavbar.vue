@@ -34,10 +34,10 @@
             <div v-else class="flex items-center gap-3">
                 <template v-if="!authStore().user?.name">
                     <router-link to="/login">
-                        <Button label="Login" text size="small" />
+                        <Button label="Login" text size="medium" />
                     </router-link>
                     <router-link to="/register">
-                        <Button label="Registro" severity="primary" size="small" />
+                        <Button label="REGISTER" severity="primary" size="small" />
                     </router-link>
                 </template>
 
@@ -133,7 +133,7 @@
     </div>
     
     <!-- Spacer -->
-    <div class="h-20"></div>
+    <div class="h-20 bg-[#520B93]"></div>
 </template>
 
 <script setup>
@@ -154,7 +154,7 @@ const { processing, logout } = useAuth();
 const { toggleDarkMode, isDarkTheme, setDefaultMode } = useLayout();
 
 const navLinks = [
-    { label: 'Inicio', route: '/', icon: 'pi pi-home' },
+    { label: 'Home', route: '/', icon: 'pi pi-home' },
     { label: 'Rooms', route: '/rooms' },
     { label: 'Leaderboard', route: '/leaderboard'}
 ];

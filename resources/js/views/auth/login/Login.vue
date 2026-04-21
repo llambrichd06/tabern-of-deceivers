@@ -1,31 +1,33 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full">
-            <!-- Logo y título -->
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold">
-                    Bienvenido a SQL Check!
-                </h2>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Inicia sesión para continuar
-                </p>
-            </div>
+    <div class="min-h-screen bg-[#520B93] text-white">
+        <div class="mx-auto w-full max-w-5xl px-4">
+            <div class="flex min-h-[80vh] flex-col items-center justify-center pt-20 pb-8">
+                <!-- Title -->
+                <div class="mb-8 w-full max-w-3xl text-center">
+                    <h2 class="text-4xl font-bold md:text-6xl leading-tight">
+                        Welcome to the Tavern of Deceivers!
+                    </h2>
+                    <p class="mt-3 text-base text-white/80 md:text-lg">
+                        Log in to continue
+                    </p>
+                </div>
 
-            <!-- Formulario -->
-            <Card>
-                <template #content>
+                <!-- Form card -->
+                <div class="w-full max-w-2xl rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8 lg:p-10">
                     <form @submit.prevent="submitLogin" class="space-y-6">
                         <!-- Email -->
                         <div class="flex flex-col gap-2">
-                            <label for="email" class="font-medium">{{ $t('email') }}</label>
+                            <label for="email" class="font-medium text-white">
+                                {{ $t('email') }}
+                            </label>
                             <InputText
                                 id="email"
                                 type="email"
                                 v-model="loginForm.email"
-                                placeholder="tu@email.com"
-                                :class="{ 'p-invalid': validationErrors?.email }"
+                                placeholder="your@email.com"
+                                :class="['auth-input', { 'p-invalid': validationErrors?.email }]"
                             />
-                            <small v-if="validationErrors?.email" class="text-red-500">
+                            <small v-if="validationErrors?.email" class="text-red-300">
                                 <div v-for="message in validationErrors.email" :key="message">
                                     {{ message }}
                                 </div>
@@ -34,69 +36,72 @@
 
                         <!-- Password -->
                         <div class="flex flex-col gap-2">
-                            <label for="password" class="font-medium">{{ $t('password') }}</label>
+                            <label for="password" class="font-medium text-white">
+                                {{ $t('password') }}
+                            </label>
                             <Password
                                 id="password"
                                 v-model="loginForm.password"
                                 placeholder="••••••••"
                                 :toggleMask="true"
                                 :feedback="false"
-                                inputClass="w-full"
+                                inputClass="auth-input w-full"
                                 :class="{ 'p-invalid': validationErrors?.password }"
                                 fluid
                             />
-                            <small v-if="validationErrors?.password" class="text-red-500">
+                            <small v-if="validationErrors?.password" class="text-red-300">
                                 <div v-for="message in validationErrors.password" :key="message">
                                     {{ message }}
                                 </div>
                             </small>
                         </div>
 
-                        <!-- Remember me y Forgot password -->
-                        <div class="flex items-center justify-between">
+                        <!-- Remember / Forgot -->
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div class="flex items-center gap-2">
                                 <Checkbox
                                     v-model="loginForm.remember"
                                     inputId="remember"
                                     binary
                                 />
-                                <label for="remember" class="text-sm cursor-pointer">
+                                <label for="remember" class="cursor-pointer text-sm text-white/90">
                                     {{ $t('remember_me') }}
                                 </label>
                             </div>
+
                             <router-link
                                 :to="{ name: 'auth.forgot-password' }"
-                                class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                                class="text-sm font-medium text-white/90 transition-colors hover:text-white"
                             >
                                 {{ $t('forgot_password') }}
                             </router-link>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Submit -->
                         <Button
                             type="submit"
                             :label="$t('login')"
                             :loading="processing"
                             :disabled="processing"
-                            class="w-full"
+                            class="auth-submit-btn w-full rounded-2xl! border-0! py-3! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             size="large"
                         />
 
-                        <!-- Register link -->
+                        <!-- Register -->
                         <div class="text-center">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                ¿No tienes una cuenta?
+                            <p class="text-sm text-white/80">
+                                Don't have an account?
                                 <router-link
                                     :to="{ name: 'auth.register' }"
-                                    class="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                                    class="font-medium text-white transition-colors hover:text-white/80"
                                 >
-                                    Regístrate aquí
+                                    Register here
                                 </router-link>
                             </p>
                         </div>
                     </form>
-                </template>
-            </Card>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -108,7 +113,6 @@ const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 </script>
 
 <style scoped>
-/* Asegurar que PrimeIcons se muestren correctamente */
 :deep(.pi) {
     font-family: 'primeicons' !important;
     font-style: normal;
@@ -119,22 +123,52 @@ const { loginForm, validationErrors, processing, submitLogin } = useAuth();
     display: inline-block;
 }
 
-/* Estilos para InputText de PrimeVue */
-:deep(.p-inputtext) {
-    width: 100%;
-}
-
-/* Estilos para Password de PrimeVue */
-:deep(.p-password) {
-    width: 100%;
-}
-
+:deep(.p-inputtext),
+:deep(.p-password),
 :deep(.p-password-input) {
     width: 100%;
 }
 
-/* Estilos para Button de PrimeVue */
-:deep(.p-button) {
+:deep(.auth-input),
+:deep(.auth-input.p-inputtext),
+:deep(.p-password .auth-input),
+:deep(.p-password-input) {
     width: 100%;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border-radius: 1rem !important;
+    box-shadow: none !important;
+}
+
+:deep(.auth-input::placeholder),
+:deep(.p-password-input::placeholder) {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+:deep(.auth-input:enabled:focus),
+:deep(.p-password-input:enabled:focus),
+:deep(.p-inputtext:enabled:focus) {
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.08) !important;
+}
+
+:deep(.p-checkbox .p-checkbox-box) {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+:deep(.p-checkbox.p-highlight .p-checkbox-box) {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+:deep(.auth-submit-btn.p-button) {
+    background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
+    color: white !important;
+}
+
+:deep(.auth-submit-btn.p-button:enabled:hover) {
+    filter: brightness(1.05);
 }
 </style>
