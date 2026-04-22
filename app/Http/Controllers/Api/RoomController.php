@@ -31,7 +31,7 @@ class RoomController extends Controller
     }
 
     public function show(Room $room) {
-        $this->authorize('room-list');
+        // $this->authorize('room-list');
         $room->load('host', 'players');
         return response()->json([
             'room' => $room,

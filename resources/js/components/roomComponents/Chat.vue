@@ -14,7 +14,7 @@
                     <p v-if="message.user" class="text-sm font-semibold text-white/90">
 						{{ message?.user || "Unknown" }}:
 					</p>
-					<p class="mt-1 text-sm md:text-base text-white">
+					<p class="mt-1 text-sm md:text-base text-white wrap-break-word">
 						{{ message.text }}
 					</p>
 				</div>
@@ -28,6 +28,7 @@
                     v-model="currentMessage"
                     placeholder="Write message..."
                     class="chat-input w-full"
+                    :maxlength="maxLength"
                     @keyup.enter="sendMessage"
                 />
 
@@ -39,6 +40,9 @@
                     @click="sendMessage"
                 />
             </div>
+            <small class="flex justify-content-end text-secondary pl-2">
+              {{ currentMessage.length }}/{{ maxLength }}
+            </small>
         </div>
     </div>
 </template>
@@ -52,6 +56,7 @@ const props = defineProps<{
 const chatLoading = ref(false);
 const currentMessage = ref('')
 const messages = ref([])
+const maxLength = 300;
 
 onMounted(async () => {
 	window.Echo.join(`chat.room.${props.roomId}`)
