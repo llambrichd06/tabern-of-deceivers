@@ -146,7 +146,7 @@
                             <div class="relative flex items-center justify-center">
                                 <img 
                                     src="/images/crown.svg"
-                                    class="absolute -top-7 left-1/2 -translate-x-1/2 w-10 h-10 rotate-12"
+                                    class="absolute -top-7 left-22/30 -translate-x-1/2 w-10 h-10 rotate-22"
                                 />
                                 <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
                             </div>

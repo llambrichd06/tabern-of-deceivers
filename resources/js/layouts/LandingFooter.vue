@@ -9,7 +9,7 @@
             </div>
 
             <div class="flex justify-center md:justify-end">
-                <router-link to="/contact" class="font-medium transition-colors hover:text-[#520B93]/70">
+                <router-link to="/contactUs" class="font-medium transition-colors hover:text-[#520B93]/70">
                     Contact Us
                 </router-link>
             </div>
