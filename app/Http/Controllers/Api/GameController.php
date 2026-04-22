@@ -310,13 +310,11 @@ class GameController extends Controller
         return $playerNum;
     }
 
-    private function takeCards($gameId, $idPlayerTaker) {
+    private function takeCards($gameId, $playerNum) {
         $gameState = $this->getDecodedGameStateById($gameId);
 
-        $players = $gameState->players;
 
-        $positionPlayerTaker = array_search($idPlayerTaker, $players); //rep la posicio del jugador amb id idPlayerTaker de la array players
-        $playerNum = $positionPlayerTaker + 1;
+        // $positionPlayerTaker = array_search($idPlayerTaker, $players); //rep la posicio del jugador amb id idPlayerTaker de la array players
         $playerGrabbed = 'player'.$playerNum;
         $playerTakerDeck = $gameState->player_decks->{$playerGrabbed};
 
