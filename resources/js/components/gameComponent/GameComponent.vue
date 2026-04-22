@@ -47,12 +47,39 @@
         <!-- Middle pile -->
         <div class="flex flex-col items-center justify-center gap-3">
             <div class="flex items-center justify-center gap-4">
-                <div class="w-20 h-30 flex items-center justify-center">
-                    <Image
-                        src="/images/Cards/backCard.png"
-                        alt="Back of the Card"
-                        imageClass="w-20 h-30 rounded-md object-cover"
-                    />
+                <div class="relative w-24 h-34 flex items-center justify-center">
+                    <!-- No cards -->
+                    <div
+                        v-if="pileCount === 0"
+                        class="w-20 h-30 border-2 border-dashed border-white/60 rounded-md flex items-center justify-center"
+                    >
+                        <span class="text-white/70 font-semibold">PILE</span>
+                    </div>
+
+                    <!-- One card -->
+                    <div v-else-if="pileCount === 1" class="w-20 h-30">
+                        <Image
+                            src="/images/Cards/backCard.png"
+                            alt="Back of the Card"
+                            imageClass="w-full h-full rounded-md object-cover shadow-lg border border-black"
+                        />
+                    </div>
+
+                    <!-- Multiple cards -->
+                    <div v-else class="absolute inset-0">
+                        <div
+                            v-for="(_, index) in visiblePileCards"
+                            :key="index"
+                            class="absolute left-1/2 top-1/2 w-20 h-30"
+                            :style="getPileCardStyle(index, visiblePileCards)"
+                        >
+                            <Image
+                                src="/images/Cards/backCard.png"
+                                alt="Back of the Card"
+                                imageClass="w-full h-full rounded-md object-cover shadow-lg border border-black"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <p class="text-xl md:text-2xl font-semibold whitespace-nowrap">
@@ -181,6 +208,37 @@ const getPlayerName = (index: number) => {
 
 const pileCount = computed(() => game.value.game_state.pile.count);
 const pileCalledRank = computed(() => game.value.game_state.pile.called_rank);
+
+const visiblePileCards = computed(() => {
+    return Math.min(pileCount.value || 0, 5);
+});
+
+const getPileCardStyle = (index: number, total: number) => {
+    const spreadsByTotal: Record<number, number[]> = {
+        2: [-6, 6],
+        3: [-10, 0, 10],
+        4: [-12, -4, 4, 12],
+        5: [-14, -7, 0, 7, 14]
+    };
+
+    const offsetsByTotal: Record<number, number[]> = {
+        2: [-4, 4],
+        3: [-8, 0, 8],
+        4: [-10, -3, 3, 10],
+        5: [-12, -6, 0, 6, 12]
+    };
+
+    const rotations = spreadsByTotal[total] || [0];
+    const offsets = offsetsByTotal[total] || [0];
+
+    const rotation = rotations[index] ?? 0;
+    const translateX = offsets[index] ?? 0;
+
+    return {
+        transform: `translate(-50%, -50%) translateX(${translateX}px) rotate(${rotation}deg)`,
+        zIndex: index + 1
+    };
+};
 
 const selectedRank = ref('');
 const ranks = ref([
