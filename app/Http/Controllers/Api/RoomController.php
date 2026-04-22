@@ -41,7 +41,7 @@ class RoomController extends Controller
     // public function kickPlayer() //idea a futur
     
     public function store(Request $request) {
-        $this->authorize('room-create');
+        // $this->authorize('room-create');
         $data = $request->validate([
             'room_code' => ['nullable', 'size:8'],
             'state' => ['required', 'in:lobby,on_going,completed'],
