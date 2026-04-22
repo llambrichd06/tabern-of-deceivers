@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Log;
 class RoomController extends Controller
 {
     public function index(Request $request) {
+        $this->authorize('room-list');
         $room = Room::with('host')->with('players')->get();
-        return $room;
+        return response()->json([ 'room' => $room ]);
     }
 
     public function openRooms() {
@@ -30,15 +31,17 @@ class RoomController extends Controller
     }
 
     public function show(Room $room) {
+        $this->authorize('room-list');
         $room->load('host', 'players');
         return response()->json([
-            'data' => $room,
+            'room' => $room,
         ]);
     }
     
     // public function kickPlayer() //idea a futur
     
     public function store(Request $request) {
+        $this->authorize('room-create');
         $data = $request->validate([
             'room_code' => ['nullable', 'size:8'],
             'state' => ['required', 'in:lobby,on_going,completed'],
@@ -62,10 +65,11 @@ class RoomController extends Controller
         $roomUser->room_id = $room->id;
         $roomUser->save();
 
-        return $room; //return created room for front, in case we need its data
+        return response()->json([ 'room' => $room ]); //return created room for front, in case we need its data
     }
 
     public function update(Request $request, Room $room) {
+        $this->authorize('room-edit');
         $room = Room::find($room->id);
         $data = $request->validate([
             'room_code' => ['required', 'size:8'],
@@ -79,10 +83,11 @@ class RoomController extends Controller
         $room->private = $data['private'] ?? $room->private;
      
         $room->save();
-        return $room;
+        return response()->json([ 'room' => $room ]);
     }
 
     public function destroy(Room $room) {
+        $this->authorize('room-delete');
         $room->delete();
         return "deleted successfully";
     }
