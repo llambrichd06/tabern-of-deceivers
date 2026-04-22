@@ -65,6 +65,3 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
 });
-
-Route::get('category-list', [CategoryController::class, 'getList']);
-

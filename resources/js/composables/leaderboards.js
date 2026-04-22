@@ -38,7 +38,7 @@ export default function useLeaderboards() {
     const getLeaderboards = async () => {
         return axios.get('/api/leaderboards')
             .then(response => {
-                leaderboards.value = response.data;
+                leaderboards.value = response.data.leaderboard;
                 // console.log(leaderboards.value)
                 return response;
             })
@@ -47,7 +47,7 @@ export default function useLeaderboards() {
     const getLeaderboard = async (id) => {
         return axios.get('/api/leaderboards/' + id)
             .then(response => {
-                leaderboard.value = response.data.data;
+                leaderboard.value = response.data.leaderboard;
                 return response;
             })
     }

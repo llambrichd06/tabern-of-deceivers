@@ -11,22 +11,25 @@ use Illuminate\Support\Facades\Log;
 class LeaderboardController extends Controller
 {
     public function index() {
+        $this->authorize('leaderboard-list');
         $leaderboard = Leaderboard::with('user')->get();
-        return $leaderboard;
+        return response()->json([ 'leaderboard' => $leaderboard ]);
     }
     
     public function show(Leaderboard $leaderboard) {
+        $this->authorize('leaderboard-list');
         return response()->json([
-            'data' => $leaderboard,
+            'leaderboard' => $leaderboard,
         ]);
     }
 
     public function indexPaginated(Request $request) {
+        
         $leaderboard = Leaderboard::with('user')->orderByDesc('wins')->paginate($request->rows ?? 10);
         return $leaderboard;
     }
 
-    public function getBestUsers() { //esto deberia estar en users????
+    public function getBestUsers() {
         $bestUsers = Leaderboard::with('user')
             ->orderByDesc('wins', 'points')
             ->limit(3)
@@ -37,6 +40,7 @@ class LeaderboardController extends Controller
     }
     
     public function store(Request $request) {
+        $this->authorize('leaderboard-create');
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
             'points' => ['nullable', 'min:0'],
@@ -45,11 +49,12 @@ class LeaderboardController extends Controller
             'matches' => ['required', 'min:0'],
         ]);
         $leaderboard = Leaderboard::create($data);
-        return $leaderboard;
+        return response()->json([ 'leaderboard' => $leaderboard ]);
         
     }
 
     public function update(Request $request, Leaderboard $leaderboard) {
+        $this->authorize('leaderboard-edit');
         $leaderboard = Leaderboard::find($leaderboard->id);
         $data = $request->validate([
             'user_id' => ['nullable', 'exists:users,id'],
@@ -64,11 +69,12 @@ class LeaderboardController extends Controller
         $leaderboard->losses = $data['losses'] ?? $leaderboard->losses;
         $leaderboard->matches = $data['matches'] ?? $leaderboard->matches;
         $leaderboard->save();
-        return $leaderboard;
+        return response()->json([ 'leaderboard' => $leaderboard ]);
     }
 
     public function destroy(Leaderboard $leaderboard) {
+        $this->authorize('leaderboard-delete');
         $leaderboard->delete();
-        return "deleted successfully";
+        return response()->json([ 'data' => 'deleted successfully' ]);
     }
 }

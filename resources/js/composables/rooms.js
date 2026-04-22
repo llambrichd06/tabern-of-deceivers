@@ -35,7 +35,7 @@ export default function useRooms() {
     const getRooms = async () => {
         return axios.get('/api/rooms')
             .then(response => {
-                rooms.value = response.data.data || response.data;
+                rooms.value = response.data.room || response.room;
                 return response;
             })
     }
@@ -43,9 +43,9 @@ export default function useRooms() {
     const getRoom = async (id) => {
         return axios.get('/api/rooms/' + id)
             .then(response => {
-                let responseDatas = response.data.data || response.data
+                let responseDatas = response.data.room || response.room
                 responseDatas.private = responseDatas.private == 0 ? false : true;
-                room.value = response.data.data;
+                room.value = response.data.room;
                 return response;
             })
     }
@@ -74,7 +74,7 @@ export default function useRooms() {
         })
             .then(response => {
                 toast.crud.created('Room')
-                return response.data;
+                return response.data.room;
             })
             .catch(error => {
                 if (error.response?.data) {

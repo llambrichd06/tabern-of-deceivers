@@ -83,7 +83,7 @@
                     </template>
                 </Column>
 
-                <Column field="created_at" header="created_at" sortable class="min-w-[150px]">
+                <Column field="created_at" header="host_id" sortable class="min-w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="8rem" height="1rem" />
                         <span v-else class="text-sm table-cell-date">{{ slotProps.data.host_id }}</span>

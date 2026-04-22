@@ -21,6 +21,29 @@ use stdClass;
 
 class GameController extends Controller
 {
+    public function index() {
+        $this->authorize('game-list');
+    }
+    
+    public function show() {
+        $this->authorize('game-list');
+    }
+    
+    public function store() {
+        $this->authorize('game-create');
+    }
+    
+    public function update() {
+        $this->authorize('game-edit');
+    }
+    
+    public function delete() {
+        $this->authorize('game-delete');
+    }
+    
+
+
+
     public function getUserGameStateById(Game $game)
     {
         if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);
