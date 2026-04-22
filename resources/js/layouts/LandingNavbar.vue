@@ -162,17 +162,17 @@ const navLinks = [
 const items = computed(() => [
     {
         items: [
-            { label: 'Perfil', icon: 'pi pi-user', command: () => router.push('/app/profile') },
+            { label: 'Profile', icon: 'pi pi-user', command: () => router.push('/app/profile') },
             { 
-                label: 'Panel Admin', 
+                label: 'Admin Panel', 
                 icon: 'pi pi-cog', 
-                route: '/admin', 
+                command: () => router.push('/admin'),
                 visible: authStore().user?.roles?.some(r => r.name.includes('admin')) || false
             },
-            { label: 'Mi Panel', icon: 'pi pi-th-large', route: '/app' },
+            // { label: 'Mi Panel', icon: 'pi pi-th-large', route: '/app' },
             { separator: true },
             {
-                label: 'Cerrar sesión',
+                label: 'Log off',
                 icon: 'pi pi-power-off',
                 class: 'text-red-500',
                 command: () => {

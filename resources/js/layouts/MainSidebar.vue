@@ -3,71 +3,101 @@
         :class="[
             props.sidebarOpen ? 'translate-x-0' : '-translate-x-full',
             props.isCollapsed ? 'w-[70px]' : 'w-64',
-            'fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out lg:static lg:translate-x-0 shadow-lg lg:shadow-none sidebar-container group'
+            'fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out lg:static lg:translate-x-0 shadow-lg lg:shadow-none sidebar-container group'
         ]"
     >
         <!-- Sidebar Header -->
-        <div class="flex items-center justify-center p-4 border-b border-gray-100 dark:border-gray-800 shrink-0 transition-all duration-300"
-             :class="props.isCollapsed ? 'h-16' : 'h-24'">
+        <div
+            class="flex items-center justify-center p-4  shrink-0 transition-all duration-300 bg-[#520B93]"
+            :class="props.isCollapsed ? 'h-16' : 'h-24'"
+        >
             <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap transition-all duration-300 w-full justify-center">
                 <router-link to="/">
-                    <img src="/images/logo.svg" alt="Logo" class="transition-all duration-300 object-contain" 
-                         :class="props.isCollapsed ? 'h-8 w-8' : 'h-16 w-auto max-w-full'"/>
+                    <img
+                        src="/images/logo.svg"
+                        alt="Logo"
+                        class="transition-all duration-300 object-contain"
+                        :class="props.isCollapsed ? 'h-8 w-8' : 'h-16 w-auto max-w-full'"
+                    />
                 </router-link>
             </div>
         </div>
 
         <!-- Sidebar Menu -->
-        <div class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden p-3 gap-1 scrollbar-hide">
+        <div class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden p-3 gap-1 scrollbar-hide bg-[#520B93] text-white">
             <template v-for="(item, index) in menuModel" :key="index">
-                <!-- Group Label -->     
                 <!-- Group Label -->
-                <div v-if="item.label && item.items" class="px-3 mt-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap transition-opacity duration-200"
-                     :class="props.isCollapsed ? 'hidden' : 'opacity-100'">
+                <div
+                    v-if="item.label && item.items"
+                    class="px-3 mt-4 mb-2 text-xs font-semibold text-white/70 uppercase tracking-wider whitespace-nowrap transition-opacity duration-200"
+                    :class="props.isCollapsed ? 'hidden' : 'opacity-100'"
+                >
                     {{ item.label }}
                 </div>
 
                 <template v-if="item.items">
-                     <!-- Submenu Items -->
-                     <template v-for="(subItem, subIndex) in item.items" :key="subItem.label">
+                    <!-- Submenu Items -->
+                    <template v-for="(subItem, subIndex) in item.items" :key="subItem.label">
                         <router-link :to="subItem.route" v-if="subItem.route" custom v-slot="{ href, navigate, isActive }">
-                            <a :href="href" @click="navigate" 
-                               v-tooltip.right="props.isCollapsed ? subItem.label : ''"
-                               class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
-                               :class="[
-                                   isActive ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200'
-                               ]"
+                            <a
+                                :href="href"
+                                @click="navigate"
+                                v-tooltip.right="props.isCollapsed ? subItem.label : ''"
+                                class="relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
+                                :class="[
+                                    isActive
+                                        ? 'bg-[#520B93] text-white font-medium'
+                                        : 'bg-[#520B93] text-white hover:bg-[#6d28d9]'
+                                ]"
                             >
-                                <i class="text-lg shrink-0 transition-colors" :class="[subItem.icon, isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-500']"></i>
+                                <i
+                                    class="text-lg shrink-0 transition-colors"
+                                    :class="[subItem.icon, 'text-white']"
+                                ></i>
                                 
-                                <span class="whitespace-nowrap transition-all duration-300 origin-left"
-                                      :class="[props.isCollapsed ? 'hidden' : 'w-auto opacity-100']">
+                                <span
+                                    class="whitespace-nowrap transition-all duration-300 origin-left text-white"
+                                    :class="[props.isCollapsed ? 'hidden' : 'w-auto opacity-100']"
+                                >
                                     {{ subItem.label }}
                                 </span>
 
-                                <span v-if="isActive" class="absolute right-2 w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
+                                <span
+                                    v-if="isActive"
+                                    class="absolute right-2 w-1.5 h-1.5 rounded-full bg-white"
+                                ></span>
                             </a>
                         </router-link>
-                     </template>
+                    </template>
                 </template>
 
                 <!-- Single Item -->
                 <template v-else-if="item.route">
-                     <router-link :to="item.route" custom v-slot="{ href, navigate, isActive }">
-                        <a :href="href" @click="navigate" 
-                           v-tooltip.right="props.isCollapsed ? item.label : ''"
-                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
-                           :class="[
-                               isActive ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200'
-                           ]"
+                    <router-link :to="item.route" custom v-slot="{ href, navigate, isActive }">
+                        <a
+                            :href="href"
+                            @click="navigate"
+                            v-tooltip.right="props.isCollapsed ? item.label : ''"
+                            class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
+                            :class="[
+                                isActive
+                                    ? 'bg-[#520B93] text-white font-medium'
+                                    : 'bg-[#520B93] text-white hover:bg-[#6d28d9]'
+                            ]"
                         >
-                            <i class="text-lg shrink-0 transition-colors" :class="[item.icon, isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-500']"></i>
-                            <span class="whitespace-nowrap transition-all duration-300 origin-left"
-                                  :class="[props.isCollapsed ? 'hidden' : 'w-auto opacity-100']">
+                            <i
+                                class="text-lg shrink-0 transition-colors"
+                                :class="[item.icon, 'text-white']"
+                            ></i>
+
+                            <span
+                                class="whitespace-nowrap transition-all duration-300 origin-left text-white"
+                                :class="[props.isCollapsed ? 'hidden' : 'w-auto opacity-100']"
+                            >
                                 {{ item.label }}
                             </span>
                         </a>
-                     </router-link>
+                    </router-link>
                 </template>
             </template>
         </div>
@@ -104,18 +134,15 @@ const props = defineProps({
 const emit = defineEmits(['toggleSidebar', 'toggleCollapse']);
 
 const menuModel = computed(() => {
-    // Si se proporcionan items personalizados, usarlos
     if (props.menuItems) {
         return props.menuItems;
     }
 
-    // Si no, usar los items por defecto del admin
     const items = [
         {
             icon: 'pi pi-home',
             label: 'Principal',
-            // Used as header if items present
-             items: [
+            items: [
                 { label: 'Dashboard', icon: 'pi pi-compass', route: '/', permission: 'all' }
             ]
         },
@@ -134,10 +161,9 @@ const menuModel = computed(() => {
                 { label: 'Leaderboards', icon: 'pi pi-chart-bar', route: '/admin/leaderboards', permission: 'leaderboard-list' },
                 { label: 'Rooms', icon: 'pi pi-box', route: '/admin/rooms', permission: 'room-list' },
             ]
-        } //ADMIN SIDEBAR HERE, JUST LOOK AT THE STRUCTURE, COPY IT FOR NEW ENTRIES
+        }
     ];
 
-    // Filtrar items según permisos
     return items.filter(item => {
         if (item.permission && item.permission !== 'all') {
             if (!can(item.permission)) return false;

@@ -1,11 +1,11 @@
 <template>
     <header class="tail-admin-header sticky top-0 z-999 flex w-full">
-        <div class="flex grow items-center justify-between p-1 md:px-6 2xl:px-11">
+        <div class="flex grow items-center justify-between p-1 md:px-6 2xl:px-11 bg-[#520B93] text-white">
             <div class="flex items-center gap-2 sm:gap-4">
                 <!-- Toggle Button - Mobile -->
                 <button 
                     @click="emit('toggleSidebar')" 
-                    class="z-99999 flex items-center justify-center w-9 h-9 rounded-lg border transition-colors lg:hidden"
+                    class="z-99999 flex items-center justify-center w-9 h-9 rounded-lg  transition-colors lg:hidden"
                     aria-label="Toggle sidebar"
                 >
                     <i class="pi pi-bars text-lg"></i>
@@ -25,19 +25,19 @@
             <div class="flex items-center gap-2 sm:gap-3">
                 <ul class="flex items-center gap-1.5 sm:gap-2">
                     <!-- Dark Mode Toggle -->
-                    <li>
+                    <!-- <li>
                         <button @click="toggleDarkMode" class="header-icon-button relative flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-200" title="Cambiar tema">
                             <i :class="isDarkTheme ? 'pi pi-sun' : 'pi pi-moon'" class="text-base"></i>
                         </button>
-                    </li>
+                    </li> -->
 
                     <!-- User Dropdown -->
                     <li>
                         <div class="relative">
                             <button @click="toggleDropdown" class="header-user-button flex items-center gap-3 rounded-lg px-2 py-1.5 transition-all duration-200 hover:bg-opacity-50">
                                 <span class="hidden text-right lg:block min-w-[80px]">
-                                    <span class="block text-sm font-semibold leading-tight user-name">{{ user?.name || 'Usuario' }}</span>
-                                    <span class="block text-xs leading-tight user-role">{{ user?.roles?.[0]?.name || 'Rol' }}</span>
+                                    <span class="block text-sm font-semibold leading-tight user-nametext-white">{{ user?.name || 'Usuario' }}</span>
+                                    <span class="block text-xs leading-tight user-roletext-white">{{ user?.roles?.[0]?.name || 'Rol' }}</span>
                                 </span>
                                 <div class="header-avatar relative h-10 w-10 shrink-0 rounded-full overflow-hidden ring-2 ring-offset-2">
                                     <img v-if="user?.avatar" :src="user.avatar" alt="User" class="h-full w-full object-cover"/>
@@ -58,10 +58,10 @@
                                         <li>
                                             <router-link :to="route.path.startsWith('/app') ? '/app/profile' : '/admin/profile'" class="dropdown-menu-item">
                                                 <i class="pi pi-user"></i>
-                                                <span>Mi Perfil</span>
+                                                <span>My profile</span>
                                             </router-link>
                                         </li>
-                                        <li>
+                                        <!-- <li>
                                             <router-link v-if="auth.is('admin') || auth.is('docent')" to="/admin" class="dropdown-menu-item">
                                                 <i class="pi pi-shield"></i>
                                                 <span>Panel Admin</span>
@@ -72,12 +72,12 @@
                                                 <i class="pi pi-graduation-cap"></i>
                                                 <span>Panel Usuario</span>
                                             </router-link>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                     <div class="border-t">
                                         <button @click="logout" class="dropdown-menu-item logout-button">
                                             <i class="pi pi-sign-out"></i>
-                                            <span>Cerrar Sesión</span>
+                                            <span>Logout</span>
                                         </button>
                                     </div>
                                 </div>
@@ -165,14 +165,14 @@ onUnmounted(() => {
    ============================================ */
 header {
     background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+    /* border-bottom: 1px solid #e5e7eb; */
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(8px);
 }
 
 /* Botones de iconos del header */
 .header-icon-button {
-    border: 1px solid #e5e7eb;
+    /* border: 1px solid #e5e7eb; */
     background-color: #ffffff;
     color: #6b7280;
 }
@@ -180,7 +180,7 @@ header {
 .header-icon-button:hover {
     background-color: #f8fafc;
     color: #1e293b;
-    border-color: #cbd5e1;
+    /* border-color: #cbd5e1; */
     transform: translateY(-1px);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 }
@@ -197,7 +197,7 @@ header {
 .header-search-input {
     background-color: #f8fafc;
     color: #1e293b;
-    border: 1px solid #e2e8f0;
+    /* border: 1px solid #e2e8f0; */
     font-weight: 400;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -209,7 +209,7 @@ header {
 
 .header-search-input:focus {
     background-color: #ffffff;
-    border-color: #3b82f6;
+    /* border-color: #3b82f6; */
     outline: none;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
@@ -231,7 +231,7 @@ header {
 }
 
 .header-user-button:hover {
-    background-color: #f8fafc;
+    /* background-color: #f8fafc; */
     border-radius: 0.5rem;
 }
 
@@ -266,7 +266,7 @@ header {
 /* Badge de notificación */
 .notification-badge {
     background-color: #ef4444;
-    border: 2px solid #ffffff;
+    /* border: 2px solid #ffffff; */
     box-shadow: 0 0 0 2px #ffffff;
 }
 
@@ -277,13 +277,13 @@ header {
 /* Dropdown - Diseño Profesional */
 .header-dropdown {
     background-color: #ffffff;
-    border: 1px solid #e2e8f0;
+    /* border: 1px solid #e2e8f0; */
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
     min-width: 280px;
 }
 
 .header-dropdown-header {
-    border-bottom: 1px solid #f1f5f9;
+    /* border-bottom: 1px solid #f1f5f9; */
     background: linear-gradient(to bottom, #fafbfc, #f8fafc);
     padding: 1rem 1.25rem;
 }
@@ -368,7 +368,7 @@ header {
 }
 
 .header-dropdown .border-t {
-    border-top: 1px solid #f1f5f9;
+    /* border-top: 1px solid #f1f5f9; */
     margin-top: 0.25rem;
 }
 

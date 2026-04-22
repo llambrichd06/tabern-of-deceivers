@@ -1,5 +1,7 @@
 <template>
-    <MainLayout :menuItems="items" />
+    <div class="bg-[#520B93] text-white">
+        <MainLayout :menuItems="items" />
+    </div>
 </template>
 
 <script setup>
