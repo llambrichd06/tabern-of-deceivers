@@ -5,22 +5,22 @@
             <section class="px-4 py-4 lg:py-6">
                 <div class="mx-auto w-full max-w-7xl">
                     <div
-                        class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px] items-stretch"
+                        class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:h-[calc(100vh-80px)] lg:items-stretch"
                     >
                         <!-- GAME -->
                         <div
-                            class="rounded-3xl bg-purple-300/35 p-3 md:p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] lg:h-[calc(100vh-3rem)] overflow-hidden"
+                            class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
                         >
-                            <div class="h-full rounded-2xl bg-emerald-900/80 p-3 md:p-4 overflow-auto">
+                            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-emerald-900/80 p-3 md:p-4">
                                 <GameComponent v-model:game="game" v-model:loading="isLoading" />
                             </div>
                         </div>
 
                         <!-- CHAT -->
                         <div
-                            class="rounded-3xl bg-purple-300/35 p-3 md:p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] lg:h-[calc(100vh-3rem)] overflow-hidden"
+                            class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
                         >
-                            <div class="h-full rounded-2xl bg-black/10 p-2 md:p-3 overflow-hidden">
+                            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-black/10 p-2 md:p-3">
                                 <Chat :roomId="game.room_id" />
                             </div>
                         </div>
@@ -30,8 +30,8 @@
         </div>
 
         <!-- LOADING -->
-        <div v-else class="flex justify-center items-center min-h-screen px-4">
-            <div class="rounded-3xl bg-purple-300/35 p-8 shadow-[0_15px_20px_rgba(0,0,0,0.28)] text-center">
+        <div v-else class="flex min-h-screen items-center justify-center px-4">
+            <div class="rounded-3xl bg-purple-300/35 p-8 text-center shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
                 <div
                     class="rounded-2xl bg-cover bg-repeat p-8"
                     style="background-image: url('/img/backCard.png');"

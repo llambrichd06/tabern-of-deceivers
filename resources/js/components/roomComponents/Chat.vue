@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-full min-h-0 w-full flex-col">
+    <div class="flex h-full min-h-0 w-full flex-col overflow-hidden">
         <!-- Messages -->
         <div
             class="mb-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4"
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Input -->
-        <div class="rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4">
+        <div class="shrink-0 rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4">
             <div class="flex flex-col gap-3 sm:flex-row">
                 <InputText
                     v-model="currentMessage"
@@ -91,7 +91,6 @@ watch(
 onMounted(async () => {
     window.Echo.join(`chat.room.${props.roomId}`)
         .listen("MessageSent", (e: any) => {
-            console.log(e);
             messages.value.push({
                 id: e.message.id ?? Date.now(),
                 user: e.message.user_name,
@@ -126,9 +125,6 @@ const sendMessage = () => {
 
         axios
             .post("/api/messages/sent/" + props.roomId, { text })
-            .then((response) => {
-                console.log(response);
-            })
             .catch((error) => {
                 console.log(error);
             })
@@ -153,7 +149,6 @@ const sendMessage = () => {
     color: rgba(255, 255, 255, 0.65) !important;
 }
 
-/* PrimeVue overrides */
 :deep(.chat-input .p-inputtext),
 :deep(.p-inputtext.chat-input) {
     background: rgba(255, 255, 255, 0.1) !important;

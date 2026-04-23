@@ -1,7 +1,7 @@
 <template>
-    <div class="flex h-full min-h-0 flex-col justify-between gap-4 lg:gap-5">
+    <div class="flex h-full min-h-0 flex-col justify-between gap-3 lg:gap-4">
         <!-- TOP PLAYERS -->
-        <div class="flex justify-center gap-2 md:gap-3 lg:gap-4 flex-wrap">
+        <div class="flex flex-wrap justify-center gap-2 md:gap-3 lg:gap-4">
             <div
                 v-for="(decks, player, index) in otherPlayerDecks"
                 :key="player"
@@ -10,7 +10,7 @@
             >
                 <div class="flex w-full flex-col items-center justify-center rounded-2xl bg-white/8 px-2 py-3">
                     <div class="flex flex-col items-center gap-2">
-                        <div class="text-center text-sm md:text-base font-semibold leading-tight">
+                        <div class="text-center text-sm font-semibold leading-tight md:text-base">
                             {{ getPlayerName(index) }}
                         </div>
 
@@ -20,7 +20,7 @@
                                 alt="Back of the Card"
                                 imageClass="w-12 h-18 md:w-14 md:h-20 rounded-md object-cover"
                             />
-                            <p class="mt-1 text-center text-xs md:text-sm font-medium">
+                            <p class="mt-1 text-center text-xs font-medium md:text-sm">
                                 Cards: {{ decks.count }}
                             </p>
                         </div>
@@ -29,46 +29,22 @@
             </div>
         </div>
 
-        <!-- CENTER AREA -->
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-4 lg:gap-6">
-            <!-- LEFT INFO -->
-            <div class="flex justify-center lg:justify-start order-2 lg:order-1">
-                <div class="w-full max-w-[260px] rounded-2xl bg-white/8 px-4 py-3">
-                    <p class="text-center lg:text-left text-base md:text-lg font-semibold">
-                        Turn: {{ turn }}
-                    </p>
-                    <p
-                        v-if="myPlayerNum == turnOf"
-                        class="text-center lg:text-left text-base md:text-lg font-semibold"
-                    >
-                        Your turn
-                    </p>
-                    <p
-                        v-else
-                        class="text-center lg:text-left text-base md:text-lg font-semibold"
-                    >
-                        Player {{ turnOf }}'s turn
-                    </p>
-                    <p class="text-center lg:text-left text-base md:text-lg font-semibold">
-                        You are Player {{ myPlayerNum }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- MIDDLE PILE -->
-            <div class="flex flex-col items-center justify-center gap-3 order-1 lg:order-2">
-                <div class="flex flex-col items-center justify-center gap-2">
-                    <div class="relative w-24 h-32 md:w-28 md:h-36 flex items-center justify-center">
+        <!-- MIDDLE AREA -->
+        <div class="relative min-h-[190px] lg:min-h-[210px]">
+            <!-- CENTERED PILE -->
+            <div class="flex h-full items-center justify-center">
+                <div class="flex flex-col items-center justify-center gap-1.5">
+                    <div class="relative flex h-28 w-20 items-center justify-center md:h-32 md:w-24">
                         <!-- No cards -->
                         <div
                             v-if="pileCount === 0"
-                            class="w-16 h-24 md:w-20 md:h-28 border-2 border-dashed border-white/60 rounded-md flex items-center justify-center"
+                            class="flex h-20 w-14 items-center justify-center rounded-md border-2 border-dashed border-white/60 md:h-24 md:w-16"
                         >
-                            <span class="text-white/70 text-xs md:text-sm font-semibold">PILE</span>
+                            <span class="text-xs font-semibold text-white/70 md:text-sm">PILE</span>
                         </div>
 
                         <!-- One card -->
-                        <div v-else-if="pileCount === 1" class="w-16 h-24 md:w-20 md:h-28">
+                        <div v-else-if="pileCount === 1" class="h-20 w-14 md:h-24 md:w-16">
                             <Image
                                 src="/images/Cards/backCard.png"
                                 alt="Back of the Card"
@@ -81,7 +57,7 @@
                             <div
                                 v-for="(_, index) in visiblePileCards"
                                 :key="index"
-                                class="absolute left-1/2 top-1/2 w-16 h-24 md:w-20 md:h-28"
+                                class="absolute left-1/2 top-1/2 h-20 w-14 md:h-24 md:w-16"
                                 :style="getPileCardStyle(index, visiblePileCards)"
                             >
                                 <Image
@@ -93,44 +69,52 @@
                         </div>
                     </div>
 
-                    <p class="text-base md:text-lg font-semibold whitespace-nowrap">
+                    <p class="whitespace-nowrap text-base font-semibold md:text-lg">
                         Cards: {{ pileCount }}
                     </p>
 
-                    <p class="text-sm md:text-base font-semibold text-center">
-                        Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}
-                    </p>
-                </div>
-
-                <div v-if="pileCalledRank == 0 && turnOf == myPlayerNum">
-                    <Select
-                        v-model="selectedRank"
-                        :options="ranks"
-                        optionLabel="name"
-                        optionValue="code"
-                        placeholder="Select rank"
-                        class="w-36 md:w-40"
-                    />
+                    <div v-if="pileCalledRank == 0 && turnOf == myPlayerNum" class="mt-1">
+                        <Select
+                            v-model="selectedRank"
+                            :options="ranks"
+                            optionLabel="name"
+                            optionValue="code"
+                            placeholder="Select rank"
+                            class="w-36 md:w-40"
+                        />
+                    </div>
                 </div>
             </div>
 
-            <!-- RIGHT INFO -->
-            <div class="flex justify-center lg:justify-end order-3">
-                <div class="w-full max-w-[260px] rounded-2xl bg-white/8 px-4 py-3">
-                    <p class="text-center lg:text-right text-base md:text-lg font-semibold">
-                        Selected: {{ mySelectedCards.length }}/4
+            <!-- RIGHT: INFO -->
+            <div class="mt-4 flex justify-center lg:absolute lg:right-0 lg:top-1/2 lg:mt-0 lg:-translate-y-1/2 lg:justify-end">
+                <div class="w-full max-w-[210px] rounded-2xl bg-white/8 px-4 py-3">
+                    <p class="text-center text-sm font-semibold md:text-base lg:text-right">
+                        Turn: {{ turn }}
                     </p>
-                    <p class="text-center lg:text-right text-base md:text-lg font-semibold">
-                        Hand: {{ myCards.length }} cards
+                    <p
+                        v-if="myPlayerNum == turnOf"
+                        class="text-center text-base font-semibold md:text-lg lg:text-right"
+                    >
+                        Your turn
+                    </p>
+                    <p
+                        v-else
+                        class="text-center text-base font-semibold md:text-lg lg:text-right"
+                    >
+                        Player {{ turnOf }}'s turn
+                    </p>
+                    <p class="text-center text-base font-semibold md:text-lg lg:text-right">
+                        Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}
                     </p>
                 </div>
             </div>
         </div>
 
         <!-- BOTTOM ACTIONS -->
-        <div class="grid grid-cols-1 lg:grid-cols-[140px_minmax(0,1fr)_140px] items-center gap-3 lg:gap-4">
+        <div class="grid grid-cols-1 items-center gap-3 lg:grid-cols-[140px_minmax(0,1fr)_140px] lg:gap-4">
             <!-- CALL LIE -->
-            <div class="flex justify-center lg:justify-start order-2 lg:order-1">
+            <div class="order-2 flex justify-center lg:order-1 lg:justify-start">
                 <Button
                     label="Call lie"
                     :severity="isLieButtonDisabled ? null : 'primary'"
@@ -146,12 +130,12 @@
             </div>
 
             <!-- MY CARDS -->
-            <div class="flex justify-center gap-1.5 md:gap-2 flex-wrap order-1 lg:order-2">
+            <div class="order-1 flex flex-wrap justify-center gap-1.5 md:gap-2 lg:order-2">
                 <div
                     v-for="card in myCards"
                     :key="card.id"
-                    :class="{ '-translate-y-2': mySelectedCards.includes(card.id) }"
-                    class="w-12 h-18 md:w-14 md:h-20 rounded-md transition-transform duration-300 ease-in-out hover:-translate-y-3 cursor-pointer overflow-hidden"
+                    :class="getCardClass(card.id)"
+                    class="playing-card h-18 w-12 cursor-pointer overflow-hidden rounded-md border border-transparent transition-all duration-200 ease-out md:h-20 md:w-14"
                     @click="cardSelect(card)"
                 >
                     <Image
@@ -163,14 +147,14 @@
 
                 <div
                     v-if="myCards.length == 0"
-                    class="w-full text-center text-sm md:text-base py-4"
+                    class="w-full py-4 text-center text-sm md:text-base"
                 >
                     You have no cards!
                 </div>
             </div>
 
             <!-- PLAY CARDS -->
-            <div class="flex justify-center lg:justify-end order-3">
+            <div class="order-3 flex justify-center lg:justify-end">
                 <Button
                     label="Play Cards"
                     :severity="isCardButtonDisabled ? null : 'primary'"
@@ -302,11 +286,24 @@ const getCardImage = (cardId: number) => {
     return `/images/Cards/${cardId}.${extension}`;
 };
 
+const isCardSelected = (cardId: number) => {
+    return mySelectedCards.value.includes(cardId);
+};
+
+const getCardClass = (cardId: number) => {
+    const selected = isCardSelected(cardId);
+
+    return {
+        'card-selected': selected,
+        'card-unselected': !selected
+    };
+};
+
 const cardSelect = (card: any) => {
     const index = mySelectedCards.value.indexOf(card.id);
     if (index > -1) {
         mySelectedCards.value.splice(index, 1);
-    } else if (mySelectedCards.value.length < 4) {
+    } else if (mySelectedCards.value.length < 6) {
         mySelectedCards.value.push(card.id);
     }
 };
@@ -323,3 +320,27 @@ const callALie = () => {
     callLie(gameId);
 };
 </script>
+
+<style scoped>
+.playing-card {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+}
+
+.card-unselected:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 9px 18px rgba(0, 0, 0, 0.26);
+}
+
+.card-selected {
+    transform: translateY(-10px);
+    border-color: transparent;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.32);
+}
+
+.card-selected:hover {
+    transform: translateY(-10px);
+    border-color: transparent;
+    box-shadow: 0 13px 23px rgba(0, 0, 0, 0.34);
+}
+</style>
