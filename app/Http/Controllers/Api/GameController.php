@@ -187,7 +187,7 @@ class GameController extends Controller
             $result = $this->takeCards($gameId, $lastPlayer);
             $resultMessage = 'It was a lie!';
         } else {
-            $this->changeTurnTo($gameId, $lastPlayer);
+            $this->changeTurnTo($gameId, $lastPlayer, false);
             $result = $this->takeCards($gameId, $callerNum);
             $resultMessage = 'It was the truth!';
         } 
@@ -278,14 +278,14 @@ class GameController extends Controller
         }
     }
 
-    private function changeTurnTo($gameId, $playerNum) {
+    private function changeTurnTo($gameId, $playerNum, $lie = true) {
         $game = Game::find($gameId);
         $gameState = $this->getDecodedGameStateById($gameId);
         $lastPlayerTurn = $gameState->last_player_turn;
         Log::info("last player was".$lastPlayerTurn);
         $lastPlayer = 'player'.$lastPlayerTurn;
 
-        if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
+        if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0 && $lie) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
             $this->gameWon($gameId);
             return true;
         }
