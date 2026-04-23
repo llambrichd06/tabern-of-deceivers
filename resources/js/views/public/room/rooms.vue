@@ -1,32 +1,8 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
-        <!-- ------------------------------ Menu Buttons ------------------------------ -->
-        <section class="px-4 pt-8">
-            <div class="mx-auto grid w-full max-w-5xl grid-cols-1 gap-3 sm:grid-cols-3">
-                <Button
-                    label="Search Game"
-                    severity="secondary"
-                    class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
-                    @click="openJoinGame"
-                />
-                <Button
-                    label="Host Game"
-                    severity="secondary"
-                    class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
-                    @click="hostGame"
-                />
-                <Button
-                    label="Quick Match"
-                    severity="secondary"
-                    class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
-                    @click="searchQuickGame"
-                />
-            </div>
-        </section>
-
         <!-- ------------------------------ Rooms ------------------------------ -->
         <section class="px-4 py-8">
-            <div class="mx-auto w-full max-w-5xl rounded-3xl bg-[#520B93]">
+            <div class="mx-auto w-full max-w-7xl rounded-3xl bg-[#520B93]">
                 <!-- Header -->
                 <div class="rounded-t-3xl bg-[#520B93] px-6 py-8 text-center md:px-8">
                     <h2 class="text-4xl font-bold text-white">
@@ -37,89 +13,96 @@
                     </p>
                 </div>
 
+                <!-- ------------------------------ Menu Buttons ------------------------------ -->
+                <section class="px-4 pt-8 pb-10">
+                    <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 sm:grid-cols-3">
+                        <Button
+                            label="Search Game"
+                            severity="secondary"
+                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            @click="openJoinGame"
+                        />
+                        <Button
+                            label="Host Game"
+                            severity="secondary"
+                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            @click="hostGame"
+                        />
+                        <Button
+                            label="Quick Match"
+                            severity="secondary"
+                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            @click="searchQuickGame"
+                        />
+                    </div>
+                </section>
+
                 <!-- Rooms list -->
-                <div class="rounded-b-3xl bg-[#520B93] px-2 pb-4 md:px-0">
-                    <DataView :value="rooms" paginator :rows="4" layout="grid">
+                <div class="rounded-b-3xl bg-[#520B93] px-2 pb-4 pt-2 md:px-0">
+                    <DataView :value="rooms" paginator :rows="6" layout="grid">
                         <template #grid="slotProps">
-                            <div class="grid grid-cols-1 gap-6 p-4 md:grid-cols-2">
+                            <div class="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 xl:grid-cols-3">
                                 <div
                                     v-for="item in slotProps.items"
                                     :key="item.id"
                                 >
-                                    <div class="h-full rounded-3xl bg-purple-300/35 p-6 text-white shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
-                                        <div class="flex min-h-[260px] flex-col justify-between">
+                                    <div class="h-full rounded-3xl bg-purple-300/35 p-5 text-white shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
+                                        <div class="flex min-h-[300px] flex-col">
                                             <!-- Top -->
-                                            <div class="flex items-start justify-between gap-4">
-                                                <div class="text-lg font-semibold text-white">
-                                                    Players {{ item.players.length }}/6
+                                            <div class="flex items-start justify-between gap-4 border-b border-white/20 pb-4">
+                                                <div>
+                                                    <p class="text-sm font-medium uppercase tracking-wide text-white/70">
+                                                        Room
+                                                    </p>
+                                                    <p class="text-lg font-semibold text-white">
+                                                        {{ item.room_code }}
+                                                    </p>
+                                                </div>
+
+                                                <div class="text-right">
+                                                    <p class="text-sm font-medium uppercase tracking-wide text-white/70">
+                                                        Host
+                                                    </p>
+                                                    <p class="text-lg font-semibold text-white">
+                                                        {{ item.host?.name || "Unknown" }}
+                                                    </p>
                                                 </div>
                                             </div>
 
-                                            <!-- Middle -->
-                                            <div class="mt-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                                                <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-                                                    <!-- Left -->
-                                                    <div class="space-y-3">
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[0])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[0]?.name || "" }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[2])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[2]?.name || "" }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[4])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[4]?.name || "" }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Right -->
-                                                    <div class="space-y-3">
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[1])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[1]?.name || "" }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[3])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[3]?.name || "" }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="flex items-center gap-2">
-                                                            <div :class="circleClass(item.players[5])"></div>
-                                                            <div class="min-w-[90px] px-2 py-0.5 text-sm text-white">
-                                                                {{ item.players[5]?.name || "" }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <!-- Center -->
+                                            <div class="flex flex-1 flex-col justify-center py-5">
+                                                <div class="mb-4 text-center">
+                                                    <p class="text-base font-semibold text-white">
+                                                        Players {{ item.players.length }}/6
+                                                    </p>
                                                 </div>
 
-                                                <div class="flex justify-center md:justify-end">
-                                                    <Button
-                                                        label="Join Room"
-                                                        severity="secondary"
-                                                        class="rounded-2xl! px-8! py-3! text-base! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.3)]"
-                                                        @click="joinPublic(item.id)"
-                                                    />
+                                                <div class="grid grid-cols-2 gap-x-4 gap-y-3">
+                                                    <div
+                                                        v-for="(player, index) in playerSlots(item.players)"
+                                                        :key="index"
+                                                        class="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/10 px-3 py-2"
+                                                    >
+                                                        <div :class="circleClass(player)"></div>
+                                                        <div class="min-w-0 flex-1">
+                                                            <p class="truncate text-sm font-medium text-white">
+                                                                {{ player?.name || "Empty slot" }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <!-- Bottom -->
-                                            <div class="mt-6 border-t border-white/20 pt-4 text-right text-sm text-white/80">
-                                                Host: {{ item.host?.name || "" }}
+                                            <div class="border-t border-white/20 pt-4">
+                                                <div class="flex justify-center">
+                                                    <Button
+                                                        label="Join Room"
+                                                        severity="secondary"
+                                                        class="w-full rounded-2xl! px-8! py-3! text-base! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.3)]"
+                                                        @click="joinPublic(item.id)"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -186,11 +169,14 @@ const joinPublic = async (id) => {
     router.push({ name: "lobby", params: { id: data.id } });
 };
 
+const playerSlots = (players = []) => {
+    return Array.from({ length: 6 }, (_, index) => players[index] || null);
+};
+
 const circleClass = (player) => {
     return [
-        "w-6 h-6 rounded-full shrink-0",
-        "border-2 border-white/50",
-        player ? "bg-[#520B93]" : "bg-transparent",
+        "h-7 w-7 rounded-full shrink-0 border-2 border-white/40",
+        player ? "bg-[#520B93]" : "bg-transparent border-dashed"
     ].join(" ");
 };
 </script>
