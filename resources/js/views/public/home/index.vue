@@ -51,7 +51,7 @@
         <!-- HOW IT WORKS -->
         <section class="mt-10 rounded-xl px-6 py-8 md:px-10 md:py-10">
             <div class="mx-auto max-w-5xl">
-                <h2 class="mb-6 text-center text-4xl font-bold">
+                <h2 class="text-4xl text-center font-bold md:text-6xl">
                     How does the game work?
                 </h2>
                 
@@ -103,7 +103,7 @@
         <!-- BEST PLAYERS -->
         <section class="mt-12 px-4">
             <div class="mx-auto max-w-5xl rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 md:px-10 md:pt-10 shadow-[0_15px_20px_rgba(0,0,0,0.3)]">
-                <h2 class="mb-8 text-center text-4xl font-bold">
+                <h2 class="mb-8 text-center text-4xl font-bold md:text-6xl">
                     Rankings
                 </h2>
                 

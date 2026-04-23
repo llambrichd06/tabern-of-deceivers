@@ -5,7 +5,7 @@
             <div class="mx-auto w-full max-w-7xl rounded-3xl bg-[#520B93]">
                 <!-- Header -->
                 <div class="rounded-t-3xl bg-[#520B93] px-6 py-8 text-center md:px-8">
-                    <h2 class="text-4xl font-bold text-white">
+                    <h2 class="text-4xl font-bold text-white md:text-6xl">
                         Available Rooms
                     </h2>
                     <p class="mx-auto mt-3 max-w-2xl text-white/85">
