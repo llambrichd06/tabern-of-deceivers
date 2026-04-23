@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
         <!-- TOP SECTION -->
-        <section class="px-4 pb-8 pt-4">
-            <div class="mx-auto max-w-5xl">
+        <section class="px-4 pb-4 pt-4">
+            <div class="mx-auto max-w-7xl">
                 <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
                     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-col gap-4">
@@ -38,18 +38,18 @@
                             </div>
                         </div>
 
-                        <div  class="flex flex-wrap items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <Button
-                            v-if="!loading && authUser.user.id === room?.host?.id"
-                            label="Start Match"
-                            severity="success"
-                            class="rounded-2xl! px-5! py-2! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
-                            @click="start"
+                                v-if="!loading && authUser.user.id === room?.host?.id"
+                                label="Start Match"
+                                severity="success"
+                                class="rounded-2xl! px-5! py-2! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
+                                @click="start"
                             />
-                            <!-- <Button label="Edit Match Rules" size="small" /> -->
-                            <div v-else class="">
+                            <div v-else>
                                 <p>Waiting for the host to start the match...</p>
                             </div>
+
                             <Button
                                 label="Leave Room"
                                 severity="danger"
@@ -58,10 +58,7 @@
                             />
                         </div>
                     </div>
-                    
                 </div>
-
-                
 
                 <div
                     v-if="loading"
@@ -71,50 +68,93 @@
                 </div>
 
                 <div v-else class="mt-6">
-                    <div class="rounded-3xl bg-purple-300/35 px-6 py-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:px-8">
-                        <p class="mb-8 text-lg font-semibold md:text-xl">
-                            Players in room: {{ numPlayers }}
-                        </p>
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
+                        <!-- PLAYERS LEFT -->
+                        <div class="rounded-3xl bg-purple-300/35 px-6 py-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:px-8 lg:min-h-[560px]">
+                            <div class="mb-8 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <p class="text-lg font-semibold md:text-xl">
+                                    Players in room: {{ numPlayers }}
+                                </p>
 
-                        <div class="flex min-h-[140px] flex-wrap items-start justify-center gap-x-10 gap-y-8">
-                            <!-- Host -->
-                            <div class="flex w-[100px] flex-col items-center text-center">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
-                                    {{ getInitials(room?.host?.name) }}
-                                </div>
-                                <p class="mt-3 text-sm font-medium text-white">{{ room?.host?.name }}</p>
-                                <p class="text-xs uppercase tracking-wider text-white/75">HOST</p>
+                                <p class="text-sm text-white/75">
+                                    Max 6 players
+                                </p>
                             </div>
 
-                            <!-- Other players -->
-                            <div
-                                v-for="player in otherPlayers"
-                                :key="player.id"
-                                class="flex w-[100px] flex-col items-center text-center"
-                            >
-                                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
-                                    {{ getInitials(player.name) }}
-                                </div>
-                                <p class="mt-3 text-sm font-medium text-white">{{ player.name }}</p>
+                            <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 xl:grid-cols-3">
+                                <!-- Host -->
+                                <div class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center ring-2 ring-yellow-300/60">
+                                    <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
+                                        {{ getInitials(room?.host?.name) }}
+                                    </div>
 
-                                <div v-if="authUser.user.id === room?.host?.id" class="mt-2">
-                                    <Button
-                                        label="Make Owner"
-                                        text
-                                        class="rounded-xl! text-white! hover:bg-white/10!"
-                                        @click="makePlayerOwner(player.id)"
-                                    />
+                                    <p class="mt-3 text-sm font-semibold text-white break-words">
+                                        {{ room?.host?.name }}
+                                    </p>
+
+                                    <p class="mt-1 text-xs uppercase tracking-wider text-yellow-200">
+                                        Host
+                                    </p>
                                 </div>
+
+                                <!-- Other players -->
+                                <div
+                                    v-for="player in otherPlayers"
+                                    :key="player.id"
+                                    class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center"
+                                >
+                                    <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
+                                        {{ getInitials(player.name) }}
+                                    </div>
+
+                                    <p class="mt-3 text-sm font-semibold text-white break-words">
+                                        {{ player.name }}
+                                    </p>
+
+                                    <div v-if="authUser.user.id === room?.host?.id" class="mt-3">
+                                        <Button
+                                            label="Make Owner"
+                                            text
+                                            class="rounded-xl! text-white! hover:bg-white/10!"
+                                            @click="makePlayerOwner(player.id)"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Empty slots -->
+                                <div
+                                    v-for="slot in emptySlots"
+                                    :key="`empty-${slot}`"
+                                    class="flex min-h-[150px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/25 bg-white/5 px-3 py-4 text-center"
+                                >
+                                    <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-white/30 text-2xl text-white/40">
+                                        +
+                                    </div>
+
+                                    <p class="mt-3 text-sm font-medium text-white/50">
+                                        Empty slot
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CHAT RIGHT -->
+                        <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-5 lg:h-[560px] overflow-hidden">
+                            <div class="mb-3 flex items-center justify-between px-1">
+                                <h2 class="text-xl font-bold text-white">
+                                    Chat
+                                </h2>
+                                <p class="text-sm text-white/70">
+                                    Room {{ room?.room_code }}
+                                </p>
+                            </div>
+
+                            <div class="h-[calc(100%-2.5rem)] overflow-hidden rounded-2xl bg-black/10 p-2">
+                                <Chat :roomId="id" />
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <!-- CHAT -->
-        <section class="px-4 pb-8">
-            <div class="mx-auto max-w-5xl rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-6">
-                <Chat :roomId="id" />
             </div>
         </section>
     </div>
@@ -180,6 +220,11 @@ const otherPlayers = computed(() => {
     return room.value?.players?.filter(
         (player) => player.id !== room.value?.host?.id
     ) ?? [];
+});
+
+const emptySlots = computed(() => {
+    const totalSlots = 6;
+    return Math.max(totalSlots - numPlayers.value, 0);
 });
 
 const leaveTheRoom = async () => {

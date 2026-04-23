@@ -1,28 +1,40 @@
 <template>
-    <div class="w-full">
+    <div class="flex h-full min-h-0 w-full flex-col">
         <!-- Messages -->
         <div
-			v-if="messages.length > 0"
-			class="mb-4 max-h-[320px] overflow-y-auto rounded-3xl bg-purple-300/20 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]"
-		>
-			<div class="bg-white/10 rounded-2xl py-5 px-4">
-				<div
-					v-for="message in messages"
-					:key="message.id"
-					class=" py-3 text-white border-b border-b-white/20"
-				>
-                    <p v-if="message.user" class="text-sm font-semibold text-white/90">
-						{{ message?.user || "Unknown" }}:
-					</p>
-					<p class="mt-1 text-sm md:text-base text-white wrap-break-word">
-						{{ message.text }}
-					</p>
-				</div>
-			</div>
-		</div>
+            class="mb-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4"
+        >
+            <div
+                ref="messagesContainer"
+                class="h-full overflow-y-auto rounded-2xl bg-white/10 px-4 py-3"
+            >
+                <div v-if="messages.length > 0" class="flex flex-col">
+                    <div
+                        v-for="message in messages"
+                        :key="message.id ?? `${message.user ?? 'system'}-${message.text}`"
+                        class="border-b border-b-white/20 py-3 text-white last:border-b-0"
+                    >
+                        <p v-if="message.user" class="text-sm font-semibold text-white/90">
+                            {{ message.user || "Unknown" }}:
+                        </p>
+
+                        <p class="mt-1 break-words text-sm text-white md:text-base">
+                            {{ message.text }}
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    v-else
+                    class="flex h-full items-center justify-center text-center text-sm text-white/75 md:text-base"
+                >
+                    No messages yet.
+                </div>
+            </div>
+        </div>
 
         <!-- Input -->
-        <div class="rounded-3xl bg-purple-300/20 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+        <div class="rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4">
             <div class="flex flex-col gap-3 sm:flex-row">
                 <InputText
                     v-model="currentMessage"
@@ -35,65 +47,97 @@
                 <Button
                     label="Send"
                     severity="secondary"
-                    :disabled="chatLoading"
+                    :disabled="chatLoading || !currentMessage.trim()"
                     class="chat-send-btn rounded-2xl! px-6! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
                     @click="sendMessage"
                 />
             </div>
-            <small class="flex justify-content-end text-secondary pl-2">
-              {{ currentMessage.length }}/{{ maxLength }}
+
+            <small class="mt-2 flex justify-end pl-2 text-white/70">
+                {{ currentMessage.length }}/{{ maxLength }}
             </small>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps<{
-	roomId: integer;
-}>()
+    roomId: number;
+}>();
+
 const chatLoading = ref(false);
-const currentMessage = ref('')
-const messages = ref([])
+const currentMessage = ref("");
+const messages = ref<any[]>([]);
 const maxLength = 300;
+const messagesContainer = ref<HTMLElement | null>(null);
+
+const scrollToBottom = async () => {
+    await nextTick();
+    if (messagesContainer.value) {
+        messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    }
+};
+
+watch(
+    messages,
+    async () => {
+        await scrollToBottom();
+    },
+    { deep: true }
+);
 
 onMounted(async () => {
-	window.Echo.join(`chat.room.${props.roomId}`)
-	    .listen('MessageSent', (e) => {
-        	// Standard event listener for messages within that room
-        	console.log(e);
-        	// messages.value.push(e.message.user_name + ': ' + e.message.text )
+    window.Echo.join(`chat.room.${props.roomId}`)
+        .listen("MessageSent", (e: any) => {
+            console.log(e);
             messages.value.push({
+                id: e.message.id ?? Date.now(),
                 user: e.message.user_name,
                 text: e.message.text
             });
         })
-        .joining((user) => {
-            // Runs when a new person joins
-        	messages.value.push({text:`${user.name} joined the room.`})
+        .joining((user: any) => {
+            messages.value.push({
+                id: `join-${user.id}-${Date.now()}`,
+                text: `${user.name} joined the room.`
+            });
         })
-        .leaving((user) => {
-            // Runs when someone closes the tab or disconnects
-        	messages.value.push({text:`${user.name} left the room.`})
-        })
-})
+        .leaving((user: any) => {
+            messages.value.push({
+                id: `leave-${user.id}-${Date.now()}`,
+                text: `${user.name} left the room.`
+            });
+        });
+
+    await scrollToBottom();
+});
+
+onUnmounted(() => {
+    window.Echo.leave(`chat.room.${props.roomId}`);
+});
 
 const sendMessage = () => {
-    if (!chatLoading.value && currentMessage.value) {
+    const text = currentMessage.value.trim();
+
+    if (!chatLoading.value && text) {
         chatLoading.value = true;
-        
-        axios.post('/api/messages/sent/'+props.roomId,{text: currentMessage.value})
-        .then(response => {
-            console.log(response);
-        }).catch(error =>{
-            console.log(error);
-        }).finally(
-            chatLoading.value = false,
-            currentMessage.value = ""
-        )
+
+        axios
+            .post("/api/messages/sent/" + props.roomId, { text })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(() => {
+                chatLoading.value = false;
+                currentMessage.value = "";
+            });
     }
-}
+};
 </script>
 
 <style scoped>
