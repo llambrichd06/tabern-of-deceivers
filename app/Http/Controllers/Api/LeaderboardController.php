@@ -24,9 +24,36 @@ class LeaderboardController extends Controller
     }
 
     public function indexPaginated(Request $request) {
-        
-        $leaderboard = Leaderboard::with('user')->orderByDesc('wins')->paginate($request->rows ?? 10);
-        return $leaderboard;
+        //FALTA VALIDAR REQUEST
+        $query = Leaderboard::with('user');
+
+        // data filtering
+        if ($request->filled('filterValue')) {
+            $filterVal = $request->filterValue;
+            $filterField = $request->filterField;
+            //since user is in a different table we have a different query
+            if ($filterField === 'user.name') {
+                $query->whereHas('user', function($q) use ($filterVal) {
+                    $q->where('name', 'like', "%{$filterVal}%");
+            });
+            } else {
+                $query->where($filterField, 'like', "%{$filterVal}%");
+            }
+        }
+
+        // data sorting (after filtering so we sort the fliter)
+        $direction = $request->sortOrder == 1 ? 'asc' : 'desc';
+        $sortField = $request->sortField ?? 'points';
+
+        if ($sortField === 'user.name') {
+            $query->join('users', 'leaderboards.user_id', '=', 'users.id')
+                  ->orderBy('users.name', $direction)
+                  ->select('leaderboards.*');
+        } else {
+            $query->orderBy($sortField, $direction);
+        }
+
+        return response()->json([ 'leaderboard' => $query->paginate($request->rows ?? 10) ]);
     }
 
     public function getBestUsers() {

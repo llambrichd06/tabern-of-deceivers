@@ -146,14 +146,26 @@ export default function useLeaderboards() {
             })
     }
 
-    const getPaginatedLeaderboards = async (page, rownum = 10) => {
-        return axios.get('/api/leaderboards/paginatedLeaderboards?page='+page+'&rows='+rownum)
-            .then(response => {
-                leaderboards.value = response.data.data;
-                totalLeaderboards.value = response.data.total;
-                console.log(response)
-                return response;
-            })
+    const getPaginatedLeaderboards = async (page, sortField, sortOrder, filterField, filterValue, rownum = 10) => {
+        return axios.get('/api/leaderboards/paginatedLeaderboards', {
+            params: {
+                page: page,
+                rows: rownum,
+                sortField: sortField,
+                sortOrder: sortOrder,
+                filterField: filterField,
+                filterValue: filterValue,
+            }
+        })
+        .then(response => {
+            console.log(response)
+            leaderboards.value = response.data.leaderboard.data;
+            totalLeaderboards.value = response.data.leaderboard.total;
+            return response;
+        })
+        .catch(error => {
+            toast.crud.errorMsgFromError(error)
+        })
     }
 
     return {

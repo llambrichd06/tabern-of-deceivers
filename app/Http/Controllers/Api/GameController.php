@@ -314,7 +314,6 @@ class GameController extends Controller
         $gameState = $this->getDecodedGameStateById($gameId);
 
 
-        // $positionPlayerTaker = array_search($idPlayerTaker, $players); //rep la posicio del jugador amb id idPlayerTaker de la array players
         $playerGrabbed = 'player'.$playerNum;
         $playerTakerDeck = $gameState->player_decks->{$playerGrabbed};
 
