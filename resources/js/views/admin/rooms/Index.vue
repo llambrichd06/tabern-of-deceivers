@@ -29,7 +29,9 @@
 
         <template #content>
             <DataTable
-                v-model:filters="roomFilters"
+                v-model:filters="filters"
+                v-model:sort-field="sortField"
+                v-model:sort-order="sortOrder"
                 :value="rooms || []"
                 :paginator="true"
                 :rows="10"
@@ -40,7 +42,7 @@
                 :loading="loading"
                 filter-display="menu"
                 :filter-delay="300"
-                :global-filter-fields="['alias', 'name', 'surname1', 'surname2', 'email']"
+                :global-filter-fields="['room_code', 'state', 'private', 'host_id']"
 
             >
                 <Column field="id" header="ID" sortable class="w-[60px]">
@@ -50,7 +52,7 @@
                     </template>
                 </Column>
 
-                <Column field="name" header="room_code" sortable filter :filter-placeholder="'room_code'" class="min-w-[200px]">
+                <Column field="room_code" header="room_code" sortable :filter-placeholder="'room_code'" class="min-w-[200px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="10rem" height="1rem" />
                         <div v-else class="flex items-center space-x-2">
@@ -63,7 +65,7 @@
                     </template>
                 </Column>
 
-                <Column field="alias" header="state" sortable filter :filter-placeholder="'state'" class="min-w-[150px]">
+                <Column field="state" header="state" sortable :filter-placeholder="'state'" class="min-w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="8rem" height="1rem" />
                         <span v-else class="table-cell-name">{{ slotProps.data.state || '-' }}</span>
@@ -73,7 +75,7 @@
                     </template>
                 </Column>
 
-                <Column field="email" header="private" sortable filter :filter-placeholder="'private'" class="min-w-[200px]">
+                <Column field="private" header="private" sortable :filter-placeholder="'private'" class="min-w-[200px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="12rem" height="1rem" />
                         <span v-else class="text-sm table-cell-email">{{ slotProps.data.private || '-' }}</span>
@@ -83,14 +85,17 @@
                     </template>
                 </Column>
 
-                <Column field="created_at" header="host_id" sortable class="min-w-[150px]">
+                <Column field="host_id" header="host_id" sortable  class="min-w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="8rem" height="1rem" />
                         <span v-else class="text-sm table-cell-date">{{ slotProps.data.host_id }}</span>
                     </template>
+                    <template #filter="{ filterModel }">
+                        <InputText v-model="filterModel.value" placeholder="host_id" class="w-full" />
+                    </template>
                 </Column>
 
-                <Column header="Acciones" class="w-[150px]">
+                <Column v-if="can('room-edit') || can('room-delete')" header="Avaliable actions" class="w-[150px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="4rem" height="2rem" />
                         <div v-else class="flex gap-2">
@@ -128,22 +133,17 @@ import { useRouter } from "vue-router";
 import useRooms from "../../../composables/rooms";
 import { useAbility } from '@casl/vue';
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
+import { useRoomCrudStore } from "../../../store/room";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const { rooms, getRooms, deleteRoom } = useRooms();
 const { can } = useAbility();
 const loading = ref(false);
 
-const roomFilters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    alias: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    roles: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    created_at: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-
-    
-});
+const store = useRoomCrudStore();
+//these are setted as v-model on the datatable, so they automatically update
+const { filters, sortField, sortOrder } = storeToRefs(store);
 
 const refreshRooms = () => {
     loading.value = true;

@@ -29,7 +29,9 @@
 
         <template #content>
             <DataTable
-                v-model:filters="userFilters"
+                v-model:filters="filters"
+                v-model:sort-field="sortField"
+                v-model:sort-order="sortOrder"
                 :value="users.data || []"
                 :paginator="true"
                 :rows="10"
@@ -152,22 +154,18 @@ import { useRouter } from "vue-router";
 import useUsers from "../../../composables/users";
 import { useAbility } from '@casl/vue';
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
+import { useUserCrudStore } from "../../../store/user";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const { users, getUsers, deleteUser } = useUsers();
 const { can } = useAbility();
 const loading = ref(false);
 
-const userFilters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    alias: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    roles: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    created_at: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
 
-    
-});
+const store = useUserCrudStore();
+//these are setted as v-model on the datatable, so they automatically update
+const { filters, sortField, sortOrder } = storeToRefs(store);
 
 const refreshUsers = () => {
     loading.value = true;

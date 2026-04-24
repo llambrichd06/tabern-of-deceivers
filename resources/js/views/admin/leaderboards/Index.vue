@@ -29,7 +29,9 @@
 
         <template #content>
             <DataTable
-                v-model:filters="leaderboardFilters"
+                v-model:filters="filters"
+                v-model:sort-field="sortField"
+                v-model:sort-order="sortOrder"
                 :value="leaderboards || []"
                 :paginator="true"
                 :rows="10"
@@ -40,7 +42,7 @@
                 :loading="loading"
                 filter-display="menu"
                 :filter-delay="300"
-                :global-filter-fields="['alias', 'name', 'surname1', 'surname2', 'email']"
+                :global-filter-fields="['user_id', 'points', 'wins']"
 
             >
                 <Column field="id" header="ID" sortable class="w-[60px]">
@@ -50,7 +52,7 @@
                     </template>
                 </Column>
 
-                <Column field="name" header="User ID" sortable filter :filter-placeholder="'User ID'" class="min-w-[200px]">
+                <Column field="user_id" header="User ID" sortable filter :filter-placeholder="'User ID'" class="min-w-[200px]">
                     <template #body="slotProps">
                         <Skeleton v-if="loading" width="10rem" height="1rem" />
                         <div v-else class="flex items-center space-x-2">
@@ -123,7 +125,7 @@
                         <div v-else class="flex gap-2">
                             <Button
                                 v-if="can('leaderboard-edit')"
-                                v-tooltip.top="'Editar usuario'"
+                                v-tooltip.top="'Edit leaderboard'"
                                 icon="pi pi-pencil"
                                 rounded
                                 text
@@ -133,7 +135,7 @@
                             />
                             <Button
                                 v-if="can('leaderboard-delete')"
-                                v-tooltip.top="'Eliminar usuario'"
+                                v-tooltip.top="'Delete leaderboard'"
                                 icon="pi pi-trash"
                                 rounded
                                 text
@@ -157,20 +159,18 @@ import { useRouter } from "vue-router";
 import useLeaderboards from "../../../composables/leaderboards";
 import { useAbility } from '@casl/vue';
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
+import { useLeaderboardCrudStore } from "../../../store/leaderboard";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const { leaderboards, getLeaderboards, deleteLeaderboard } = useLeaderboards();
 const { can } = useAbility();
 const loading = ref(false);
 
-const leaderboardFilters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    alias: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    roles: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    created_at: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-});
+//initialise the leaderboard crud store
+const store = useLeaderboardCrudStore();
+//these are setted as v-model on the datatable, so they automatically update
+const { filters, sortField, sortOrder } = storeToRefs(store);
 
 const refreshLeaderboard = () => {
     loading.value = true;
@@ -178,24 +178,6 @@ const refreshLeaderboard = () => {
         loading.value = false;
     });
 };
-
-// const getRoleSeverity = (roleName) => {
-//     const roleMap = {
-//         'admin': 'danger',
-//         'alumne': 'info',
-//         'user': 'secondary'
-//     };
-//     return roleMap[roleName?.toLowerCase()] || 'secondary';
-// };
-
-// const filterRoles = (value, filter) => {
-//     if (!filter) return true;
-//     if (!value || !Array.isArray(value)) return false;
-//     const filterValue = filter.toString().toLowerCase();
-//     return value.some(role => 
-//         role.name && role.name.toLowerCase().includes(filterValue)
-//     );
-// };
 
 const formatDate = (dateString) => {
     if (!dateString) return '-';
