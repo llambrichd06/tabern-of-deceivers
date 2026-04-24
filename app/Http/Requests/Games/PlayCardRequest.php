@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Rooms;
+namespace App\Http\Requests\Games;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangePrivateRequest extends FormRequest
+class PlayCardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class ChangePrivateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_code' => ['required', 'size:8'],
+            'gameId' => ['required', 'exists:games,id'],
+            'idCards' => ['required', 'array'],
+            'calledRank' => ['nullable', 'min:0'],
         ];
     }
 }

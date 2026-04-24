@@ -22,11 +22,11 @@ class UpdateLeaderboardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['nullable', 'exists:users,id'],
-            'points' => ['nullable', 'min:0'],
-            'wins' => ['nullable', 'min:0'],
-            'losses' => ['nullable', 'min:0'],
-            'matches' => ['nullable', 'min:0'],
+            'user_id' => ['required', 'exists:users,id'],
+            'points' => ['required', 'min:0'],
+            'wins' => ['required', 'min:0'],
+            'losses' => ['required', 'min:0'],
+            'matches' => ['required', 'min:0'],
         ];
     }
 }

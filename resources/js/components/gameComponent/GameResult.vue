@@ -45,7 +45,7 @@
                 <!-- Rankings -->
                 <div class="rounded-2xl bg-purple-300/25 p-3 shadow-[0_10px_15px_rgba(0,0,0,0.25)]">
                     
-                    <!-- 🔥 HEADER -->
+                    <!-- HEADER -->
                     <div class="flex items-center justify-between px-3 pb-2 text-sm font-bold text-white/80 border-b border-white/20">
                         <span class="w-10 text-center">Rank</span>
                         <span class="flex-1 text-center">User</span>

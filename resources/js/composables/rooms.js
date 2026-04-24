@@ -186,11 +186,7 @@ export default function useRooms() {
         isLoading.value = true;
 
         try {
-            await axios.get('/api/rooms/changePrivate', {
-            params: {
-                room_id,
-            },
-            });
+            await axios.get('/api/rooms/changePrivate/'+room_id);
         } catch (error) {
             toast.crud.errorMsgFromError(error)
         } finally {

@@ -68,7 +68,7 @@ export default function useGames() {
     })
 
     const startGame = (room_id) => {
-        axios.post('/api/games/startGame', {room_id: room_id}) //Was failing cause you gotta send the data as an object
+        axios.post('/api/games/startGame/'+room_id) //Was failing cause you gotta send the data as an object
             .then(response => {
                 console.log(response.data)
             }).catch(error =>{
@@ -109,7 +109,7 @@ export default function useGames() {
         }
         isLoading.value = true; 
         
-        axios.post('/api/games/callLie', {gameId:gameId})
+        axios.post('/api/games/callLie/'+gameId)
             .then(response => {
                 console.log(response.data)
             }).catch(error =>{

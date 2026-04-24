@@ -38,7 +38,10 @@ class RoomController extends Controller
     }
 
     public function show(Room $room) {
-        // $this->authorize('room-list');
+        // We don't check for authorisation because you can see any room if you just join it
+
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+
         $room->load('host', 'players');
         return response()->json([
             'room' => $room,
@@ -83,6 +86,9 @@ class RoomController extends Controller
 
     public function update(UpdateRoomRequest $request, Room $room) {
         $this->authorize('room-edit');
+
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+
         $room = Room::find($room->id);
         $data = $request->validated();
 
@@ -97,6 +103,9 @@ class RoomController extends Controller
 
     public function destroy(Room $room) {
         $this->authorize('room-delete');
+
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+
         $room->delete();
         return response()->json([ 'data' => 'deleted successfully' ]);
     }
@@ -114,6 +123,8 @@ class RoomController extends Controller
     }
 
     public function joinPublicRoom(Room $room) {
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+
         $user = Auth::user();
         $room = Room::where('id', $room->id)
                 ->where('state', 'lobby')
@@ -153,8 +164,8 @@ class RoomController extends Controller
         }
     }
 
-    public function changePrivate(ChangePrivateRequest $request) {
-        $room = Room::find($request->room_id);
+    public function changePrivate(Room $room) {
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
         $user = Auth::user();
         $host_id = $room -> host_id;
         if ($user -> id == $host_id) {
@@ -167,7 +178,7 @@ class RoomController extends Controller
         } else {
             return response()->json(['error' => 'Only the admin of the room can change if the room is private or not'], 400);
         }
-        return $room;
+        return response()->json([ 'room' => $room ]);
     }
 
     public function transferOwnership(TransferOwnership $request) {
@@ -198,8 +209,8 @@ class RoomController extends Controller
                 $room->host_id = $room->players()->first()->id ?? $player->id;
                 $room->save();
             }
-            $this->deleteRoomIfEmpty($room); //if room is empty, we delete it, since we don't want to log an empty room
-            // COMMENTED FOR NOW, WHEN WE COMPLETE THE APLICATION UNCOMMENT
+            $this->completeRoomIfEmpty($room); //if room is empty, we complete it, since we don't want to show an empty room
+
             return response()->json(['success' => $result]);
         } else {
             return response()->json(['error' => 'You aren\'t in this room'], 400);
@@ -226,7 +237,7 @@ class RoomController extends Controller
     /**
      * Function to delete a room if its empty
      */
-    private function deleteRoomIfEmpty(Room $room) {
+    private function completeRoomIfEmpty(Room $room) {
         if ($room->players()->count() <= 0) {
             $room->state = 'completed';
             $room->save();

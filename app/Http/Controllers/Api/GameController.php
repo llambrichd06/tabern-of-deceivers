@@ -9,6 +9,7 @@ use App\Events\GameWon;
 use App\Events\LieCalled;
 use App\Events\TakenCards;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Games\PlayCardRequest;
 use App\Models\Card;
 use App\Models\Game;
 use App\Models\Leaderboard;
@@ -49,7 +50,7 @@ class GameController extends Controller
         if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);
 
         //we need to send the whole game object, but edit the gamestate so that its only for the logged user
-        return response()->json(['game_state' => $game->game_state]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
+        return response()->json(['game' => $game]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
     public function getGame(Game $game) {
@@ -64,14 +65,19 @@ class GameController extends Controller
         return response()->json(['game' => $game]);
     }
 
-    public function startGame(Request $request)
+    public function startGame(Room $room)
     {
-        $roomId = $request->room_id;
+        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+
+        $user = Auth::user();
+        if ($user->id != $room->host_id) {
+            return response()->json(['error' => 'Only the host can start the game'], 403);
+        }
+
+        $roomId = $room->id;
         $gameForRoomExists = Game::where('room_id', $roomId)->where('is_finished', '0')->first();
 
         if ($gameForRoomExists) return response()->json(['error' => 'This room has an unfinished game'], 409);
-
-        $room = Room::where('id', $roomId)->first();
 
         if ($room->players()->count() < 2) return response()->json(['error' => 'You need at least 2 players to start a game!'], 409);
         
@@ -88,12 +94,13 @@ class GameController extends Controller
         $this->updateGameState($game->id, $game->game_state);
     }
 
-    public function playCards(Request $request) {
-        broadcast(new CardPlayed(Game::find($request->gameId)));
-        $gameState = $this->getDecodedGameStateById($request->gameId);
+    public function playCards(PlayCardRequest $request) {
+        $gameId = $request->gameId;
+        $gameState = $this->getDecodedGameStateById($gameId);
         $playerNum = $this->getLoggedPlayerNumFromState($gameState); //player playing the cards
+        if (!$playerNum) return response()->json(['error' => 'User not in the game'], 404);
+        broadcast(new CardPlayed(Game::find($gameId)));
         $playerGrabbed = 'player'.$playerNum;
-
 
         /**
          * we are getting the ids and then turning the array of ids into an array of cards
@@ -106,11 +113,11 @@ class GameController extends Controller
         try {
             $nextPlayerNum = isset($gameState->players[$playerNum]) ? $playerNum+1 : 1;
 
-            $isGameFinished = $this->changeTurnTo($request->gameId, $nextPlayerNum);
+            $isGameFinished = $this->changeTurnTo($gameId, $nextPlayerNum);
             if ($isGameFinished) {
                 return;
             }
-            $gameState = $this->getDecodedGameStateById($request->gameId); //Grab the game state again after changin turn
+            $gameState = $this->getDecodedGameStateById($gameId); //Grab the game state again after changin turn
 
             //if there was no called rank
             if ($gameState->pile->called_rank <= 0) {
@@ -148,22 +155,24 @@ class GameController extends Controller
             
             $jsonGameState = json_encode($gameState);
 
-            $this->updateGameState($request->gameId, $jsonGameState);
+            $this->updateGameState($gameId, $jsonGameState);
             return response()->json('success');
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function callLie(Request $request) {
-        $gameId = $request->gameId;
-
-        broadcast(new LieCalled(Game::find($gameId)));
+    public function callLie(Game $game) {
+        if (!$game->id || $game->is_finished) return response()->json(['error' => 'Game not found'], 404);
+        $gameId = $game->id;
 
         $gameState = $this->getDecodedGameStateById($gameId);
         $callerNum = $this->getLoggedPlayerNumFromState($gameState);
 
-        $players = $gameState->players;
+        if (!$callerNum) return response()->json(['error' => 'User not in the game'], 404);
+
+        broadcast(new LieCalled(Game::find($gameId)));
+
         $lastPlayedCards = $gameState->pile->last_played_cards;
         if (empty($lastPlayedCards)) {
             return response()->json(['error' => 'A lie was called already!'], 400);
@@ -171,8 +180,7 @@ class GameController extends Controller
         $calledRank = $gameState->pile->called_rank;
 
         $lastPlayer = $gameState->last_player_turn;
-        Log::info($lastPlayer);
-        Log::info($callerNum);
+
         $lie = false;
         foreach ($lastPlayedCards as $card) {
             $currentCard = Card::find($card->id);
@@ -183,11 +191,11 @@ class GameController extends Controller
         }
 
         if ($lie == true) {
-            $this->changeTurnTo($gameId, $callerNum);
+            $this->changeTurnTo($gameId, $callerNum, true);
             $result = $this->takeCards($gameId, $lastPlayer);
             $resultMessage = 'It was a lie!';
         } else {
-            $this->changeTurnTo($gameId, $lastPlayer, false);
+            $this->changeTurnTo($gameId, $lastPlayer);
             $result = $this->takeCards($gameId, $callerNum);
             $resultMessage = 'It was the truth!';
         } 
@@ -278,14 +286,12 @@ class GameController extends Controller
         }
     }
 
-    private function changeTurnTo($gameId, $playerNum, $lie = true) {
-        $game = Game::find($gameId);
+    private function changeTurnTo($gameId, $playerNum, $lie = false) {
         $gameState = $this->getDecodedGameStateById($gameId);
         $lastPlayerTurn = $gameState->last_player_turn;
-        Log::info("last player was".$lastPlayerTurn);
         $lastPlayer = 'player'.$lastPlayerTurn;
 
-        if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0 && $lie) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
+        if ($lastPlayerTurn != 0 && $gameState->player_decks->{$lastPlayer}->count <= 0 && !$lie) { //we put $lastPlayerTurn between brackets so it actually does what we want and doesen't search for "count" inside $lastPlayerTurn
             $this->gameWon($gameId);
             return true;
         }
@@ -304,7 +310,7 @@ class GameController extends Controller
         return $decodedGameState;
     }
 
-    private function getLoggedPlayerNumFromState(stdClass $gameState) : int {
+    private function getLoggedPlayerNumFromState(stdClass $gameState) : int|bool {
         $user = Auth::user();
         $playerNum = array_search($user->id, $gameState->players)+1;
         return $playerNum;

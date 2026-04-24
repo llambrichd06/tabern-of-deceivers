@@ -5,8 +5,8 @@
             <div
                 v-for="(decks, player, index) in otherPlayerDecks"
                 :key="player"
-                :class="{ 'hidden': player === 'player' + myPlayerNum || decks.count < 1 || turnOf == lastPlayerTurn }"
-                class="min-w-[110px]"
+                :class="{ 'hidden': player === 'player' + myPlayerNum || (decks.count < 1 && player != 'player'+lastPlayerTurn) }"
+                class="min-w-27.5"
             >
                 <div class="flex w-full flex-col items-center justify-center rounded-2xl bg-white/8 px-2 py-3">
                     <div class="flex flex-col items-center gap-2">
@@ -30,7 +30,7 @@
         </div>
 
         <!-- MIDDLE AREA -->
-        <div class="relative min-h-[190px] lg:min-h-[210px]">
+        <div class="relative min-h-47.5 lg:min-h-52.5">
             <!-- CENTERED PILE -->
             <div class="flex h-full items-center justify-center">
                 <div class="flex flex-col items-center justify-center gap-1.5">
@@ -88,7 +88,7 @@
 
             <!-- RIGHT: INFO -->
             <div class="mt-4 flex justify-center lg:absolute lg:right-0 lg:top-1/2 lg:mt-0 lg:-translate-y-1/2 lg:justify-end">
-                <div class="w-full max-w-[210px] rounded-2xl bg-white/8 px-4 py-3">
+                <div class="w-full max-w-52.5 rounded-2xl bg-white/8 px-4 py-3">
                     <p class="text-center text-sm font-semibold md:text-base lg:text-right">
                         Turn: {{ turn }}
                     </p>

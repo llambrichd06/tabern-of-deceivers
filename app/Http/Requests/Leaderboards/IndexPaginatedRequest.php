@@ -26,11 +26,11 @@ class IndexPaginatedRequest extends FormRequest
 
 
         return [
-            'filterValue' => ['nullable', 'size:8'],
-            'filterField' => ['nullable', 'size:8'],
-            'sortOrder' => ['nullable', 'size:8'],
-            'sortField' => ['nullable', 'size:8'],
-            'rows' => ['required', 'size:8'],
+            'filterValue' => ['nullable', 'string'],
+            'filterField' => ['nullable', 'string'],
+            'sortOrder' => ['nullable', 'integer'],
+            'sortField' => ['nullable', 'string'],
+            'rows' => ['required', 'integer'],
         ];
     }
 }

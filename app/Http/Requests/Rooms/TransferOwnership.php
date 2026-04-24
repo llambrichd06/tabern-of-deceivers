@@ -22,7 +22,6 @@ class TransferOwnership extends FormRequest
     public function rules(): array
     {
         return [
-            'host_id' => ['required', 'exists:users,id'],
             'player_id' => ['nullable', 'exists:users,id'],
             'room_id' => ['required', 'exists:rooms,id'],
         ];
