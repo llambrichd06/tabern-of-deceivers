@@ -165,9 +165,6 @@ const newPageLoad = async (event) => {
         sortOrder.value = event.sortOrder ?? -1;
         filterField.value,
         filterValue.value,
-        console.log(sortField.value);
-        console.log(sortOrder.value);
-        
 
         await getPaginatedLeaderboards(
             nextPage,

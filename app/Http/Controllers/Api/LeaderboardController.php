@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Leaderboards\IndexPaginatedRequest;
+use App\Http\Requests\Leaderboards\StoreLeaderboardRequest;
+use App\Http\Requests\Leaderboards\UpdateLeaderboardRequest;
 use App\Models\Leaderboard;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,7 +26,7 @@ class LeaderboardController extends Controller
         ]);
     }
 
-    public function indexPaginated(Request $request) {
+    public function indexPaginated(IndexPaginatedRequest $request) {
         //FALTA VALIDAR REQUEST
         $query = Leaderboard::with('user');
 
@@ -66,30 +69,18 @@ class LeaderboardController extends Controller
             ]);
     }
     
-    public function store(Request $request) {
+    public function store(StoreLeaderboardRequest $request) {
         $this->authorize('leaderboard-create');
-        $data = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-            'points' => ['nullable', 'min:0'],
-            'wins' => ['required', 'min:0'],
-            'losses' => ['required', 'min:0'],
-            'matches' => ['required', 'min:0'],
-        ]);
+        $data = $request->validated();
         $leaderboard = Leaderboard::create($data);
         return response()->json([ 'leaderboard' => $leaderboard ]);
         
     }
 
-    public function update(Request $request, Leaderboard $leaderboard) {
+    public function update(UpdateLeaderboardRequest $request, Leaderboard $leaderboard) {
         $this->authorize('leaderboard-edit');
         $leaderboard = Leaderboard::find($leaderboard->id);
-        $data = $request->validate([
-            'user_id' => ['nullable', 'exists:users,id'],
-            'points' => ['nullable', 'min:0'],
-            'wins' => ['nullable', 'min:0'],
-            'losses' => ['nullable', 'min:0'],
-            'matches' => ['nullable', 'min:0'],
-        ]);
+        $data = $request->validated();
         $leaderboard->user_id = $data['user_id'] ?? $leaderboard->user_id;
         $leaderboard->points = $data['points'] ?? $leaderboard->points;
         $leaderboard->wins = $data['wins'] ?? $leaderboard->wins;

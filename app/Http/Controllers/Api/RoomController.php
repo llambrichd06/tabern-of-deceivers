@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rooms\ChangePrivateRequest;
+use App\Http\Requests\Rooms\JoinRoomRequest;
+use App\Http\Requests\Rooms\KickUser;
+use App\Http\Requests\Rooms\LeaveRoom;
+use App\Http\Requests\Rooms\StoreRoomRequest;
+use App\Http\Requests\Rooms\TransferOwnership;
+use App\Http\Requests\Rooms\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomUsers;
 use App\Models\User;
@@ -13,7 +20,7 @@ use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $this->authorize('room-list');
         $room = Room::with('host')->with('players')->get();
         return response()->json([ 'room' => $room ]);
@@ -37,17 +44,24 @@ class RoomController extends Controller
             'room' => $room,
         ]);
     }
-    
-    // public function kickPlayer() //idea a futur
-    
-    public function store(Request $request) {
-        // $this->authorize('room-create');
-        $data = $request->validate([
-            'room_code' => ['nullable', 'size:8'],
-            'state' => ['required', 'in:lobby,on_going,completed'],
-            'host_id' => ['required', 'exists:users,id'],
-            'private' => ['required', 'in:0,1']
-        ]);
+        
+    public function store(StoreRoomRequest $request) {
+        $this->authorize('room-create');
+        $data = $request->validated();
+
+        $room = $this->storeRoom($data);
+        return response()->json([ 'room' => $room ]);
+    }
+
+    public function hostRoom(StoreRoomRequest $request) {
+        $data = $request->validated();
+
+        $room = $this->storeRoom($data);
+        return response()->json([ 'room' => $room ]); //return created room for front, in case we need its data
+
+    }
+
+    private function storeRoom($data) {
         if (!$data['room_code']) {//If a room code is not provided, we make a random one
             do {
                 //We create 4 random bytes, which if we parse into hexadecimal, we get 8 characters, which is exactly what we want for a room code
@@ -64,19 +78,14 @@ class RoomController extends Controller
         $roomUser->user_id = $room->host_id;
         $roomUser->room_id = $room->id;
         $roomUser->save();
-
-        return response()->json([ 'room' => $room ]); //return created room for front, in case we need its data
+        return $room;
     }
 
-    public function update(Request $request, Room $room) {
+    public function update(UpdateRoomRequest $request, Room $room) {
         $this->authorize('room-edit');
         $room = Room::find($room->id);
-        $data = $request->validate([
-            'room_code' => ['required', 'size:8'],
-            'state' => ['required', 'in:lobby,on_going,completed'],
-            'host_id' => ['required', 'exists:users,id'],
-            'private' => ['required', 'in:0,1']
-        ]);
+        $data = $request->validated();
+
         $room->room_code = $data['room_code'] ?? $room->room_code;
         $room->state = $data['state'] ?? $room->state;
         $room->host_id = $data['host_id'] ?? $room->host_id;
@@ -89,13 +98,13 @@ class RoomController extends Controller
     public function destroy(Room $room) {
         $this->authorize('room-delete');
         $room->delete();
-        return "deleted successfully";
+        return response()->json([ 'data' => 'deleted successfully' ]);
     }
 
     /**
      * Function to make the currently logged in user join a room with the code of that room
      */
-    public function joinRoomWithCode(Request $request) {
+    public function joinRoomWithCode(JoinRoomRequest $request) {
         $user = Auth::user();
         $room = Room::where('room_code', $request->room_code)
                 ->where('state', 'lobby')
@@ -104,9 +113,9 @@ class RoomController extends Controller
         return $this->joinRoom($user->id, $room->id);
     }
 
-    public function joinPublicRoom(Request $request) {
+    public function joinPublicRoom(Room $room) {
         $user = Auth::user();
-        $room = Room::where('id', $request->room_id)
+        $room = Room::where('id', $room->id)
                 ->where('state', 'lobby')
                 ->where('private', '0')
                 ->first();
@@ -144,7 +153,7 @@ class RoomController extends Controller
         }
     }
 
-    public function changePrivate(Request $request) {
+    public function changePrivate(ChangePrivateRequest $request) {
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
@@ -161,7 +170,7 @@ class RoomController extends Controller
         return $room;
     }
 
-    public function transferOwnership(Request $request) {
+    public function transferOwnership(TransferOwnership $request) {
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
@@ -172,14 +181,14 @@ class RoomController extends Controller
                     $room->save();
                     return $room;
             } else {
-                return response()->json(['error' => 'The player you want to give host permision is not in this room'], 400);
+                return response()->json(['error' => 'The player you want to give host permisson is not in this room'], 404);
             }
         } else {
-            return response()->json(['error' => 'Only the host can do this action'], 400);
+            return response()->json(['error' => 'Only the host can do this action'], 403);
         }
     }
 
-    public function leaveRoom(Request $request) {
+    public function leaveRoom(LeaveRoom $request) {
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $player = $room->players()->where('user_id', $user -> id)->first();
@@ -189,7 +198,7 @@ class RoomController extends Controller
                 $room->host_id = $room->players()->first()->id ?? $player->id;
                 $room->save();
             }
-            // $this->deleteRoomIfEmpty($room); //if room is empty, we delete it, since we don't want to log an empty room
+            $this->deleteRoomIfEmpty($room); //if room is empty, we delete it, since we don't want to log an empty room
             // COMMENTED FOR NOW, WHEN WE COMPLETE THE APLICATION UNCOMMENT
             return response()->json(['success' => $result]);
         } else {
@@ -197,7 +206,8 @@ class RoomController extends Controller
         }
     }
 
-    public function kickUser(Request $request) {
+    public function kickUser(KickUser $request) { //Not implemented, probablly not going to get implemented aswell
+        return response()->json(['error' => 'Not implemented'], 404);
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $host_id = $room -> host_id;
@@ -218,7 +228,8 @@ class RoomController extends Controller
      */
     private function deleteRoomIfEmpty(Room $room) {
         if ($room->players()->count() <= 0) {
-            $room->delete();
+            $room->state = 'completed';
+            $room->save();
         }
     }
 }

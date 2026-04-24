@@ -140,12 +140,7 @@ export default function useRooms() {
         if (isLoading.value) return;
         isLoading.value = true;
 
-        return await axios.get('/api/rooms/joinPublicRoom', { //WE HAVE TO RETURN THE CALL ITSELF TO RETURN A PROMISE
-            //if we dont return the call, whatever is calling this wont get a promise and will immediatelly execute even with an await
-            params: { //A cleaner way to do get parameters
-                room_id: roomId
-            }
-        })
+        return await axios.get('/api/rooms/joinPublicRoom/'+roomId)
         .then(response => {
             return response.data
         }).catch(error =>{
