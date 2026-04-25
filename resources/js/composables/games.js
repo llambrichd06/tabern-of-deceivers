@@ -17,45 +17,7 @@ export default function useGames() {
     const initialGame = {
         room_id: '',
         is_finished: '',
-        game_state: {
-                      "pile": {
-                        "count": 0,
-                        "last_played_cards_count": 0,
-                        "cards": [],
-                        "last_played_cards": [],
-                        "called_rank": "0"
-                      },
-                      "player_decks": {
-                        "player1": {
-                          "count": 0,
-                          "cards": []
-                        },
-                        "player2": {
-                          "count": 0,
-                          "cards": []
-                        },
-                        "player3": {
-                          "count": 0,
-                          "cards": []
-                        },
-                        "player4": {
-                          "count": 0,
-                          "cards": []
-                        },
-                        "player5": {
-                          "count": 0,
-                          "cards": []
-                        },
-                        "player6": {
-                          "count": 0,
-                          "cards": []
-                        }
-                      },
-                      "players": [],
-                      "current_player_turn": 0,
-                      "last_player_turn": 0,
-                      "turn": 0
-                    },
+        game_state: '',
     }
     const game = ref({...initialGame})
 
@@ -64,19 +26,116 @@ export default function useGames() {
     const validationErrors = errors
 
     const gameSchema = yup.object({
-
+            room_id: yup.number().required(),
+            is_finished: yup.boolean().required(),
+            game_state: yup.string().required(),
     })
 
+    const getGames = async () => {
+        return axios.get('/api/games')
+            .then(response => {
+                games.value = response.data.game || response.game;
+                return response;
+            })
+    }
+
+    const getGame = async (id) => {
+        return axios.get('/api/games/' + id)
+            .then(response => {
+                let responseDatas = response.data.game || response.game
+                responseDatas.is_finished = responseDatas.is_finished == 0 ? false : true;
+                game.value = response.data.game;
+                return response;
+            })
+    }
+
+    const storeGame = async (game) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true
+        clearErrors()
+        
+        game.is_finished = game.is_finished ? 1 : 0;
+
+        const { isValid } = validate(gameSchema, game)
+        if (!isValid) {
+            isLoading.value = false
+
+            return
+        }
+
+        const serializedGame = serializeGame(game)
+
+        return axios.post('/api/games', serializedGame, {
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        })
+            .then(response => {
+                toast.crud.created('Game')
+                return response.data.game;
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                }
+            })
+            .finally(() => isLoading.value = false)
+    }
+
+    const resetGame = () => {
+        game.value = { ...initialGame }
+        clearErrors()
+    }
+
+    const updateGame = async (game) => {
+        if (isLoading.value) return;
+        
+        isLoading.value = true
+        clearErrors()
+        
+        game.is_finished = game.is_finished ? 1 : 0;
+
+        const { isValid } = validate(gameSchema, game)
+        if (!isValid) {
+            isLoading.value = false
+            return
+        }
+
+        axios.put('/api/games/' + game.id, game)
+            .then(response => {
+                router.push({ name: 'games.index' })
+                toast.crud.updated('Game')
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                }
+            })
+            .finally(() => isLoading.value = false)
+    }
+
+    const deleteGame = async (id) => {
+        axios.delete('/api/games/' + id)
+            .then(response => {
+                getGames()
+                toast.crud.deleted('Game')
+            })
+            .catch(error => {
+                toast.crud.error('Delete game. Message:'+error.response?.data)
+            })
+    }
+
     const startGame = (room_id) => {
-        axios.post('/api/games/startGame/'+room_id) //Was failing cause you gotta send the data as an object
+        axios.post('/api/games/startGame/'+room_id)
             .then(response => {
                 console.log(response.data)
             }).catch(error =>{
                 toast.crud.errorMsgFromError(error);
             })
     }
-    const getGame = async (id) => {
-        return axios.get('/api/games/'+id)
+    const getGameState = async (id) => {
+        return axios.get('/api/games/getGameState/'+id)
             .then(response => {
                 game.value = response.data.game
                 return response
@@ -116,11 +175,28 @@ export default function useGames() {
                 toast.crud.errorMsgFromError(error);
             })
     }
+    const serializeGame = (data) => {
+        const form = new FormData()
+        Object.entries(data).forEach(([key, value]) => {
+            if (value === undefined || value === null) return
+            if (Array.isArray(value)) {
+                value.forEach(item => form.append(`${key}[]`, item))
+            } else {
+                form.append(key, value)
+            }
+        })
+        return form
+    }
     return {
         games,
         game,
-        startGame,
+        getGames,
         getGame,
+        storeGame,
+        updateGame,
+        deleteGame,
+        startGame,
+        getGameState,
         playCards,
         callLie,
         hasError,

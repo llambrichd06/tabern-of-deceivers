@@ -56,19 +56,19 @@ import useGames from "../../../composables/games";
 import GameResult from "../../../components/gameComponent/GameResult.vue";
 
 const route = useRoute();
-const { game, getGame, isLoading } = useGames();
+const { game, getGameState, isLoading } = useGames();
 const gameId = route.params.id;
 const gameWon = ref(false);
 
 onBeforeMount(async () => {
-    await getGame(gameId);
+    await getGameState(gameId);
     window.Echo.join(`game.room.${game.value.room_id}`)
         .here((users) => {
             console.log("Currently loaded:", users);
         })
         .listen("UpdateGameState", async () => {
             console.log("GAME UPDATED! GET MY STATE");
-            await getGame(gameId).then(isLoading.value = false);
+            await getGameState(gameId).then(isLoading.value = false);
         })
         .listen("CardPlayed", () => {
             console.log("CARD PLAYED, PAUSE FOR A SECOND");

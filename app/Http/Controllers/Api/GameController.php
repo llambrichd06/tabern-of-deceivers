@@ -10,6 +10,7 @@ use App\Events\LieCalled;
 use App\Events\TakenCards;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Games\PlayCardRequest;
+use App\Http\Requests\Games\StoreGameRequest;
 use App\Models\Card;
 use App\Models\Game;
 use App\Models\Leaderboard;
@@ -24,48 +25,82 @@ class GameController extends Controller
 {
     public function index() {
         $this->authorize('game-list');
+        $games = Game::all();
+        return response()->json(['game' => $games]);
     }
     
-    public function show() {
+    public function show(Game $game) {
         $this->authorize('game-list');
+        if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+        return response()->json(['game' => $game]);
     }
     
-    public function store() {
+    public function store(StoreGameRequest $request) {
         $this->authorize('game-create');
+        $game = new Game;
+        $game->room_id = $request->room_id;
+        $game->is_finished = $request->is_finished;
+        $game->game_state = $request->game_state;   //i don't know if i like the idea of saving games with no state
+
+        $game->save();
+
+        return response()->json(['game' => $game]);
     }
     
-    public function update() {
+    public function update(StoreGameRequest $request, Game $game) {
         $this->authorize('game-edit');
+        if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+
+        $game->room_id = $request->room_id;
+        $game->is_finished = $request->is_finished;
+        $game->game_state = $request->game_state;  
+
+        $game->save();
+
+        return response()->json(['game' => $game]);
     }
     
-    public function delete() {
+    public function destroy(Game $game) {
         $this->authorize('game-delete');
+        if (!$game->id) return response()->json(['error' => 'Game not found'], 404);
+
+        $game->delete();
+        return response()->json([ 'data' => 'deleted successfully' ]);
     }
     
 
     public function getUserGameStateById(Game $game)
     {
-        if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);
+        if (!$game->id || $game->is_finished) return response()->json(['error' => 'Game not found'], 404);
 
-        //we need to send the whole game object, but edit the gamestate so that its only for the logged user
+        $game->game_state = json_decode($game->game_state);
+
+        $playerNum = $this->getLoggedPlayerNumFromState($game->game_state);
+
+        $game->game_state->pile->cards = [];
+        $game->game_state->pile->last_played_cards = [];
+
+        foreach ($game->game_state->player_decks as $player => $deckData) {
+            if ($player != 'player'.$playerNum) {
+                $game->game_state->player_decks->{$player}->cards = [];
+            }
+        }
+
         return response()->json(['game' => $game]); //WE NEED TO EDIT THE DATA SENT TO THE USER SO ITS FOR THAT USER SPECIFICALLY
     }
 
     public function getGame(Game $game) {
         if (!$game->id || $game->is_finished) return response()->json(['error' => 'Game not found'], 404);
-        
+
         $game->game_state = json_decode($game->game_state);
-        // $myPlayerNum = $this->getLoggedPlayerNumFromState($game->game_state);
         
-        // foreach ($game->game_state->player_decks as $playerNum => $playerDeck) {
-        //     if ($playerNum == $myPlayerNum) continue;
-        // }
+        
         return response()->json(['game' => $game]);
     }
 
     public function startGame(Room $room)
     {
-        if(!$room) return response()->json(['error' => 'Room not found'], 404);
+        if(!$room->id) return response()->json(['error' => 'Room not found'], 404);
 
         $user = Auth::user();
         if ($user->id != $room->host_id) {

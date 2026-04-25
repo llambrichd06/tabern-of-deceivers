@@ -39,11 +39,12 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::post('/messages/sent/{room}', [MessageController::class, 'sent']);
 
-    Route::get('/games/{game}', [GameController::class, 'getGame']);
+    Route::get('/games/getGameState/{game}', [GameController::class, 'getUserGameStateById']);
     Route::post('/games/startGame/{room}', [GameController::class, 'startGame']);
     Route::get('/games/getGameState/{game}', [GameController::class, 'getUserGameStateById']);
     Route::post('/games/playCards', [GameController::class, 'playCards']);
     Route::post('/games/callLie/{game}', [GameController::class, 'callLie']);
+    Route::apiResource('games', GameController::class);
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);

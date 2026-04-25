@@ -159,6 +159,7 @@ const menuModel = computed(() => {
             items: [
                 { label: 'Leaderboards', icon: 'pi pi-chart-bar', route: '/admin/leaderboards', permission: 'leaderboard-list' },
                 { label: 'Rooms', icon: 'pi pi-box', route: '/admin/rooms', permission: 'room-list' },
+                { label: 'Games', icon: 'pi pi-play-circle', route: '/admin/games', permission: 'game-list' },
             ]
         }
     ];

@@ -320,6 +320,40 @@ export default [
                     }
                 ]
             },
+            {
+                name: 'gamesAdmin',
+                path: 'games',
+                meta: { breadCrumb: 'Games' },
+                children: [
+                    {
+                        name: 'gamesAdmin.index',
+                        path: '',
+                        component: () => import('../views/admin/games/Index.vue'),
+                        meta: {
+                            breadCrumb: 'Games',
+                            hideBreadcrumb: true // Ocultar breadcrumb del layout porque la Card tiene su propio header
+                        }
+                    },
+                    {
+                        name: 'gamesAdmin.create',
+                        path: 'create',
+                        component: () => import('../views/admin/games/Create.vue'),
+                        meta: {
+                            breadCrumb: 'Create Game',
+                            linked: false
+                        }
+                    },
+                    {
+                        name: 'gamesAdmin.edit',
+                        path: 'edit/:id',
+                        component: () => import('../views/admin/games/Edit.vue'),
+                        meta: {
+                            breadCrumb: 'Update Game',
+                            linked: false
+                        }
+                    }
+                ]
+            },
         ]
     },
     {
