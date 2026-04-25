@@ -45,12 +45,12 @@
                                 <div class="relative w-full max-w-[22rem]">
                                     <div class="absolute -left-10 top-1/2 h-1 w-10 -translate-y-1/2 bg-white/70"></div>
 
-                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                        <div class="flex min-h-32.5 items-center justify-center rounded-2xl bg-white/10">
+                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                        <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                             <img
-                                                src="https://via.placeholder.com/280x160"
+                                                src="/images/Rules/Rule1.png"
                                                 alt="Step 1 image"
-                                                class="max-h-40 object-contain"
+                                                class="h-full w-full object-contain"
                                             />
                                         </div>
                                     </div>
@@ -84,12 +84,12 @@
                                 <div class="relative w-full max-w-[23rem]">
                                     <div class="absolute -left-10 top-1/2 h-1 w-10 -translate-y-1/2 bg-white/70"></div>
 
-                                    <div class="min-h-50 rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                        <div class="flex min-h-37.5 items-center justify-center rounded-2xl bg-white/10">
+                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                        <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                             <img
-                                                src="https://via.placeholder.com/300x180"
+                                                src="/images/Rules/Rule2.png"
                                                 alt="Step 2 image"
-                                                class="max-h-44 object-contain"
+                                                class="h-full w-full object-contain"
                                             />
                                         </div>
                                     </div>
@@ -121,12 +121,12 @@
                                 <div class="relative w-full max-w-[22rem]">
                                     <div class="absolute -left-10 top-1/2 h-1 w-10 -translate-y-1/2 bg-white/70"></div>
 
-                                    <div class="min-h-47.5 rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                        <div class="flex min-h-35 items-center justify-center rounded-2xl bg-white/10">
+                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                        <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                             <img
-                                                src="https://via.placeholder.com/280x170"
+                                                src="/images/Rules/Rule3.png"
                                                 alt="Step 3 image"
-                                                class="max-h-40 object-contain"
+                                                class="h-full w-full object-contain"
                                             />
                                         </div>
                                     </div>
@@ -177,27 +177,25 @@
                                     <div class="absolute -left-10 top-1/2 h-1 w-10 -translate-y-1/2 bg-white/70"></div>
 
                                     <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                        <div class="flex min-h-35 flex-col justify-between gap-3">
-                                            <div class="rounded-2xl bg-white/10 p-3">
-                                                <p class="mb-2 text-xs font-medium text-white/70">IMG OP 1</p>
-                                                <div class="flex min-h-10.5 items-center justify-center">
+                                        <div class="min-h-[22rem] rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                            <div class="flex h-full flex-col justify-between gap-4">
+                                                
+                                                <div class="flex flex-1 items-center justify-center rounded-2xl bg-white/10 p-3">
                                                     <img
-                                                        src="https://via.placeholder.com/180x70"
+                                                        src="/images/Rules/Rule4A.png"
                                                         alt="Option 1 image"
-                                                        class="max-h-14 object-contain"
+                                                        class="max-h-full object-contain"
                                                     />
                                                 </div>
-                                            </div>
 
-                                            <div class="rounded-2xl bg-white/10 p-3">
-                                                <p class="mb-2 text-xs font-medium text-white/70">IMG OP 2</p>
-                                                <div class="flex min-h-10.5 items-center justify-center">
+                                                <div class="flex flex-1 items-center justify-center rounded-2xl bg-white/10 p-3">
                                                     <img
-                                                        src="https://via.placeholder.com/180x70"
+                                                        src="/images/Rules/Rule4B.png"
                                                         alt="Option 2 image"
-                                                        class="max-h-14 object-contain"
+                                                        class="max-h-full object-contain"
                                                     />
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -229,12 +227,12 @@
                                 <div class="relative w-full max-w-[22rem]">
                                     <div class="absolute -left-10 top-1/2 h-1 w-10 -translate-y-1/2 bg-white/70"></div>
 
-                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                        <div class="flex min-h-32.5 items-center justify-center rounded-2xl bg-white/10">
+                                    <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                        <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                             <img
-                                                src="https://via.placeholder.com/280x160"
+                                                src="/images/Rules/Rule5.png"
                                                 alt="Step 5 image"
-                                                class="max-h-40 object-contain"
+                                                class="h-full w-full object-contain"
                                             />
                                         </div>
                                     </div>
@@ -253,12 +251,12 @@
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div class="flex min-h-35 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/280x160"
+                                        src="/images/Rules/Rule1.png"
                                         alt="Step 1 image"
-                                        class="max-h-40 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
@@ -272,12 +270,12 @@
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div class="flex min-h-35 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/280x160"
+                                        src="/images/Rules/Rule2.png"
                                         alt="Step 2 image"
-                                        class="max-h-40 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
@@ -290,12 +288,12 @@
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div class="flex min-h-35 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/280x160"
+                                        src="/images/Rules/Rule3.png"
                                         alt="Step 3 image"
-                                        class="max-h-40 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
@@ -310,24 +308,22 @@
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <p class="mb-4 text-sm font-medium text-white/70">IMG OP 1</p>
-                                <div class="flex min-h-30 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/260x140"
+                                        src="/images/Rules/Rule4A.png"
                                         alt="Option 1 image"
-                                        class="max-h-36 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <p class="mb-4 text-sm font-medium text-white/70">IMG OP 2</p>
-                                <div class="flex min-h-30 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/260x140"
+                                        src="/images/Rules/Rule4B.png"
                                         alt="Option 2 image"
-                                        class="max-h-36 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
@@ -340,12 +336,12 @@
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div class="flex min-h-35 items-center justify-center rounded-2xl bg-white/10">
+                            <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
+                                <div class="flex h-40 items-center justify-center rounded-2xl bg-white/10 p-2">
                                     <img
-                                        src="https://via.placeholder.com/280x160"
+                                        src="/images/Rules/Rule5.png"
                                         alt="Step 5 image"
-                                        class="max-h-40 object-contain"
+                                        class="h-full w-full object-contain"
                                     />
                                 </div>
                             </div>
