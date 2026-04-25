@@ -58,74 +58,80 @@
         <!-- Mobile Menu -->
         <div v-if="visibleMobileMenu" class="fixed inset-0 z-50 lg:hidden">
             <!-- Backdrop -->
-            <div class="absolute inset-0 bg-black/50" @click="visibleMobileMenu = false"></div>
+            <div class="absolute inset-0 bg-black/60" @click="visibleMobileMenu = false"></div>
             
             <!-- Panel -->
-            <div 
-                class="absolute right-0 top-0 h-full w-full sm:w-80 shadow-2xl"
-                :class="isDarkTheme ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'"
-                @click.stop>
+            <div
+                class="absolute right-0 top-0 h-full w-full bg-[#520B93] text-white shadow-2xl sm:w-80"
+                @click.stop
+            >
                 <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+                <div class="flex items-center justify-between border-b border-white/15 p-4">
                     <div class="flex items-center gap-2">
-                        <img src="/images/logo.svg" alt="logo" class="h-8"/>
-                        <span class="font-bold text-lg">Menu</span>
+                        <img src="/images/logo.svg" alt="logo" class="h-8" />
+                        <span class="text-lg font-bold">Menu</span>
                     </div>
-                    <button 
+
+                    <button
                         @click="visibleMobileMenu = false"
-                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        class="rounded-lg p-2 text-white transition-colors hover:bg-purple-300/20"
+                    >
                         <i class="pi pi-times text-xl"></i>
                     </button>
                 </div>
 
                 <!-- Content -->
-                <div class="flex flex-col gap-4 p-4 h-[calc(100%-5rem)] overflow-y-auto">
+                <div class="flex h-[calc(100%-5rem)] flex-col gap-4 overflow-y-auto p-4">
                     <!-- Nav Links -->
-                    <div class="flex flex-col gap-1">
-                        <router-link 
+                    <div class="flex flex-col gap-2">
+                        <router-link
                             v-for="link in navLinks"
                             :key="link.route"
-                            :to="link.route" 
+                            :to="link.route"
                             @click="visibleMobileMenu = false"
-                            class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            class="flex items-center gap-3 rounded-2xl border border-white/10 bg-purple-300/20 p-3 text-white transition-colors hover:bg-purple-300/35"
+                        >
                             <i :class="link.icon"></i>
                             <span>{{ link.label }}</span>
                         </router-link>
                     </div>
 
-                    <div class="border-t border-gray-200 dark:border-gray-800"></div>
+                    <div class="border-t border-white/15"></div>
 
                     <!-- Auth -->
                     <div class="flex flex-col gap-3">
                         <template v-if="!authStore().user?.name">
                             <router-link to="/login" @click="visibleMobileMenu = false">
-                                <Button label="Iniciar Sesión" outlined class="w-full" />
+                                <Button label="Login" severity="secondary" class="w-full" />
                             </router-link>
+
                             <router-link to="/register" @click="visibleMobileMenu = false">
-                                <Button label="Registrarse" class="w-full" />
+                                <Button label="REGISTER" severity="primary" class="w-full" />
                             </router-link>
                         </template>
+
                         <template v-else>
-                            <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-                                <div class="font-medium">{{ authStore().user.name }}</div>
-                                <div class="text-xs text-gray-500">{{ authStore().user.email }}</div>
+                            <div class="rounded-2xl border border-white/10 bg-purple-300/20 p-3">
+                                <div class="font-medium text-white">{{ authStore().user.name }}</div>
+                                <div class="text-xs text-white/70">{{ authStore().user.email }}</div>
                             </div>
-                            <Button label="Ir al Dashboard" icon="pi pi-th-large" outlined @click="navigateToDashboard" />
-                            <Button label="Cerrar Sesión" icon="pi pi-power-off" severity="danger" text @click="handleLogout" />
+
+                            <Button
+                                label="Ir al Dashboard"
+                                icon="pi pi-th-large"
+                                severity="secondary"
+                                class="w-full"
+                                @click="navigateToDashboard"
+                            />
+
+                            <Button
+                                label="Cerrar Sesión"
+                                icon="pi pi-power-off"
+                                severity="danger"
+                                class="w-full"
+                                @click="handleLogout"
+                            />
                         </template>
-                    </div>
-                    
-                    <!-- Theme Toggle -->
-                    <div 
-                        class="mt-auto flex items-center justify-between p-3 rounded-lg"
-                        :class="isDarkTheme ? 'bg-gray-800' : 'bg-gray-50'">
-                        <span class="text-sm font-medium">Tema</span>
-                        <button 
-                            @click="toggleDarkMode"
-                            class="p-2 rounded-lg transition-colors"
-                            :class="isDarkTheme ? 'hover:bg-gray-700' : 'hover:bg-gray-200'">
-                            <i :class="isDarkTheme ? 'pi-moon' : 'pi-sun'" class="pi"></i>
-                        </button>
                     </div>
                 </div>
             </div>

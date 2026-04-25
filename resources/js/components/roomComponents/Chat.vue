@@ -1,8 +1,8 @@
 <template>
-    <div class="flex h-full min-h-0 w-full flex-col overflow-hidden">
+    <div class="flex h-full max-h-[70vh] min-h-0 w-full flex-col overflow-hidden md:max-h-none">
         <!-- Messages -->
         <div
-            class="mb-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4"
+            class="order-2 mt-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:order-1 md:mt-0 md:mb-3 md:p-4"
         >
             <div
                 ref="messagesContainer"
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Input -->
-        <div class="shrink-0 rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:p-4">
+        <div class="order-1 shrink-0 rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:order-2 md:p-4">
             <div class="flex flex-col gap-3 sm:flex-row">
                 <InputText
                     v-model="currentMessage"

@@ -48,43 +48,53 @@
                         </Column>
                     </DataTable>
                 </div>
-                <div class="mt-6 flex flex-wrap gap-4 items-center justify-between bg-purple-300/20 p-4 rounded-2xl border border-white/10">
-                    <div class="flex flex-wrap gap-4 items-center flex-1">
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase tracking-wider text-purple-200 ml-1">Search By</label>
-                            <Select 
-                                v-model="filterField" 
-                                :options="filterOptions" 
-                                optionLabel="label" 
-                                optionValue="value" 
+                <div class="mt-6 rounded-2xl border border-white/10 bg-purple-300/20 p-4">
+                    <div class="flex flex-col gap-3 md:flex-row md:items-end md:gap-4">
+                        <!-- Search By -->
+                        <div class="flex flex-col gap-1 w-full md:w-[180px]">
+                            <label class="ml-1 text-xs font-bold uppercase tracking-wider text-white">
+                                Search By
+                            </label>
+
+                            <Select
+                                v-model="filterField"
+                                :options="filterOptions"
+                                optionLabel="label"
+                                optionValue="value"
                                 placeholder="Select Column"
-                                class="w-full md:w-48 custom-select"
+                                class="w-full custom-select h-[62px] md:h-[62px]"
                                 @change="onFilter"
                             />
                         </div>
-                    
-                        <div class="flex flex-col gap-1 flex-1 min-w-50">
-                            <label class="text-xs font-bold uppercase tracking-wider text-purple-200 ml-1">Search Value</label>
+
+                        <!-- Search Value -->
+                        <div class="flex flex-col gap-1 w-full md:flex-1">
+                            <label class="ml-1 text-xs font-bold uppercase tracking-wider text-white">
+                                Search Value
+                            </label>
 
                             <IconField>
-                                <InputIcon class="pi pi-search text-white/50" />
-                                <InputText 
-                                    v-model="filterValue" 
-                                    placeholder="Type to filter..." 
-                                    class="w-full custom-input" 
+                                <InputIcon class="pi pi-search text-white/70" />
+                                <InputText
+                                    v-model="filterValue"
+                                    placeholder="Type to filter..."
+                                    class="w-full custom-input h-[62px] md:h-[62px]"
                                     @input="onFilter"
                                 />
                             </IconField>
                         </div>
+
+                        <!-- Clear -->
+                        <div class="flex flex-col justify-end w-full md:w-[96px]">
+                            <Button
+                                icon="pi pi-filter-slash"
+                                label="Clear"
+                                outlined
+                                class="w-full custom-clear-btn h-[62px] md:h-[62px]"
+                                @click="clearFilter"
+                            />
+                        </div>
                     </div>
-                
-                    <Button 
-                        icon="pi pi-filter-slash" 
-                        label="Clear" 
-                        outlined 
-                        class="mt-5 md:mt-0 custom-clear-btn" 
-                        @click="clearFilter"
-                    />
                 </div>
                 <!-- BUTTON -->
                 <div class="mt-10 flex justify-center">
@@ -236,21 +246,14 @@ const newPageLoad = async (event) => {
     color: white;
 }
 
-/* ACTIVE PAGE (circle) */
-.leaderboard-table :deep(.p-paginator .p-highlight) {
-    background: rgba(82, 11, 147, 0.9) !important;
-    color: white !important;
-    border-radius: 9999px !important;
-}
-
-/* IMPORTANT: inner button fix */
+/* ACTIVE PAGE */
+.leaderboard-table :deep(.p-paginator .p-highlight),
 .leaderboard-table :deep(.p-paginator .p-paginator-page.p-highlight) {
     background: rgba(82, 11, 147, 0.9) !important;
     color: white !important;
     border-radius: 9999px !important;
 }
 
-/* remove that pale green/white look */
 .leaderboard-table :deep(.p-paginator .p-paginator-page) {
     background: transparent !important;
     color: white !important;
@@ -271,33 +274,55 @@ const newPageLoad = async (event) => {
     border-radius: 1rem;
 }
 
-/* Custom Input & Select Styling */
-:deep(.custom-input), 
+/* ============================= */
+/* INPUT & SELECT (FIX FINAL) */
+/* ============================= */
+
+:deep(.custom-input),
 :deep(.custom-select) {
     background: rgba(255, 255, 255, 0.12) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: white !important;
     border-radius: 0.75rem !important;
-    padding: 0.75rem;
 }
 
-:deep(.custom-input:focus), 
+/* INPUT */
+:deep(.custom-input) {
+    height: 62px !important;
+    padding: 0 0.75rem;
+}
+
+/* SELECT BASE */
+:deep(.custom-select) {
+    height: 62px !important;
+}
+
+/* SELECT TEXT (CENTRADO + COLOR) */
+:deep(.custom-select .p-select-label) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.75rem;
+    color: white !important;
+}
+
+/* ICONO SELECT */
+:deep(.custom-select .p-select-trigger) {
+    display: flex;
+    align-items: center;
+    color: white !important;
+}
+
+/* FOCUS */
+:deep(.custom-input:focus),
 :deep(.custom-select:focus) {
-    border-color: #a855f7 !important; /* Purple highlight */
+    border-color: #a855f7 !important;
     box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4) !important;
 }
 
-:deep(.custom-select .p-select-label) {
-    color: white !important;
-}
-
-:deep(.custom-select .p-select-trigger) {
-    color: white !important;
-}
-
-/* Dropdown Overlay Styling (The list inside the select) */
+/* DROPDOWN */
 :deep(.p-select-overlay) {
-    background: #3b0764 !important; /* Darker purple for the menu */
+    background: #3b0764 !important;
     color: white !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
@@ -310,13 +335,24 @@ const newPageLoad = async (event) => {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* CLEAR BUTTON */
 :deep(.custom-clear-btn) {
     border-color: rgba(255, 255, 255, 0.4) !important;
     color: white !important;
     border-radius: 0.75rem !important;
+    height: 62px !important;
 }
 
 :deep(.custom-clear-btn:hover) {
     background: rgba(255, 255, 255, 0.1) !important;
+}
+
+:deep(.custom-input::placeholder) {
+    color: rgba(255, 255, 255, 0.85) !important;
+    opacity: 1 !important;
+}
+
+:deep(.custom-select .p-select-label.p-placeholder) {
+    color: rgba(255, 255, 255, 0.85) !important;
 }
 </style>
