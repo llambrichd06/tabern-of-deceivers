@@ -136,7 +136,7 @@ import WaitingQuickPlay from "../../../components/roomComponents/WaitingQuickPla
 import JoinRoom from "../../../components/roomComponents/JoinRoom.vue";
 import { useRouter } from "vue-router";
 
-const { getOpenRooms, joinPublicRoom, rooms, storeRoom, room } = useRooms();
+const { getOpenRooms, joinPublicRoom, rooms, storeRoom, room, hostRoom } = useRooms();
 
 const showQuickPlayDialog = ref(false);
 const joinRoomVisible = ref(false);
@@ -148,11 +148,10 @@ onMounted(async () => {
 });
 
 const hostGame = async () => {
-    room.value.host_id = auth.user.id;
-    room.value.private = true;
-    room.value.state = "lobby";
 
-    const data = await storeRoom(room.value);
+    const data = await hostRoom(room.value);
+    console.log(data);
+    
     router.push({ name: "lobby", params: { id: data.id } });
 };
 

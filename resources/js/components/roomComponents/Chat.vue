@@ -41,7 +41,7 @@
                     placeholder="Write message..."
                     class="chat-input w-full"
                     :maxlength="maxLength"
-                    @keyup.enter="sendMessage"
+                    @keyup.enter="send"
                 />
 
                 <Button
@@ -49,7 +49,7 @@
                     severity="secondary"
                     :disabled="chatLoading || !currentMessage.trim()"
                     class="chat-send-btn rounded-2xl! px-6! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
-                    @click="sendMessage"
+                    @click="send"
                 />
             </div>
 
@@ -62,17 +62,17 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-
+import useMessages from "../../composables/messages";
 const props = defineProps<{
     roomId: number;
 }>();
 
-const chatLoading = ref(false);
+
 const currentMessage = ref("");
 const messages = ref<any[]>([]);
 const maxLength = 300;
 const messagesContainer = ref<HTMLElement | null>(null);
-
+const { sendMessage, chatLoading } = useMessages();
 const scrollToBottom = async () => {
     await nextTick();
     if (messagesContainer.value) {
@@ -117,22 +117,9 @@ onUnmounted(() => {
     window.Echo.leave(`chat.room.${props.roomId}`);
 });
 
-const sendMessage = () => {
-    const text = currentMessage.value.trim();
-
-    if (!chatLoading.value && text) {
-        chatLoading.value = true;
-
-        axios
-            .post("/api/messages/sent/" + props.roomId, { text })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally(() => {
-                chatLoading.value = false;
-                currentMessage.value = "";
-            });
-    }
+const send = async () => {
+    sendMessage(currentMessage.value, props.roomId)
+    currentMessage.value = ""
 };
 </script>
 

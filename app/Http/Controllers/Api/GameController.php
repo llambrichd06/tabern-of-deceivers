@@ -43,8 +43,6 @@ class GameController extends Controller
     }
     
 
-
-
     public function getUserGameStateById(Game $game)
     {
         if (!$game->game_state) return response()->json(['error' => 'Game not found'], 404);

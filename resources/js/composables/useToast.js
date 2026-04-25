@@ -127,7 +127,7 @@ export function useToast() {
         if (errorData.name === 'ValidationError') {
             errorMessage = errorData.message;
         } else {
-            errorMessage = errorData.response.data.error;
+            errorMessage = errorData.response.data.error ?? errorData.response.data.message;
         }
       error('Error', `${errorMessage ?? 'Something went wrong!'}`);
     }

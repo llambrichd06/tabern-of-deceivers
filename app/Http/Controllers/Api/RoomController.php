@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Rooms\ChangePrivateRequest;
 use App\Http\Requests\Rooms\JoinRoomRequest;
 use App\Http\Requests\Rooms\KickUser;
-use App\Http\Requests\Rooms\LeaveRoom;
+
+use App\Http\Requests\Rooms\LeaveRoomRequest;
 use App\Http\Requests\Rooms\StoreRoomRequest;
 use App\Http\Requests\Rooms\TransferOwnership;
 use App\Http\Requests\Rooms\UpdateRoomRequest;
@@ -56,12 +57,17 @@ class RoomController extends Controller
         return response()->json([ 'room' => $room ]);
     }
 
-    public function hostRoom(StoreRoomRequest $request) {
-        $data = $request->validated();
-
-        $room = $this->storeRoom($data);
-        return response()->json([ 'room' => $room ]); //return created room for front, in case we need its data
-
+    public function hostRoom() {
+        $user = Auth::user();
+        $newRoom = [
+            'room_code' => '',
+            'state' => 'lobby',
+            'host_id' => $user->id,
+            'private' => '1',
+        ];
+        
+        $room = $this->storeRoom($newRoom);
+        return response()->json([ 'room' => $room ]); //return created room for front, so it can send the host to the room they created
     }
 
     private function storeRoom($data) {
@@ -199,7 +205,7 @@ class RoomController extends Controller
         }
     }
 
-    public function leaveRoom(LeaveRoom $request) {
+    public function leaveRoom(LeaveRoomRequest $request) {
         $room = Room::find($request->room_id);
         $user = Auth::user();
         $player = $room->players()->where('user_id', $user -> id)->first();

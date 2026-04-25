@@ -27,7 +27,6 @@ class LeaderboardController extends Controller
     }
 
     public function indexPaginated(IndexPaginatedRequest $request) {
-        //FALTA VALIDAR REQUEST
         $query = Leaderboard::with('user');
 
         // data filtering

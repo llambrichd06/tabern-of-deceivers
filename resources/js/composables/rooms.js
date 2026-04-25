@@ -135,6 +135,19 @@ export default function useRooms() {
             })
     }
 
+    const hostRoom = async () => {
+        return axios.post('/api/rooms/hostRoom')
+            .then(response => {
+                toast.crud.created('Room')
+                return response.data.room;
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                }
+            })
+            .finally(() => isLoading.value = false)
+    }
 
     const joinPublicRoom = async (roomId) => {
         if (isLoading.value) return;
@@ -152,10 +165,7 @@ export default function useRooms() {
         if (isLoading.value) return;
         isLoading.value = true;
         const { isValid } = validate(roomCodeSchema, roomCode);
-        // if (!isValid) {
-        //     isLoading.value = false
-        //     return
-        // }
+
         return await axios.get('/api/rooms/joinRoomWithCode', { 
             params: { //A cleaner way to do get parameters
                 room_code: roomCode
@@ -240,6 +250,7 @@ export default function useRooms() {
         updateRoom,
         deleteRoom,
         resetRoom,
+        hostRoom,
         joinRoomByCode,
         joinPublicRoom,
         changePrivate,
