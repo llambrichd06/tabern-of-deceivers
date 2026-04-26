@@ -1,39 +1,6 @@
 <template>
     <div class="w-full min-h-screen bg-[#520B93] text-white">
         <div class="w-full space-y-6">
-            <!-- Avatar Section -->
-            <!--
-            <section class="w-full">
-                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
-                    <h2 class="mb-6 text-2xl font-bold text-white">Avatar</h2>
-
-                    <div class="flex flex-col items-center">
-                        <FileUpload
-                            name="picture"
-                            url="/api/users/updateimg"
-                            @before-upload="onBeforeUpload"
-                            @upload="onTemplatedUpload"
-                            accept="image/*"
-                            :maxFileSize="1500000"
-                            @select="onSelectedFiles"
-                            mode="basic"
-                            :auto="true"
-                            chooseLabel="Cambiar Avatar"
-                            class="avatar-upload w-full"
-                        />
-
-                        <div class="mt-6 flex w-full justify-center">
-                            <Avatar
-                                :image="user.avatar || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
-                                class="h-32! w-32!"
-                                shape="circle"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
-            -->
-
             <!-- Personal Data Section -->
             <section class="w-full">
                 <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
@@ -67,6 +34,35 @@
                                 {{ user.surname2 || "-" }}
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Avatar Section -->
+            <section class="w-full">
+                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
+                    <h2 class="mb-6 text-2xl font-bold text-white">Avatar</h2>
+                    <div class="flex flex-col items-center">
+                        <div class="mt-3 flex w-full justify-center">
+                            <Avatar
+                                :image="user.avatar || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                                class="h-32! w-32!"
+                                shape="circle"
+                            />
+                        </div>
+                        <FileUpload
+                            name="picture"
+                            url="/api/users/updateimg"
+                            @before-upload="onBeforeUpload"
+                            @upload="onTemplatedUpload"
+                            accept="image/*"
+                            :maxFileSize="1500000"
+                            @select="onSelectedFiles"
+                            mode="basic"
+                            :auto="true"
+                            chooseLabel="Cambiar Avatar"
+                            class="avatar-upload w-full mt-6"
+                        />
                     </div>
                 </div>
             </section>
