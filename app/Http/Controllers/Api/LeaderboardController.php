@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Leaderboards\IndexPaginatedRequest;
 use App\Http\Requests\Leaderboards\StoreLeaderboardRequest;
 use App\Http\Requests\Leaderboards\UpdateLeaderboardRequest;
+use App\Http\Resources\LeaderboardResource;
 use App\Models\Leaderboard;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -64,26 +65,11 @@ class LeaderboardController extends Controller
             ->orderByDesc('wins')
             ->orderByDesc('points')
             ->limit(3)
-            ->get()
-            ->map(function ($leaderboard) {
-                return [
-                    'id' => $leaderboard->id,
-                    'user_id' => $leaderboard->user_id,
-                    'wins' => $leaderboard->wins,
-                    'losses' => $leaderboard->losses,
-                    'matches' => $leaderboard->matches,
-                    'points' => $leaderboard->points,
-                    'user' => [
-                        'id' => $leaderboard->user?->id,
-                        'name' => $leaderboard->user?->name,
-                        'email' => $leaderboard->user?->email,
-                        'avatar' => $leaderboard->user?->getFirstMediaUrl('images-users') ?: asset('images/placeholder.png'),
-                    ],
-                ];
-            });
+            ->get();
+
 
         return response()->json([
-            'leaderboards' => $bestUsers,
+            'leaderboards' => LeaderboardResource::collection($bestUsers),
         ]);
     }
     
