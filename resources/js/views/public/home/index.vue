@@ -158,7 +158,7 @@
                             <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-visible">
                                 <img
                                     src="/images/crown.svg"
-                                    class="absolute -top-8 left-1/2 h-10 w-10 -translate-x-1/2 rotate-12"
+                                    class="absolute -top-8 left-3/5 h-10 w-10 -translate-x-1/2 rotate-12"
                                     alt="Crown"
                                 />
 
