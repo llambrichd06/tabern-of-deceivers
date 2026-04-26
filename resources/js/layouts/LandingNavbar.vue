@@ -111,17 +111,28 @@
                         </template>
 
                         <template v-else>
-                            <div class="rounded-2xl border border-white/10 bg-purple-300/20 p-3">
-                                <div class="font-medium text-white">{{ authStore().user.name }}</div>
-                                <div class="text-xs text-white/70">{{ authStore().user.email }}</div>
+                            <div class="rounded-2xl border border-white/10 bg-purple-300/20 p-3 flex items-center gap-2">
+                                <Avatar :image="authStore().user.avatar" shape="circle" size="small" />
+                                <div>
+                                    <div class="font-medium text-white">{{ authStore().user.name }}</div>
+                                    <div class="text-xs text-white/70">{{ authStore().user.email }}</div>
+                                </div>
                             </div>
 
                             <Button
-                                label="Ir al Dashboard"
+                                label="Ir al Perfil"
                                 icon="pi pi-th-large"
                                 severity="secondary"
                                 class="w-full"
                                 @click="navigateToDashboard"
+                            />
+
+                            <Button v-if="authStore().user?.roles?.some(r => r.name.includes('admin')) || false"
+                                label="Ir a Administrador"
+                                icon="pi pi-wrench"
+                                severity="secondary"
+                                class="w-full"
+                                @click="navigateToAdmin"
                             />
 
                             <Button
@@ -196,6 +207,11 @@ const toggle = (event) => {
 const navigateToDashboard = () => {
     visibleMobileMenu.value = false;
     router.push('/app');
+}
+
+const navigateToAdmin = () => {
+    visibleMobileMenu.value = false;
+    router.push('/admin');
 }
 
 const handleLogout = () => {
