@@ -16,6 +16,7 @@ use App\Models\Game;
 use App\Models\Leaderboard;
 use App\Models\Room;
 use App\Models\RoomUsers;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -256,12 +257,12 @@ class GameController extends Controller
         ];
 
         $gameState->player_decks = [
-            'player1' => ['count' => 0, 'cards' => []],
-            'player2' => ['count' => 0, 'cards' => []],
-            'player3' => ['count' => 0, 'cards' => []],
-            'player4' => ['count' => 0, 'cards' => []],
-            'player5' => ['count' => 0, 'cards' => []],
-            'player6' => ['count' => 0, 'cards' => []],
+            'player1' => ['count' => 0, 'cards' => [], 'user_name' => ''],
+            'player2' => ['count' => 0, 'cards' => [], 'user_name' => ''],
+            'player3' => ['count' => 0, 'cards' => [], 'user_name' => ''],
+            'player4' => ['count' => 0, 'cards' => [], 'user_name' => ''],
+            'player5' => ['count' => 0, 'cards' => [], 'user_name' => ''],
+            'player6' => ['count' => 0, 'cards' => [], 'user_name' => ''],
         ];
 
         $gameState->players = [];
@@ -275,8 +276,10 @@ class GameController extends Controller
         $cardAmount = Card::count(); 
         // $cardsPerPlayer = floor($cardAmount/count($players)); // USE THIS WHEN WE STOP TESTING
         
-        foreach ($players as $player) {
+        foreach ($players as $position => $player) {
             array_push($gameState->players, $player->user_id);
+            $user = User::find($player->user_id);
+            $gameState->player_decks['player'.($position+1)]['user_name'] = $user->name;
         }
         
         //depending on player number, how many cards do we need to use in the game

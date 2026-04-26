@@ -11,7 +11,7 @@
                 <div class="flex w-full flex-col items-center justify-center rounded-2xl bg-white/8 px-2 py-3">
                     <div class="flex flex-col items-center gap-2">
                         <div class="text-center text-sm font-semibold leading-tight md:text-base">
-                            {{ getPlayerName(index) }}
+                            {{ getPlayerNameFromNum(player) ?? getPlayerName(index) }}
                         </div>
 
                         <div class="flex flex-col items-center">
@@ -102,7 +102,7 @@
                                 v-else
                                 class="text-sm font-semibold"
                             >
-                                Player {{ turnOf }}'s turn
+                                Turn of {{ getPlayerNameFromNum('player'+turnOf ?? 'player1')}}
                             </p>
                             <p class="text-sm font-semibold">
                                 Rank: {{ pileCalledRank == 0 ? 'None' : pileCalledRank }}
@@ -128,7 +128,7 @@
                         v-else
                         class="text-center text-base font-semibold md:text-lg lg:text-right"
                     >
-                        Player {{ turnOf }}'s turn
+                        Turn of {{ getPlayerNameFromNum('player'+turnOf)}}
                     </p>
                     <p class="text-center text-base font-semibold md:text-lg lg:text-right">
                         Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}
@@ -240,6 +240,13 @@ const getPlayerName = (index: number) => {
     const playerData = playersData.value.find((p: any) => p.id === playerId);
     return playerData?.name || `Player ${index + 1}`;
 };
+
+const getPlayerNameFromNum = (playerNum) => {
+    if (!playerNum) {
+        return 'Player'
+    }
+    return otherPlayerDecks?.value[playerNum]['user_name']
+}
 
 const pileCount = computed(() => game.value.game_state.pile.count);
 const pileCalledRank = computed(() => game.value.game_state.pile.called_rank);
