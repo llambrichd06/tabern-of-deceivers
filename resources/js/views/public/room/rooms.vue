@@ -17,23 +17,29 @@
                 <section class="px-4 pt-8 pb-10">
                     <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 sm:grid-cols-3">
                         <Button
-                            label="Search Game"
-                            severity="secondary"
-                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
-                            @click="openJoinGame"
-                        />
-                        <Button
                             label="Host Game"
                             severity="secondary"
                             class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="hostGame"
                         />
                         <Button
+                            label="Search Game"
+                            severity="secondary"
+                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            @click="openJoinGame"
+                        />
+                        <Button
+                            label="Refresh Rooms"
+                            severity="secondary"
+                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            @click="refreshRooms"
+                        />
+                        <!-- <Button
                             label="Quick Match"
                             severity="secondary"
                             class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="searchQuickGame"
-                        />
+                        /> -->
                     </div>
                 </section>
 
@@ -138,7 +144,7 @@ import { useRouter } from "vue-router";
 
 const { getOpenRooms, joinPublicRoom, rooms, storeRoom, room, hostRoom } = useRooms();
 
-const showQuickPlayDialog = ref(false);
+// const showQuickPlayDialog = ref(false);
 const joinRoomVisible = ref(false);
 const auth = authStore();
 const router = useRouter();
@@ -155,9 +161,13 @@ const hostGame = async () => {
     router.push({ name: "lobby", params: { id: data.id } });
 };
 
-const searchQuickGame = () => {
-    showQuickPlayDialog.value = true;
-};
+// const searchQuickGame = () => {
+//     showQuickPlayDialog.value = true;
+// };
+
+const refreshRooms = () => {
+    getOpenRooms();
+} 
 
 const openJoinGame = () => {
     joinRoomVisible.value = true;
