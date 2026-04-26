@@ -46,7 +46,7 @@
                         type="button" 
                         @click="toggle"
                         class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-purple-300/30 transition-colors">
-                        <Avatar :image="authStore().user.avatar" :label="authStore().user.name[0]" shape="circle" size="small" />
+                        <Avatar :image="authStore().user.avatar" shape="circle" size="small" />
                         <span class="text-sm font-medium hidden xl:inline">{{ authStore().user?.name }}</span>
                         <i class="pi pi-chevron-down text-xs"></i>
                     </button>

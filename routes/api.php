@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/rooms/leaveRoom', [RoomController::class, 'leaveRoom']);
     Route::get('/rooms/changePrivate/{room}', [RoomController::class, 'changePrivate']);
     Route::get('/rooms/transferOwnership', [RoomController::class, 'transferOwnership']);
-    Route::get('/rooms/kickUser', [RoomController::class, 'kickUser']);
+    // Route::get('/rooms/kickUser', [RoomController::class, 'kickUser']); //Not implemented
     Route::get('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
     Route::get('/rooms/joinPublicRoom/{room}', [RoomController::class, 'joinPublicRoom']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
@@ -41,7 +41,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('/games/getGameState/{game}', [GameController::class, 'getUserGameStateById']);
     Route::post('/games/startGame/{room}', [GameController::class, 'startGame']);
-    Route::get('/games/getGameState/{game}', [GameController::class, 'getUserGameStateById']);
     Route::post('/games/playCards', [GameController::class, 'playCards']);
     Route::post('/games/callLie/{game}', [GameController::class, 'callLie']);
     Route::apiResource('games', GameController::class);
