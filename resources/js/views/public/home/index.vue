@@ -101,8 +101,9 @@
         </section>
 
         <!-- BEST PLAYERS -->
-        <section class="mt-12 px-4">
-            <div class="mx-auto max-w-5xl rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 md:px-10 md:pt-10 shadow-[0_15px_20px_rgba(0,0,0,0.3)]">
+        <section class="mt-16 px-4 pb-14 md:pb-20">
+            <div class="mx-auto flex min-h-[560px] max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 md:min-h-[620px] md:px-10 md:pt-10 shadow-[0_15px_20px_rgba(0,0,0,0.3)]">
+                
                 <h2 class="mb-8 text-center text-4xl font-bold md:text-6xl">
                     Rankings
                 </h2>
@@ -122,17 +123,18 @@
                     />
                 </div>
 
-                <div v-if="hasRankings">
-                    <div v-if="loading" class="text-center">
+                <div v-if="hasRankings" class="flex flex-1 items-end justify-center">
+                    <div v-if="loading" class="mb-10 text-center">
                         Loading...
                     </div>
 
-                    <div v-else class="flex items-end justify-center gap-4 md:gap-10 text-black">
+                    <div v-else class="flex items-end justify-center gap-4 md:gap-14 text-black">
+                        
                         <!-- 2nd -->
                         <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
-                            <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
+                            <div class="relative z-10 mb-[-10px] h-20 w-20 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
 
-                            <div class="mt-2 flex min-h-[150px] w-24 flex-col rounded-t-xl bg-slate-200 px-3 pt-3 pb-3 text-center md:w-28">
+                            <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-slate-200 px-4 pt-8 pb-4 text-center md:w-44">
                                 <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[1]?.user?.name ?? "No one :v" }}
                                 </p>
@@ -143,46 +145,47 @@
 
                         <!-- 1st -->
                         <div v-if="bestUsers.leaderboards?.length >= 1" class="flex flex-col items-center justify-end">
-                            <div class="relative flex items-center justify-center">
+                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
                                 <img 
                                     src="/images/crown.svg"
-                                    class="absolute -top-7 left-22/30 -translate-x-1/2 w-10 h-10 rotate-22"
+                                    class="absolute -top-8 left-3/5 h-10 w-10 -translate-x-1/2 rotate-12"
                                 />
-                                <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
+                                <div class="h-22 w-22 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
                             </div>
 
-                            <div class="mt-2 flex min-h-[190px] w-24 flex-col rounded-t-xl bg-yellow-300 px-3 pt-3 pb-3 text-center md:w-28">
+                            <div class="flex min-h-[220px] w-28 flex-col rounded-t-xl bg-yellow-300 px-4 pt-8 pb-4 text-center md:w-48">
                                 <p class="font-bold break-words">
-                                    {{ bestUsers.leaderboards[0]?.user?.name ?? "No one :v" }}
+                                    {{ bestUsers.leaderboards[0]?.user?.name ?? "There isn't a second player in the ranking" }}
                                 </p>
                                 <p class="mt-2">Wins: {{ bestUsers.leaderboards[0]?.wins ?? "none" }}</p>
-                                <p>Points: {{ bestUsers.leaderboards[0]?.points ?? "no pts" }}</p>
+                                <p>Points: {{ bestUsers.leaderboards[0]?.points ?? "none" }}</p>
                             </div>
                         </div>
 
                         <!-- 3rd -->
                         <div v-if="bestUsers.leaderboards?.length >= 3" class="flex flex-col items-center justify-end">
-                            <div class="h-20 w-20 rounded-full border border-black bg-surface-200"></div>
+                            <div class="relative z-10 mb-[-10px] h-20 w-20 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
 
-                            <div class="mt-2 flex min-h-[120px] w-24 flex-col rounded-t-xl bg-orange-500 px-3 pt-3 pb-3 text-center md:w-28">
+                            <div class="flex min-h-[145px] w-28 flex-col rounded-t-xl bg-orange-500 px-4 pt-8 pb-4 text-center md:w-44">
                                 <p class="font-bold break-words">
-                                    {{ bestUsers.leaderboards[2]?.user?.name ?? "No one :v" }}
+                                    {{ bestUsers.leaderboards[2]?.user?.name ?? "There isn't a third player in the ranking" }}
                                 </p>
                                 <p class="mt-2">Wins: {{ bestUsers.leaderboards[2]?.wins ?? "none" }}</p>
-                                <p>Points: {{ bestUsers.leaderboards[2]?.points ?? "no pts" }}</p>
+                                <p>Points: {{ bestUsers.leaderboards[2]?.points ?? "none" }}</p>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                <div v-else class="text-center">
+                <div v-else class="flex flex-1 items-center justify-center text-center">
                     <p><b>No ranking found</b></p>
                 </div>
             </div>
         </section>
 
         <!-- CTA (UNCHANGED) -->
-        <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <!-- <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <div class="flex gap-4">
                 <template v-if="!auth.user?.name">
                     <Button label="Iniciar Sesión" as="router-link" to="/login" size="large" />
@@ -198,7 +201,7 @@
                     />
                 </template>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
