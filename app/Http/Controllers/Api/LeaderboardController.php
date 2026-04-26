@@ -10,6 +10,7 @@ use App\Models\Leaderboard;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\UserResource;
 
 class LeaderboardController extends Controller
 {
@@ -60,12 +61,30 @@ class LeaderboardController extends Controller
 
     public function getBestUsers() {
         $bestUsers = Leaderboard::with('user')
-            ->orderByDesc('wins', 'points')
+            ->orderByDesc('wins')
+            ->orderByDesc('points')
             ->limit(3)
-            ->get();
+            ->get()
+            ->map(function ($leaderboard) {
+                return [
+                    'id' => $leaderboard->id,
+                    'user_id' => $leaderboard->user_id,
+                    'wins' => $leaderboard->wins,
+                    'losses' => $leaderboard->losses,
+                    'matches' => $leaderboard->matches,
+                    'points' => $leaderboard->points,
+                    'user' => [
+                        'id' => $leaderboard->user?->id,
+                        'name' => $leaderboard->user?->name,
+                        'email' => $leaderboard->user?->email,
+                        'avatar' => $leaderboard->user?->getFirstMediaUrl('images-users') ?: asset('images/placeholder.png'),
+                    ],
+                ];
+            });
+
         return response()->json([
             'leaderboards' => $bestUsers,
-            ]);
+        ]);
     }
     
     public function store(StoreLeaderboardRequest $request) {
