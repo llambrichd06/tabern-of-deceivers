@@ -102,18 +102,17 @@
 
         <!-- BEST PLAYERS -->
         <section class="mt-16 px-4 pb-14 md:pb-20">
-            <div class="mx-auto flex min-h-[560px] max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 md:min-h-[620px] md:px-10 md:pt-10 shadow-[0_15px_20px_rgba(0,0,0,0.3)]">
-                
+            <div class="mx-auto flex min-h-[560px] max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:min-h-[620px] md:px-10 md:pt-10">
                 <h2 class="mb-8 text-center text-4xl font-bold md:text-6xl">
                     Rankings
                 </h2>
-                
+
                 <p class="mx-auto mb-8 max-w-3xl text-center leading-8">
                     See the ranking of other players around the world! There, you can see your own ranking
                     compared to others. Try to aim for the top!
                 </p>
 
-                <div class="mb-12 flex justify-center w-full">
+                <div class="mb-12 flex w-full justify-center">
                     <Button
                         label="View Rankings"
                         as="router-link"
@@ -128,11 +127,17 @@
                         Loading...
                     </div>
 
-                    <div v-else class="flex items-end justify-center gap-4 md:gap-14 text-black">
-                        
+                    <div v-else class="flex items-end justify-center gap-4 text-black md:gap-14">
                         <!-- 2nd -->
                         <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] h-20 w-20 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
+                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
+                                <Avatar
+                                    :image="bestUsers.leaderboards[1]?.user?.avatar"
+                                    :label="bestUsers.leaderboards[1]?.user?.name?.charAt(0) ?? '?'"
+                                    shape="circle"
+                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
+                                />
+                            </div>
 
                             <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-slate-200 px-4 pt-8 pb-4 text-center md:w-44">
                                 <p class="font-bold break-words">
@@ -146,11 +151,17 @@
                         <!-- 1st -->
                         <div v-if="bestUsers.leaderboards?.length >= 1" class="flex flex-col items-center justify-end">
                             <div class="relative z-10 mb-[-10px] flex items-center justify-center">
-                                <img 
+                                <img
                                     src="/images/crown.svg"
                                     class="absolute -top-8 left-3/5 h-10 w-10 -translate-x-1/2 rotate-12"
                                 />
-                                <div class="h-22 w-22 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
+
+                                <Avatar
+                                    :image="bestUsers.leaderboards[0]?.user?.avatar"
+                                    :label="bestUsers.leaderboards[0]?.user?.name?.charAt(0) ?? '?'"
+                                    shape="circle"
+                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
+                                />
                             </div>
 
                             <div class="flex min-h-[220px] w-28 flex-col rounded-t-xl bg-yellow-300 px-4 pt-8 pb-4 text-center md:w-48">
@@ -164,7 +175,14 @@
 
                         <!-- 3rd -->
                         <div v-if="bestUsers.leaderboards?.length >= 3" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] h-20 w-20 rounded-full border-4 border-white bg-surface-200 shadow-lg"></div>
+                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
+                                <Avatar
+                                    :image="bestUsers.leaderboards[2]?.user?.avatar"
+                                    :label="bestUsers.leaderboards[2]?.user?.name?.charAt(0) ?? '?'"
+                                    shape="circle"
+                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
+                                />
+                            </div>
 
                             <div class="flex min-h-[145px] w-28 flex-col rounded-t-xl bg-orange-500 px-4 pt-8 pb-4 text-center md:w-44">
                                 <p class="font-bold break-words">
@@ -174,7 +192,6 @@
                                 <p>Points: {{ bestUsers.leaderboards[2]?.points ?? "none" }}</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
