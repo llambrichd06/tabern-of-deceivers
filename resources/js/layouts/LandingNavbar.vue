@@ -120,7 +120,7 @@
                             </div>
 
                             <Button
-                                label="Ir al Perfil"
+                                label="Go to profile"
                                 icon="pi pi-th-large"
                                 severity="secondary"
                                 class="w-full"
@@ -128,7 +128,7 @@
                             />
 
                             <Button v-if="authStore().user?.roles?.some(r => r.name.includes('admin')) || false"
-                                label="Ir a Administrador"
+                                label="Admin menu"
                                 icon="pi pi-wrench"
                                 severity="secondary"
                                 class="w-full"
@@ -136,7 +136,7 @@
                             />
 
                             <Button
-                                label="Cerrar Sesión"
+                                label="Log off"
                                 icon="pi pi-power-off"
                                 severity="danger"
                                 class="w-full"

@@ -11,6 +11,7 @@ use App\Http\Requests\Rooms\LeaveRoomRequest;
 use App\Http\Requests\Rooms\StoreRoomRequest;
 use App\Http\Requests\Rooms\TransferOwnership;
 use App\Http\Requests\Rooms\UpdateRoomRequest;
+use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use App\Models\RoomUsers;
 use App\Models\User;
@@ -34,7 +35,7 @@ class RoomController extends Controller
             ->where('state', 'lobby')
             ->orderBy('created_at')->get();
         return response()->json([
-            'public_rooms' => $pubRooms,
+            'public_rooms' => RoomResource::collection($pubRooms),
         ]);
     }
 
@@ -45,7 +46,7 @@ class RoomController extends Controller
 
         $room->load('host', 'players');
         return response()->json([
-            'room' => $room,
+            'room' => new RoomResource($room),
         ]);
     }
         
