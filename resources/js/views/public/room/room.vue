@@ -84,8 +84,18 @@
                             <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 xl:grid-cols-3">
                                 <!-- Host -->
                                 <div class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center ring-2 ring-yellow-300/60">
-                                    <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
-                                        {{ getInitials(room?.host?.name) }}
+                                    <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
+                                        <img
+                                            v-if="room?.host"
+                                            :src="getUserAvatar(room.host)"
+                                            :alt="room.host.name ?? 'Host avatar'"
+                                            class="h-full w-full object-cover"
+                                            @error="handleAvatarError"
+                                        />
+
+                                        <span v-else>
+                                            {{ getInitials(room?.host?.name) }}
+                                        </span>
                                     </div>
 
                                     <p class="mt-3 text-sm font-semibold text-white break-words">
@@ -103,8 +113,13 @@
                                     :key="player.id"
                                     class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center"
                                 >
-                                    <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
-                                        {{ getInitials(player.name) }}
+                                    <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
+                                        <img
+                                            :src="getUserAvatar(player)"
+                                            :alt="player.name ?? 'Player avatar'"
+                                            class="h-full w-full object-cover"
+                                            @error="handleAvatarError"
+                                        />
                                     </div>
 
                                     <p class="mt-3 text-sm font-semibold text-white break-words">
@@ -176,6 +191,8 @@ const { getRoom, room, leaveRoom, transferOwnership, changePrivate } = useRooms(
 const { startGame } = useGames();
 const authUser = authStore();
 const loading = ref(false);
+
+const fallbackAvatar = "/images/placeholder.png";
 
 onMounted(async () => {
     loading.value = true;
@@ -253,6 +270,14 @@ const privateChange = async () => {
 const start = async () => {
     if (!room.value?.id) return;
     await startGame(room.value.id);
+};
+
+const getUserAvatar = (user) => {
+    return user?.avatar || fallbackAvatar;
+};
+
+const handleAvatarError = (event) => {
+    event.target.src = fallbackAvatar;
 };
 
 const getInitials = (name) => {

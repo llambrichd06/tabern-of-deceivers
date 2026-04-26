@@ -34,12 +34,6 @@
                             class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="refreshRooms"
                         />
-                        <!-- <Button
-                            label="Quick Match"
-                            severity="secondary"
-                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
-                            @click="searchQuickGame"
-                        /> -->
                     </div>
                 </section>
 
@@ -89,7 +83,23 @@
                                                         :key="index"
                                                         class="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/10 px-3 py-2"
                                                     >
-                                                        <div :class="circleClass(player)"></div>
+                                                        <div
+                                                            class="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/40 bg-white/10"
+                                                            :class="{ 'border-dashed bg-transparent': !player }"
+                                                        >
+                                                            <img
+                                                                v-if="player"
+                                                                :src="getUserAvatar(player)"
+                                                                :alt="player.name ?? 'Player avatar'"
+                                                                class="h-full w-full object-cover"
+                                                                @error="handleAvatarError"
+                                                            />
+
+                                                            <span v-else class="text-xs text-white/50">
+                                                                +
+                                                            </span>
+                                                        </div>
+
                                                         <div class="min-w-0 flex-1">
                                                             <p class="truncate text-sm font-medium text-white">
                                                                 {{ player?.name || "Empty slot" }}
@@ -144,30 +154,27 @@ import { useRouter } from "vue-router";
 
 const { getOpenRooms, joinPublicRoom, rooms, storeRoom, room, hostRoom } = useRooms();
 
-// const showQuickPlayDialog = ref(false);
+const showQuickPlayDialog = ref(false);
 const joinRoomVisible = ref(false);
 const auth = authStore();
 const router = useRouter();
+
+const fallbackAvatar = "/images/placeholder.png";
 
 onMounted(async () => {
     await getOpenRooms();
 });
 
 const hostGame = async () => {
-
     const data = await hostRoom(room.value);
     console.log(data);
-    
+
     router.push({ name: "lobby", params: { id: data.id } });
 };
 
-// const searchQuickGame = () => {
-//     showQuickPlayDialog.value = true;
-// };
-
 const refreshRooms = () => {
     getOpenRooms();
-} 
+};
 
 const openJoinGame = () => {
     joinRoomVisible.value = true;
@@ -182,11 +189,12 @@ const playerSlots = (players = []) => {
     return Array.from({ length: 6 }, (_, index) => players[index] || null);
 };
 
-const circleClass = (player) => {
-    return [
-        "h-7 w-7 rounded-full shrink-0 border-2 border-white/40",
-        player ? "bg-[#520B93]" : "bg-transparent border-dashed"
-    ].join(" ");
+const getUserAvatar = (user) => {
+    return user?.avatar || fallbackAvatar;
+};
+
+const handleAvatarError = (event) => {
+    event.target.src = fallbackAvatar;
 };
 </script>
 
