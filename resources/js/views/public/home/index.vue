@@ -130,13 +130,18 @@
                     <div v-else class="flex items-end justify-center gap-4 text-black md:gap-14">
                         <!-- 2nd -->
                         <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
-                                <Avatar
-                                    :image="bestUsers.leaderboards[1]?.user?.avatar"
-                                    :label="bestUsers.leaderboards[1]?.user?.name?.charAt(0) ?? '?'"
-                                    shape="circle"
-                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
+                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                                <img
+                                    v-if="getUserAvatar(1)"
+                                    :src="getUserAvatar(1)"
+                                    :alt="bestUsers.leaderboards[1]?.user?.name ?? 'Player avatar'"
+                                    class="h-full w-full object-cover"
+                                    @error="handleAvatarError"
                                 />
+
+                                <span v-else class="text-2xl font-bold text-slate-700">
+                                    {{ getUserInitial(1) }}
+                                </span>
                             </div>
 
                             <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-slate-200 px-4 pt-8 pb-4 text-center md:w-44">
@@ -150,23 +155,31 @@
 
                         <!-- 1st -->
                         <div v-if="bestUsers.leaderboards?.length >= 1" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
+                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-visible">
                                 <img
                                     src="/images/crown.svg"
-                                    class="absolute -top-8 left-3/5 h-10 w-10 -translate-x-1/2 rotate-12"
+                                    class="absolute -top-8 left-1/2 h-10 w-10 -translate-x-1/2 rotate-12"
+                                    alt="Crown"
                                 />
 
-                                <Avatar
-                                    :image="bestUsers.leaderboards[0]?.user?.avatar"
-                                    :label="bestUsers.leaderboards[0]?.user?.name?.charAt(0) ?? '?'"
-                                    shape="circle"
-                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
-                                />
+                                <div class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                                    <img
+                                        v-if="getUserAvatar(0)"
+                                        :src="getUserAvatar(0)"
+                                        :alt="bestUsers.leaderboards[0]?.user?.name ?? 'Player avatar'"
+                                        class="h-full w-full object-cover"
+                                        @error="handleAvatarError"
+                                    />
+
+                                    <span v-else class="text-2xl font-bold text-slate-700">
+                                        {{ getUserInitial(0) }}
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="flex min-h-[220px] w-28 flex-col rounded-t-xl bg-yellow-300 px-4 pt-8 pb-4 text-center md:w-48">
                                 <p class="font-bold break-words">
-                                    {{ bestUsers.leaderboards[0]?.user?.name ?? "There isn't a second player in the ranking" }}
+                                    {{ bestUsers.leaderboards[0]?.user?.name ?? "There isn't a first player in the ranking" }}
                                 </p>
                                 <p class="mt-2">Wins: {{ bestUsers.leaderboards[0]?.wins ?? "none" }}</p>
                                 <p>Points: {{ bestUsers.leaderboards[0]?.points ?? "none" }}</p>
@@ -175,13 +188,18 @@
 
                         <!-- 3rd -->
                         <div v-if="bestUsers.leaderboards?.length >= 3" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex items-center justify-center">
-                                <Avatar
-                                    :image="bestUsers.leaderboards[2]?.user?.avatar"
-                                    :label="bestUsers.leaderboards[2]?.user?.name?.charAt(0) ?? '?'"
-                                    shape="circle"
-                                    class="!h-20 !w-20 border-4 border-white shadow-lg"
+                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                                <img
+                                    v-if="getUserAvatar(2)"
+                                    :src="getUserAvatar(2)"
+                                    :alt="bestUsers.leaderboards[2]?.user?.name ?? 'Player avatar'"
+                                    class="h-full w-full object-cover"
+                                    @error="handleAvatarError"
                                 />
+
+                                <span v-else class="text-2xl font-bold text-slate-700">
+                                    {{ getUserInitial(2) }}
+                                </span>
                             </div>
 
                             <div class="flex min-h-[145px] w-28 flex-col rounded-t-xl bg-orange-500 px-4 pt-8 pb-4 text-center md:w-44">
@@ -247,6 +265,20 @@ onMounted(async () => {
         loading.value = false;
     }
 });
+
+const fallbackAvatar = '/images/placeholder.png';
+
+const getUserAvatar = (index) => {
+    return bestUsers.value.leaderboards?.[index]?.user?.avatar || fallbackAvatar;
+};
+
+const getUserInitial = (index) => {
+    return bestUsers.value.leaderboards?.[index]?.user?.name?.charAt(0) ?? '?';
+};
+
+const handleAvatarError = (event) => {
+    event.target.src = fallbackAvatar;
+};
 </script>
 
 <style scoped>
