@@ -19,20 +19,28 @@
                     <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 sm:grid-cols-3">
                         <Button
                             label="Host Game"
+                            icon="pi pi-plus-circle"
+                            iconPos="left"
                             severity="secondary"
-                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            class="rooms-icon-button h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="hostGame"
                         />
+
                         <Button
                             label="Search Game"
+                            icon="pi pi-search"
+                            iconPos="left"
                             severity="secondary"
-                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            class="rooms-icon-button h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="openJoinGame"
                         />
+
                         <Button
                             label="Refresh Rooms"
+                            icon="pi pi-refresh"
+                            iconPos="left"
                             severity="secondary"
-                            class="h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            class="rooms-icon-button h-16 rounded-2xl! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
                             @click="refreshRooms"
                         />
                     </div>
@@ -111,15 +119,15 @@
                                             </div>
 
                                             <!-- Bottom -->
-                                            <div class="border-t border-white/20 pt-4">
-                                                <div class="flex justify-center">
-                                                    <Button
-                                                        label="Join Room"
-                                                        severity="secondary"
-                                                        class="w-full rounded-2xl! px-8! py-3! text-base! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.3)]"
-                                                        @click="joinPublic(item.id)"
-                                                    />
-                                                </div>
+                                            <div class="flex justify-center">
+                                                <Button
+                                                    label="Join Room"
+                                                    icon="pi pi-sign-in"
+                                                    iconPos="left"
+                                                    severity="secondary"
+                                                    class="rooms-icon-button rooms-join-button w-full rounded-2xl! px-8! py-3! text-base! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.3)]"
+                                                    @click="joinPublic(item.id)"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -235,5 +243,61 @@ const handleAvatarError = (event) => {
 :deep(.p-select-label),
 :deep(.p-select-dropdown) {
     color: white !important;
+}
+
+/* ------------------------------
+   Button icon/text alignment
+   ------------------------------ */
+
+:deep(.rooms-icon-button.p-button) {
+    display: inline-grid !important;
+    grid-template-columns: auto auto;
+    align-items: center !important;
+    justify-content: center !important;
+    column-gap: 0.65rem;
+
+    line-height: 1 !important;
+    overflow: visible !important;
+}
+
+:deep(.rooms-icon-button .p-button-icon) {
+    display: grid !important;
+    place-items: center !important;
+
+    width: 1.35rem;
+    height: 1.35rem;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 1.15rem !important;
+    line-height: 1 !important;
+}
+
+:deep(.rooms-icon-button .p-button-icon::before) {
+    display: block !important;
+    line-height: 1 !important;
+}
+
+:deep(.rooms-icon-button .p-button-label) {
+    display: flex !important;
+    align-items: center !important;
+
+    min-height: 1.75rem;
+    line-height: 1.75rem !important;
+
+    padding-top: 0.08rem;
+    overflow: visible !important;
+}
+
+:deep(.rooms-join-button .p-button-icon) {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 1.05rem !important;
+}
+
+:deep(.rooms-join-button .p-button-label) {
+    min-height: 1.5rem;
+    line-height: 1.5rem !important;
 }
 </style>

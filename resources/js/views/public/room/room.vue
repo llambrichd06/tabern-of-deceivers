@@ -175,7 +175,7 @@
                                 </p>
                             </div>
 
-                            <div class="h-[calc(100%-2.5rem)] overflow-hidden rounded-2xl bg-black/10 p-2">
+                            <div class="h-[calc(100%-2.5rem)] overflow-hidden rounded-2xl p-2">
                                 <Chat :roomId="id" />
                             </div>
                         </div>

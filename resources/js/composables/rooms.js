@@ -209,10 +209,8 @@ export default function useRooms() {
         isLoading.value = true;
         try {
             await axios.post('/api/rooms/transferOwnership', {
-            params: {
-                room_id,
-                player_id,
-            },
+                room_id: room_id,
+                player_id: player_id,
             });
         } catch (error) {
             toast.crud.errorMsgFromError(error)
@@ -227,9 +225,7 @@ export default function useRooms() {
 
         try {
             await axios.post('/api/rooms/leaveRoom', {
-            params: {
-                room_id,
-            },
+                room_id: room_id,
             });
 
             await router.push({ name: 'rooms' });

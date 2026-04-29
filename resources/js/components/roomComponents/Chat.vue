@@ -2,11 +2,11 @@
     <div class="flex h-full max-h-[70vh] min-h-0 w-full flex-col overflow-hidden md:max-h-none">
         <!-- Messages -->
         <div
-            class="order-2 mt-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:order-1 md:mt-0 md:mb-3 md:p-4"
+            class="order-2 mt-3 flex-1 min-h-0 overflow-hidden rounded-3xl bg-purple-300/20 p-3 md:order-1 md:mt-0 md:mb-3 md:p-4"
         >
             <div
                 ref="messagesContainer"
-                class="h-full overflow-y-auto rounded-2xl bg-white/10 px-4 py-3"
+                class="h-full overflow-y-auto px-4 py-3"
             >
                 <div v-if="messages.length > 0" class="flex flex-col">
                     <div
@@ -34,7 +34,9 @@
         </div>
 
         <!-- Input -->
-        <div class="order-1 shrink-0 rounded-3xl bg-purple-300/20 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.2)] md:order-2 md:p-4">
+        <div
+            class="order-1 shrink-0 rounded-3xl bg-purple-300/20 p-3 md:order-2 md:p-4"
+        >
             <div class="flex flex-col gap-3 sm:flex-row">
                 <InputText
                     v-model="currentMessage"
@@ -48,12 +50,12 @@
                     label="Send"
                     severity="secondary"
                     :disabled="chatLoading || !currentMessage.trim()"
-                    class="chat-send-btn rounded-2xl! px-6! font-semibold! shadow-[0_10px_16px_rgba(0,0,0,0.25)]"
+                    class="chat-send-btn rounded-2xl! px-6! font-semibold!"
                     @click="send"
                 />
             </div>
 
-            <small class="mt-2 flex justify-end pl-2 text-white/70">
+            <small class="mt-2 flex justify-start pl-2 text-white/70">
                 {{ currentMessage.length }}/{{ maxLength }}
             </small>
         </div>
@@ -125,8 +127,8 @@ const send = async () => {
 
 <style scoped>
 .chat-input {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.28) !important;
     color: white !important;
     border-radius: 1rem !important;
     padding: 0.9rem 1rem !important;
@@ -138,9 +140,9 @@ const send = async () => {
 
 :deep(.chat-input .p-inputtext),
 :deep(.p-inputtext.chat-input) {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
     color: white !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border: 1px solid rgba(255, 255, 255, 0.28) !important;
     box-shadow: none !important;
 }
 
@@ -149,11 +151,12 @@ const send = async () => {
 }
 
 :deep(.p-inputtext.chat-input:enabled:focus) {
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    box-shadow: none !important;
 }
 
 .chat-send-btn {
     min-height: 52px;
+    box-shadow: none !important;
 }
-</style>
+</style>    

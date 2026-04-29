@@ -20,7 +20,7 @@
                         <div
                             class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
                         >
-                            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-black/10 p-2 md:p-3">
+                            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl p-2 md:p-3">
                                 <Chat :roomId="game.room_id" />
                             </div>
                         </div>

@@ -105,7 +105,7 @@
                     compared to others. Try to aim for the top!
                 </p>
 
-                <div class="mb-12 flex w-full justify-center">
+                <div class="mb-12 flex justify-center">
                     <Button
                         label="View Rankings"
                         as="router-link"
@@ -123,7 +123,7 @@
                     <div v-else class="flex items-end justify-center gap-4 text-black md:gap-14">
                         <!-- 2nd -->
                         <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-b from-slate-100 to-slate-400 shadow-lg">
                                 <img
                                     v-if="getUserAvatar(1)"
                                     :src="getUserAvatar(1)"
@@ -137,7 +137,7 @@
                                 </span>
                             </div>
 
-                            <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-slate-200 px-4 pt-8 pb-4 text-center md:w-44">
+                            <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-gradient-to-b from-slate-100 via-slate-300 to-slate-500 px-4 pt-8 pb-4 text-center text-slate-900 shadow-[inset_0_4px_8px_rgba(255,255,255,0.45),0_12px_18px_rgba(0,0,0,0.25)] md:w-44">
                                 <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[1]?.user?.name ?? "No one :v" }}
                                 </p>
@@ -155,7 +155,7 @@
                                     alt="Crown"
                                 />
 
-                                <div class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                                <div class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-b from-yellow-100 to-yellow-400 shadow-lg">
                                     <img
                                         v-if="getUserAvatar(0)"
                                         :src="getUserAvatar(0)"
@@ -164,13 +164,13 @@
                                         @error="handleAvatarError"
                                     />
 
-                                    <span v-else class="text-2xl font-bold text-slate-700">
+                                    <span v-else class="text-2xl font-bold text-yellow-950">
                                         {{ getUserInitial(0) }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="flex min-h-[220px] w-28 flex-col rounded-t-xl bg-yellow-300 px-4 pt-8 pb-4 text-center md:w-48">
+                            <div class="flex min-h-[220px] w-28 flex-col rounded-t-xl bg-gradient-to-b from-yellow-200 via-yellow-400 to-amber-700 px-4 pt-8 pb-4 text-center text-yellow-950 shadow-[inset_0_4px_8px_rgba(255,255,255,0.45),0_14px_22px_rgba(0,0,0,0.3)] md:w-48">
                                 <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[0]?.user?.name ?? "There isn't a first player in the ranking" }}
                                 </p>
@@ -181,7 +181,7 @@
 
                         <!-- 3rd -->
                         <div v-if="bestUsers.leaderboards?.length >= 3" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-lg">
+                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-b from-orange-200 to-amber-700 shadow-lg">
                                 <img
                                     v-if="getUserAvatar(2)"
                                     :src="getUserAvatar(2)"
@@ -190,12 +190,12 @@
                                     @error="handleAvatarError"
                                 />
 
-                                <span v-else class="text-2xl font-bold text-slate-700">
+                                <span v-else class="text-2xl font-bold text-orange-950">
                                     {{ getUserInitial(2) }}
                                 </span>
                             </div>
 
-                            <div class="flex min-h-[145px] w-28 flex-col rounded-t-xl bg-orange-500 px-4 pt-8 pb-4 text-center md:w-44">
+                            <div class="flex min-h-[145px] w-28 flex-col rounded-t-xl bg-gradient-to-b from-orange-200 via-orange-500 to-amber-900 px-4 pt-8 pb-4 text-center text-orange-950 shadow-[inset_0_4px_8px_rgba(255,255,255,0.35),0_12px_18px_rgba(0,0,0,0.25)] md:w-44">
                                 <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[2]?.user?.name ?? "There isn't a third player in the ranking" }}
                                 </p>
