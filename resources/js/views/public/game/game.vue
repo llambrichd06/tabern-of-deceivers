@@ -20,7 +20,10 @@
                         <div
                             class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
                         >
-                            <div v-if="room.room_code">{{ room.room_code }}</div>
+                            <div class="mb-3 flex items-center justify-between px-1">
+                                <h2 class="text-xl font-bold text-white"> Chat </h2>
+                                <p v-if="room.room_code" class="text-sm text-white/70"> Room {{ room.room_code }} </p>
+                            </div>
 
                             <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl p-2 md:p-3">
                                 <Chat :roomId="game.room_id" />

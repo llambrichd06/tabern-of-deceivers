@@ -41,7 +41,9 @@
                                 v-if="pileCount === 0"
                                 class="flex h-20 w-14 items-center justify-center rounded-md border-2 border-dashed border-white/60 md:h-24 md:w-16"
                             >
-                                <span class="text-xs font-semibold text-white/70 md:text-sm">PILE</span>
+                                <span class="text-xs font-semibold text-white/70 md:text-sm">
+                                    PILE
+                                </span>
                             </div>
 
                             <!-- One card -->
@@ -92,18 +94,21 @@
                             <p class="text-xs font-semibold">
                                 Turn: {{ turn }}
                             </p>
+
                             <p
                                 v-if="myPlayerNum == turnOf"
                                 class="text-sm font-semibold"
                             >
                                 Your turn
                             </p>
+
                             <p
                                 v-else
                                 class="text-sm font-semibold"
                             >
-                                Turn of {{ getPlayerNameFromNum('player'+turnOf ?? 'player1')}}
+                                Turn of {{ getPlayerNameFromNum('player' + turnOf ?? 'player1') }}
                             </p>
+
                             <p class="text-sm font-semibold">
                                 Rank: {{ pileCalledRank == 0 ? 'None' : pileCalledRank }}
                             </p>
@@ -118,18 +123,21 @@
                     <p class="text-center text-sm font-semibold md:text-base lg:text-right">
                         Turn: {{ turn }}
                     </p>
+
                     <p
                         v-if="myPlayerNum == turnOf"
                         class="text-center text-base font-semibold md:text-lg lg:text-right"
                     >
                         Your turn
                     </p>
+
                     <p
                         v-else
                         class="text-center text-base font-semibold md:text-lg lg:text-right"
                     >
-                        Turn of {{ getPlayerNameFromNum('player'+turnOf)}}
+                        Turn of {{ getPlayerNameFromNum('player' + turnOf) }}
                     </p>
+
                     <p class="text-center text-base font-semibold md:text-lg lg:text-right">
                         Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}
                     </p>
@@ -138,15 +146,15 @@
         </div>
 
         <!-- BOTTOM ACTIONS -->
-        <div class="mt-4 grid grid-cols-1 items-center gap-6 lg:mt-0 lg:grid-cols-[140px_minmax(0,1fr)_140px] lg:gap-4">
+        <div class="mt-4 grid grid-cols-1 items-end gap-6 lg:mt-0 lg:grid-cols-[140px_minmax(0,1fr)_140px] lg:gap-4">
             <!-- CALL LIE -->
-            <div class="order-2 mt-2 flex justify-center lg:order-1 lg:mt-0 lg:justify-start">
+            <div class="order-2 flex justify-center lg:order-1 lg:justify-start">
                 <Button
                     label="Call lie"
                     :severity="isLieButtonDisabled ? null : 'primary'"
                     :disabled="isLieButtonDisabled"
                     :class="[
-                        'w-full sm:w-auto',
+                        'w-full rounded-2xl! px-5! py-3! text-lg! font-semibold! sm:w-[140px]',
                         isLieButtonDisabled
                             ? '!bg-gray-500 !border-gray-500 !text-white cursor-not-allowed'
                             : ''
@@ -156,7 +164,7 @@
             </div>
 
             <!-- MY CARDS -->
-            <div class="order-1 mb-2 flex flex-wrap justify-center gap-2 md:gap-2 lg:order-2">
+            <div class="order-1 flex flex-wrap justify-center gap-2 md:gap-2 lg:order-2">
                 <div
                     v-for="card in myCards"
                     :key="card.id"
@@ -180,13 +188,13 @@
             </div>
 
             <!-- PLAY CARDS -->
-            <div class="order-3 mt-2 flex justify-center lg:mt-0 lg:justify-end">
+            <div class="order-3 flex justify-center lg:justify-end">
                 <Button
                     label="Play Cards"
                     :severity="isCardButtonDisabled ? null : 'primary'"
                     :disabled="isCardButtonDisabled"
                     :class="[
-                        'w-full sm:w-auto',
+                        'w-full rounded-2xl! px-5! py-3! text-lg! font-semibold! sm:w-[140px]',
                         isCardButtonDisabled
                             ? '!bg-gray-500 !border-gray-500 !text-white cursor-not-allowed'
                             : ''
