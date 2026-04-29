@@ -20,6 +20,8 @@
                         <div
                             class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
                         >
+                            <div v-if="room.room_code">{{ room.room_code }}</div>
+
                             <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl p-2 md:p-3">
                                 <Chat :roomId="game.room_id" />
                             </div>
@@ -54,14 +56,19 @@ import GameComponent from "../../../components/gameComponent/GameComponent.vue";
 import { useRoute } from "vue-router";
 import useGames from "../../../composables/games";
 import GameResult from "../../../components/gameComponent/GameResult.vue";
+import useRooms from "../../../composables/rooms";
 
 const route = useRoute();
+
+const { room, getRoom } = useRooms();
+
 const { game, getGameState, isLoading } = useGames();
 const gameId = route.params.id;
 const gameWon = ref(false);
 
 onBeforeMount(async () => {
     await getGameState(gameId);
+    await getRoom(game.value.room_id)
     window.Echo.join(`game.room.${game.value.room_id}`)
         .here((users) => {
             console.log("Currently loaded:", users);
