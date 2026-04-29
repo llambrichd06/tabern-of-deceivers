@@ -139,7 +139,7 @@ export default function useLeaderboards() {
         return form
     }
     const getBestUsers = async () => {
-        return axios.get('/api/leaderboards/getBestUsers')
+        return axios.get('/api/leaderboards/bestUsers')
             .then(response => {
                 leaderboards.value = response.data;
                 return response;

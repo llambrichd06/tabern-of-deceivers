@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 //This endpoint is up here because if its below the apiResource for leaderboard controller, auth sanctum gets applied to it
 //even if it isn't inside the route group for some reason
-Route::get('/leaderboards/getBestUsers', [LeaderboardController::class, 'getBestUsers']); 
+Route::get('/leaderboards/bestUsers', [LeaderboardController::class, 'getBestUsers']); 
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
 
@@ -29,19 +29,19 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
     Route::apiResource('leaderboards', LeaderboardController::class);
 
-    Route::get('/rooms/leaveRoom', [RoomController::class, 'leaveRoom']);
-    Route::get('/rooms/changePrivate/{room}', [RoomController::class, 'changePrivate']);
-    Route::get('/rooms/transferOwnership', [RoomController::class, 'transferOwnership']);
+    Route::post('/rooms/leaveRoom', [RoomController::class, 'leaveRoom']);
+    Route::post('/rooms/changePrivate/{room}', [RoomController::class, 'changePrivate']);
+    Route::post('/rooms/transferOwnership', [RoomController::class, 'transferOwnership']);
     // Route::get('/rooms/kickUser', [RoomController::class, 'kickUser']); //Not implemented
-    Route::get('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
-    Route::get('/rooms/joinPublicRoom/{room}', [RoomController::class, 'joinPublicRoom']);
+    Route::post('/rooms/joinRoomWithCode', [RoomController::class, 'joinRoomWithCode']);
+    Route::post('/rooms/joinPublicRoom/{room}', [RoomController::class, 'joinPublicRoom']);
     Route::get('/rooms/openRooms', [RoomController::class, 'openRooms']);
     Route::post('/rooms/hostRoom', [RoomController::class, 'hostRoom']);
     Route::apiResource('rooms', RoomController::class);
 
     Route::post('/messages/sent/{room}', [MessageController::class, 'sent']);
 
-    Route::get('/games/getGameState/{game}', [GameController::class, 'getUserGameStateById']);
+    Route::get('/games/gameState/{game}', [GameController::class, 'getUserGameStateById']);
     Route::post('/games/startGame/{room}', [GameController::class, 'startGame']);
     Route::post('/games/playCards', [GameController::class, 'playCards']);
     Route::post('/games/callLie/{game}', [GameController::class, 'callLie']);

@@ -135,7 +135,7 @@ export default function useGames() {
             })
     }
     const getGameState = async (id) => {
-        return axios.get('/api/games/getGameState/'+id)
+        return axios.get('/api/games/gameState/'+id)
             .then(response => {
                 game.value = response.data.game
                 return response

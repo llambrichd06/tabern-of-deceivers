@@ -153,7 +153,7 @@ export default function useRooms() {
         if (isLoading.value) return;
         isLoading.value = true;
 
-        return await axios.get('/api/rooms/joinPublicRoom/'+roomId)
+        return await axios.post('/api/rooms/joinPublicRoom/'+roomId)
         .then(response => {
             return response.data
         }).catch(error =>{
@@ -166,7 +166,7 @@ export default function useRooms() {
         isLoading.value = true;
         const { isValid } = validate(roomCodeSchema, roomCode);
 
-        return await axios.get('/api/rooms/joinRoomWithCode', { 
+        return await axios.post('/api/rooms/joinRoomWithCode', { 
             params: { //A cleaner way to do get parameters
                 room_code: roomCode
             }
@@ -196,7 +196,7 @@ export default function useRooms() {
         isLoading.value = true;
 
         try {
-            await axios.get('/api/rooms/changePrivate/'+room_id);
+            await axios.post('/api/rooms/changePrivate/'+room_id);
         } catch (error) {
             toast.crud.errorMsgFromError(error)
         } finally {
@@ -208,7 +208,7 @@ export default function useRooms() {
         if (isLoading.value) return;
         isLoading.value = true;
         try {
-            await axios.get('/api/rooms/transferOwnership', {
+            await axios.post('/api/rooms/transferOwnership', {
             params: {
                 room_id,
                 player_id,
@@ -226,7 +226,7 @@ export default function useRooms() {
         isLoading.value = true;
 
         try {
-            await axios.get('/api/rooms/leaveRoom', {
+            await axios.post('/api/rooms/leaveRoom', {
             params: {
                 room_id,
             },
