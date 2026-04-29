@@ -350,7 +350,7 @@
                 <!-- BUTTON -->
                 <div class="mt-12 flex justify-center">
                     <Button
-                        label="PLAY NOW"
+                        label="Play now"
                         as="router-link"
                         to="/rooms"
                         severity="secondary"
