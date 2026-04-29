@@ -3,6 +3,17 @@
         <!-- TOP SECTION -->
         <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto max-w-7xl">
+                <!-- HEADER -->
+                <div class="mb-10 text-center">
+                    <h1 class="mb-6 text-4xl font-extrabold tracking-tight md:text-6xl">
+                        Room Lobby
+                    </h1>
+
+                    <p class="mx-auto max-w-3xl text-base leading-7 text-white/90 md:text-lg">
+                        Wait for players to join, manage the room settings, and start the match when everyone is ready.
+                    </p>
+                </div>
+
                 <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
                     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-col gap-4">

@@ -8,7 +8,7 @@
                         How To Play
                     </h1>
 
-                    <p class="mx-auto max-w-3xl leading-8 text-white/90">
+                    <p class="mx-auto max-w-3xl text-base leading-7 text-white/90 md:text-lg">
                         Learn how the game works step by step. Bluff, accuse, survive the round,
                         and try to become the last liar standing.
                     </p>
@@ -179,7 +179,6 @@
                                     <div class="min-h-45 rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
                                         <div class="min-h-[22rem] rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
                                             <div class="flex h-full flex-col justify-between gap-4">
-                                                
                                                 <div class="flex flex-1 items-center justify-center rounded-2xl bg-white/10 p-3">
                                                     <img
                                                         src="/images/Rules/Rule4A.png"
@@ -195,7 +194,6 @@
                                                         class="max-h-full object-contain"
                                                     />
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -381,16 +379,4 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-.page-content :deep(p) {
-    font-size: 1rem;
-    line-height: 1.75rem;
-}
-
-@media (min-width: 768px) {
-    .page-content :deep(p) {
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-    }
-}
-</style>
+<style scoped></style>

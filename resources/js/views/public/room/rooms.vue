@@ -4,17 +4,18 @@
         <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto w-full max-w-7xl rounded-3xl bg-[#520B93]">
                 <!-- Header -->
-                <div class="rounded-t-3xl bg-[#520B93] px-6 py-8 text-center md:px-8">
-                    <h2 class="text-4xl font-bold text-white md:text-6xl">
+                <div class="mb-10 text-center">
+                    <h1 class="mb-6 text-4xl font-extrabold tracking-tight md:text-6xl">
                         Available Rooms
-                    </h2>
-                    <p class="mx-auto mt-3 max-w-2xl text-white/85">
+                    </h1>
+
+                    <p class="mx-auto max-w-3xl text-base leading-7 text-white/90 md:text-lg">
                         Join an open room, host your own game, or jump into a quick match.
                     </p>
                 </div>
 
                 <!-- ------------------------------ Menu Buttons ------------------------------ -->
-                <section class="px-4 pt-8 pb-10">
+                <section class="px-4 pt-0 pb-10">
                     <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 sm:grid-cols-3">
                         <Button
                             label="Host Game"

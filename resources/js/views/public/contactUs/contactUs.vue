@@ -2,11 +2,11 @@
     <div class="page-content min-h-screen overflow-x-hidden bg-[#520B93] text-white">
         <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto max-w-5xl text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold mb-6">
+                <h1 class="mb-6 text-4xl font-extrabold tracking-tight md:text-6xl">
                     Contact Us
                 </h1>
 
-                <p class="mx-auto max-w-2xl text-white/90 leading-8">
+                <p class="mx-auto max-w-3xl text-base leading-7 text-white/90 md:text-lg">
                     Have a question, found a bug, or want to share feedback?
                     We would love to hear from you.
                 </p>
@@ -22,7 +22,7 @@
                         Get in touch
                     </h2>
 
-                    <p class="mb-8 text-white/95">
+                    <p class="mb-8 text-base leading-7 text-white/95 md:text-lg">
                         You can contact us for support, account issues, technical problems,
                         partnerships, or general questions about the game.
                     </p>
@@ -33,8 +33,8 @@
                                 <i class="pi pi-envelope text-xl text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-xl">Email</p>
-                                <p class="text-white/90">support@tabernofdeceivers.com</p>
+                                <p class="text-xl font-semibold">Email</p>
+                                <p class="text-base leading-7 text-white/90 md:text-lg">support@tabernofdeceivers.com</p>
                             </div>
                         </div>
 
@@ -43,8 +43,8 @@
                                 <i class="pi pi-discord text-xl text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-xl">Community</p>
-                                <p class="text-white/90">Join our Discord to report issues and meet other players.</p>
+                                <p class="text-xl font-semibold">Community</p>
+                                <p class="text-base leading-7 text-white/90 md:text-lg">Join our Discord to report issues and meet other players.</p>
                             </div>
                         </div>
 
@@ -53,8 +53,8 @@
                                 <i class="pi pi-clock text-xl text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-xl">Response time</p>
-                                <p class="text-white/90">We usually reply within 24–48 hours.</p>
+                                <p class="text-xl font-semibold">Response time</p>
+                                <p class="text-base leading-7 text-white/90 md:text-lg">We usually reply within 24–48 hours.</p>
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                             />
                         </div>
 
-                        <p v-if="successMessage" class="font-medium text-green-200">
+                        <p v-if="successMessage" class="text-base font-medium leading-7 text-green-200 md:text-lg">
                             {{ successMessage }}
                         </p>
                     </form>
@@ -134,36 +134,36 @@
 
         <!-- HELP / FAQ -->
         <section class="mt-6 px-4 pb-14">
-            <div class="mx-auto max-w-5xl rounded-2xl bg-purple-300/35 px-6 py-8 md:px-10 md:py-10 shadow-[0_15px_20px_rgba(0,0,0,0.3)]">
+            <div class="mx-auto max-w-5xl rounded-2xl bg-purple-300/35 px-6 py-8 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:px-10 md:py-10">
                 <h2 class="mb-8 text-center text-4xl font-bold">
                     Before you contact us
                 </h2>
 
-                <p class="mx-auto mb-8 max-w-3xl text-center leading-8">
+                <p class="mx-auto mb-8 max-w-3xl text-center text-base leading-7 text-white/90 md:text-lg">
                     You may find a quick answer in our help sections before sending a message.
                 </p>
 
                 <div class="grid gap-6 md:grid-cols-3">
                     <div class="rounded-3xl bg-black/15 p-8 text-center shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                        <i class="pi pi-book text-4xl mb-4 text-white/90"></i>
+                        <i class="pi pi-book mb-4 text-4xl text-white/90"></i>
                         <p class="mb-2 text-xl font-semibold">Game Rules</p>
-                        <p class="opacity-90 leading-relaxed">
+                        <p class="text-base leading-7 opacity-90 md:text-lg">
                             Learn the basics, understand the mechanics, and get ready to deceive.
                         </p>
                     </div>
 
                     <div class="rounded-3xl bg-black/15 p-8 text-center shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                        <i class="pi pi-question-circle text-4xl mb-4 text-white/90"></i>
+                        <i class="pi pi-question-circle mb-4 text-4xl text-white/90"></i>
                         <p class="mb-2 text-xl font-semibold">Common Questions</p>
-                        <p class="opacity-90 leading-relaxed">
+                        <p class="text-base leading-7 opacity-90 md:text-lg">
                             Check answers for login issues, rooms, rankings, and account questions.
                         </p>
                     </div>
 
                     <div class="rounded-3xl bg-black/15 p-8 text-center shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                        <i class="pi pi-bug text-4xl mb-4 text-white/90"></i>
+                        <i class="pi pi-bug mb-4 text-4xl text-white/90"></i>
                         <p class="mb-2 text-xl font-semibold">Bug Reports</p>
-                        <p class="opacity-90 leading-relaxed">
+                        <p class="text-base leading-7 opacity-90 md:text-lg">
                             Found something broken? Send us the details and we will investigate it.
                         </p>
                     </div>
@@ -175,7 +175,7 @@
                         as="router-link"
                         to="/rules"
                         severity="secondary"
-                        class="rounded-2xl! px-8! md:px-16! py-4! text-xl! font-semibold! shadow-[0_15px_20px_rgba(0,0,0,0.3)]"
+                        class="rounded-2xl! px-8! py-4! text-xl! font-semibold! shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:px-16!"
                     />
                 </div>
             </div>
@@ -221,16 +221,4 @@ const handleSubmit = async () => {
 };
 </script>
 
-<style scoped>
-.page-content :deep(p) {
-    font-size: 1rem;
-    line-height: 1.75rem;
-}
-
-@media (min-width: 768px) {
-    .page-content :deep(p) {
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-    }
-}
-</style>
+<style scoped></style>

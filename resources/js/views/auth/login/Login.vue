@@ -1,109 +1,112 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
-        <div class="mx-auto w-full max-w-5xl px-4">
-            <div class="flex min-h-[80vh] flex-col items-center justify-center pt-20 pb-8">
-                <!-- Title -->
-                <div class="mb-8 w-full max-w-3xl text-center">
-                    <h2 class="text-4xl font-bold md:text-6xl leading-tight">
-                        Welcome to the Tavern of Deceivers!
-                    </h2>
-                    <p class="mt-3 text-base text-white/80 md:text-lg">
-                        Log in to continue
-                    </p>
-                </div>
+        <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
+            <div class="mx-auto w-full max-w-5xl">
+                <div class="flex min-h-[80vh] flex-col items-center justify-center">
+                    <!-- Title -->
+                    <div class="mb-8 w-full max-w-3xl text-center">
+                        <h1 class="mb-6 text-4xl font-extrabold tracking-tight md:text-6xl">
+                            Welcome to the Tavern of Deceivers!
+                        </h1>
 
-                <!-- Form card -->
-                <div class="w-full max-w-2xl rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8 lg:p-10">
-                    <form @submit.prevent="submitLogin" class="space-y-6">
-                        <!-- Email -->
-                        <div class="flex flex-col gap-2">
-                            <label for="email" class="font-medium text-white">
-                                {{ $t('email') }}
-                            </label>
-                            <InputText
-                                id="email"
-                                type="email"
-                                v-model="loginForm.email"
-                                placeholder="your@email.com"
-                                :class="['auth-input', { 'p-invalid': validationErrors?.email }]"
-                            />
-                            <small v-if="validationErrors?.email" class="text-red-300">
-                                <div v-for="message in validationErrors.email" :key="message">
-                                    {{ message }}
-                                </div>
-                            </small>
-                        </div>
+                        <p class="mx-auto max-w-3xl text-base leading-7 text-white/90 md:text-lg">
+                            Log in to continue
+                        </p>
+                    </div>
 
-                        <!-- Password -->
-                        <div class="flex flex-col gap-2">
-                            <label for="password" class="font-medium text-white">
-                                {{ $t('password') }}
-                            </label>
-                            <Password
-                                id="password"
-                                v-model="loginForm.password"
-                                placeholder="••••••••"
-                                :toggleMask="true"
-                                :feedback="false"
-                                inputClass="auth-input w-full"
-                                :class="{ 'p-invalid': validationErrors?.password }"
-                                fluid
-                            />
-                            <small v-if="validationErrors?.password" class="text-red-300">
-                                <div v-for="message in validationErrors.password" :key="message">
-                                    {{ message }}
-                                </div>
-                            </small>
-                        </div>
-
-                        <!-- Remember / Forgot -->
-                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div class="flex items-center gap-2">
-                                <Checkbox
-                                    v-model="loginForm.remember"
-                                    inputId="remember"
-                                    binary
-                                />
-                                <label for="remember" class="cursor-pointer text-sm text-white/90">
-                                    {{ $t('remember_me') }}
+                    <!-- Form card -->
+                    <div class="w-full max-w-2xl rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8 lg:p-10">
+                        <form @submit.prevent="submitLogin" class="space-y-6">
+                            <!-- Email -->
+                            <div class="flex flex-col gap-2">
+                                <label for="email" class="font-medium text-white">
+                                    {{ $t('email') }}
                                 </label>
+                                <InputText
+                                    id="email"
+                                    type="email"
+                                    v-model="loginForm.email"
+                                    placeholder="your@email.com"
+                                    :class="['auth-input', { 'p-invalid': validationErrors?.email }]"
+                                />
+                                <small v-if="validationErrors?.email" class="text-red-300">
+                                    <div v-for="message in validationErrors.email" :key="message">
+                                        {{ message }}
+                                    </div>
+                                </small>
                             </div>
 
-                            <router-link
-                                :to="{ name: 'auth.forgot-password' }"
-                                class="text-sm font-medium text-white/90 transition-colors hover:text-white"
-                            >
-                                {{ $t('forgot_password') }}
-                            </router-link>
-                        </div>
+                            <!-- Password -->
+                            <div class="flex flex-col gap-2">
+                                <label for="password" class="font-medium text-white">
+                                    {{ $t('password') }}
+                                </label>
+                                <Password
+                                    id="password"
+                                    v-model="loginForm.password"
+                                    placeholder="••••••••"
+                                    :toggleMask="true"
+                                    :feedback="false"
+                                    inputClass="auth-input w-full"
+                                    :class="{ 'p-invalid': validationErrors?.password }"
+                                    fluid
+                                />
+                                <small v-if="validationErrors?.password" class="text-red-300">
+                                    <div v-for="message in validationErrors.password" :key="message">
+                                        {{ message }}
+                                    </div>
+                                </small>
+                            </div>
 
-                        <!-- Submit -->
-                        <Button
-                            type="submit"
-                            :label="$t('login')"
-                            :loading="processing"
-                            :disabled="processing"
-                            class="w-full"
-                            severity="primary"
-                            size="large"
-                        />
+                            <!-- Remember / Forgot -->
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="flex items-center gap-2">
+                                    <Checkbox
+                                        v-model="loginForm.remember"
+                                        inputId="remember"
+                                        binary
+                                    />
+                                    <label for="remember" class="cursor-pointer text-sm text-white/90">
+                                        {{ $t('remember_me') }}
+                                    </label>
+                                </div>
 
-                        <!-- Register -->
-                        <div class="text-center">
-                            <p class="text-sm text-white/80">
-                                Don't have an account?
                                 <router-link
-                                    :to="{ name: 'auth.register' }"
-                                    class="font-medium text-white transition-colors hover:text-white/80"
+                                    :to="{ name: 'auth.forgot-password' }"
+                                    class="text-sm font-medium text-white/90 transition-colors hover:text-white"
                                 >
-                                    Register here
+                                    {{ $t('forgot_password') }}
                                 </router-link>
-                            </p>
-                        </div>
-                    </form>
+                            </div>
+
+                            <!-- Submit -->
+                            <Button
+                                type="submit"
+                                :label="$t('login')"
+                                :loading="processing"
+                                :disabled="processing"
+                                class="w-full"
+                                severity="primary"
+                                size="large"
+                            />
+
+                            <!-- Register -->
+                            <div class="text-center">
+                                <p class="text-sm text-white/80">
+                                    Don't have an account?
+                                    <router-link
+                                        :to="{ name: 'auth.register' }"
+                                        class="font-medium text-white transition-colors hover:text-white/80"
+                                    >
+                                        Register here
+                                    </router-link>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 
