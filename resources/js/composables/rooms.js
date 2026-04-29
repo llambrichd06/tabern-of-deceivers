@@ -166,11 +166,7 @@ export default function useRooms() {
         isLoading.value = true;
         const { isValid } = validate(roomCodeSchema, roomCode);
 
-        return await axios.post('/api/rooms/joinRoomWithCode', { 
-            params: { //A cleaner way to do get parameters
-                room_code: roomCode
-            }
-        }).then(response => {
+        return await axios.post('/api/rooms/joinRoomWithCode', { room_code: roomCode }).then(response => {
             return response.data
         }).catch(error =>{
             toast.crud.errorMsgFromError(error);
