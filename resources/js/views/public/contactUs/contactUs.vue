@@ -1,6 +1,6 @@
 <template>
     <div class="page-content min-h-screen overflow-x-hidden bg-[#520B93] text-white">
-        <section class="mt-10 px-4">
+        <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto max-w-5xl text-center">
                 <h1 class="text-4xl md:text-5xl font-extrabold mb-6">
                     Contact Us

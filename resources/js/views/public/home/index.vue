@@ -1,47 +1,40 @@
 <template>
     <div class="page-content min-h-screen bg-[#520B93] text-white">
-        <!-- HERO (UNCHANGED) -->
+        <!-- Banner -->
         <section class="relative overflow-hidden min-h-70 md:min-h-80">
+            <!-- Green fallback / base background -->
             <div class="absolute inset-0 bg-emerald-900"></div>
-            
+
+            <!-- Tavern background image -->
             <div
                 class="absolute inset-0 bg-center bg-cover bg-no-repeat"
                 style="background-image: url('/images/tabern-background.gif');"
             ></div>
 
-            <div
-                class="absolute left-0 right-0 bottom-0 h-[42%] z-10
-                    bg-linear-to-t from-black/75 via-black/45 to-transparent
-                    md:inset-y-0 md:left-0 md:right-auto md:h-auto md:w-[42%]
-                    md:bg-linear-to-r md:from-black/70 md:via-black/45 md:to-transparent">
-            </div>
-
-            <div class="relative z-20 flex min-h-70 md:min-h-80 items-center">
+            <!-- Centered content -->
+            <div class="relative z-20 flex min-h-70 md:min-h-80 items-center justify-center">
                 <div class="mx-auto w-full max-w-5xl px-4">
-                    <div class="grid grid-cols-1 md:grid-cols-[240px_1fr] pt-20 pb-8 md:pt-8">
+                    <div class="flex flex-col items-center justify-center text-center pt-20 pb-8 md:pt-8">
 
-                        <div class="order-1 md:order-2 flex flex-col items-center justify-center text-center">
-                            <h1 class="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-                                Tabern of Deceivers
-                            </h1>
+                        <h1 class="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-4">
+                            Tabern of Deceivers
+                        </h1>
 
-                            <Button
-                                label="PLAY NOW"
-                                as="router-link"
-                                to="/rooms"
-                                severity="primary"
-                                class="border-0! px-10! py-4! text-2xl! md:px-12! md:text-3xl! font-bold!"
-                            />
-                        </div>
+                        <h3 class="font-semibold leading-tight mb-3 text-3xl md:text-4xl text-white">
+                            Lie, decieve and scheme!
+                        </h3>
 
-                        <div class="order-2 md:order-1 mt-8 md:mt-0 flex flex-col justify-center items-center md:items-start text-center md:text-left text-white max-w-full md:max-w-55">
-                            <h3 class="font-semibold leading-tight mb-4 text-3xl md:text-4xl">
-                                Lie, decieve and scheme!
-                            </h3>
-                            <p class="text-base md:text-lg leading-relaxed text-white/95">
-                                In the tavern of deceivers the best liar is the winner!
-                            </p>
-                        </div>
+                        <p class="mb-8 max-w-2xl text-base md:text-lg leading-relaxed text-white/95">
+                            In the tavern of deceivers the best liar is the winner!
+                        </p>
+
+                        <Button
+                            label="PLAY NOW"
+                            as="router-link"
+                            to="/rooms"
+                            severity="primary"
+                            class="border-0! px-10! py-4! text-2xl! md:px-12! md:text-3xl! font-bold!"
+                        />
 
                     </div>
                 </div>
@@ -51,11 +44,11 @@
         <!-- HOW IT WORKS -->
         <section class="mt-10 rounded-xl px-6 py-8 md:px-10 md:py-10">
             <div class="mx-auto max-w-5xl">
-                <h2 class="text-4xl text-center font-bold md:text-6xl">
+                <h2 class="mb-6 text-4xl text-center font-bold md:text-6xl">
                     How does the game work?
                 </h2>
                 
-                <p class="mx-auto mb-8 max-w-3xl text-center leading-8">
+                <p class="mx-auto mb-6 max-w-3xl text-center leading-8">
                     This is a game about lying to others! To be able to win you will need to lie,
                     decive and predict the other’s moves while trying to keep your friendships intact.
                 </p>

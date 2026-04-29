@@ -83,7 +83,8 @@
                             :label="$t('login')"
                             :loading="processing"
                             :disabled="processing"
-                            class="auth-submit-btn w-full rounded-2xl! border-0! py-3! text-lg! font-semibold! shadow-[0_12px_18px_rgba(0,0,0,0.28)]"
+                            class="w-full"
+                            severity="primary"
                             size="large"
                         />
 
@@ -161,14 +162,5 @@ const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 :deep(.p-checkbox.p-highlight .p-checkbox-box) {
     background: rgba(255, 255, 255, 0.18) !important;
     border-color: rgba(255, 255, 255, 0.35) !important;
-}
-
-:deep(.auth-submit-btn.p-button) {
-    background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
-    color: white !important;
-}
-
-:deep(.auth-submit-btn.p-button:enabled:hover) {
-    filter: brightness(1.05);
 }
 </style>

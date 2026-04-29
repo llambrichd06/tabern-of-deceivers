@@ -34,10 +34,10 @@
             <div v-else class="flex items-center gap-3">
                 <template v-if="!authStore().user?.name">
                     <router-link to="/login">
-                        <Button label="Login" text size="medium" />
+                        <Button label="Login" text size="medium"  class="login-text-btn" />
                     </router-link>
                     <router-link to="/register">
-                        <Button label="REGISTER" severity="primary" size="small" />
+                        <Button label="Register" severity="primary" size="small" />
                     </router-link>
                 </template>
 
@@ -102,11 +102,11 @@
                     <div class="flex flex-col gap-3">
                         <template v-if="!authStore().user?.name">
                             <router-link to="/login" @click="visibleMobileMenu = false">
-                                <Button label="Login" severity="secondary" class="w-full" />
+                                <Button label="Login" severity="secondary" class="w-full login-text-btn" />
                             </router-link>
 
                             <router-link to="/register" @click="visibleMobileMenu = false">
-                                <Button label="REGISTER" severity="primary" class="w-full" />
+                                <Button label="Register" severity="primary" class="w-full" />
                             </router-link>
                         </template>
 
@@ -242,3 +242,8 @@ onBeforeMount(() => {
 })
 </script>
 
+<style scoped>
+:deep(.login-text-btn .p-button-label) {
+    font-weight: 700 !important;
+}
+</style>

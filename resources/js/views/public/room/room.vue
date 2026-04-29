@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
         <!-- TOP SECTION -->
-        <section class="px-4 pb-4 pt-4">
+        <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto max-w-7xl">
                 <div class="rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
                     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">

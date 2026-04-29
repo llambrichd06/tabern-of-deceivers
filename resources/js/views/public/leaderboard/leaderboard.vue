@@ -1,6 +1,6 @@
 <template>
     <div class="page-content min-h-screen bg-[#520B93] text-white">
-        <section class="px-4 py-10 md:py-14">
+        <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto max-w-5xl">
                 <!-- HEADER -->
                 <div class="mb-10 text-center">

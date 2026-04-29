@@ -2,7 +2,7 @@
     <div class="page-content min-h-screen bg-[#520B93] text-white">
         <div v-if="game.game_state && game.room_id">
             <!-- GAME + CHAT -->
-            <section class="px-4 py-4 lg:py-6">
+            <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
                 <div class="mx-auto w-full max-w-7xl">
                     <div
                         class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:h-[calc(100vh-80px)] lg:items-stretch"
@@ -43,7 +43,7 @@
 
         <GameResult v-model:visible="gameWon" v-model:game="game" />
 
-        <Button label="simulate game win" @click="gameWon = true" />
+        <!-- <Button label="simulate game win" @click="gameWon = true" /> -->
     </div>
 </template>
 

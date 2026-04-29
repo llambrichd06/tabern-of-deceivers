@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-[#520B93] text-white">
         <!-- ------------------------------ Rooms ------------------------------ -->
-        <section class="px-4 py-8">
+        <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto w-full max-w-7xl rounded-3xl bg-[#520B93]">
                 <!-- Header -->
                 <div class="rounded-t-3xl bg-[#520B93] px-6 py-8 text-center md:px-8">

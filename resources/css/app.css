@@ -1503,38 +1503,44 @@ aside.sidebar-container a:hover img {
 .requiredIcon {
     color: red;
 }
-/* Canvis boto principal de prime VUE */
+/* Canvis boto principal de PrimeVue */
 .p-button.p-button-primary {
-    /* Gradient */
-    background: linear-gradient(90deg, #13D6D9 0%, #95BAB7 57%, #60C2D6 100%) !important;
+    background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
     color: white !important;
-    border: none !important;
+    border: 0 !important;
 
-    /* Tailwind equivalent */
-    border-radius: 9999px !important; /* rounded-full */
-    /* padding-left: 2.5rem !important;  px-10 */
-    /* padding-right: 2.5rem !important; */
-    /* padding-top: 1rem !important;     py-4 */
-    /* padding-bottom: 1rem !important; */
+    border-radius: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
 
-    /* font-size: 1.5rem !important;     text-2xl */
-    font-weight: 800 !important;     /* font-extrabold */
-    letter-spacing: 0.2em !important; /* tracking-[0.2em] */
-    text-transform: uppercase !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+
+    letter-spacing: normal !important;
+    text-transform: none !important;
+
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.28) !important;
 }
 
-.p-button.p-button-primary:hover {
+.p-button.p-button-primary:hover,
+.p-button.p-button-primary:enabled:hover {
+    filter: brightness(1.05);
+}
+
+.p-button.p-button-primary:active,
+.p-button.p-button-primary:enabled:active {
     filter: brightness(0.95);
 }
 
-.p-button.p-button-primary:active {
-    filter: brightness(0.9);
+.p-button.p-button-primary:disabled,
+.p-button.p-button-primary.p-disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    filter: none;
 }
 
-/* Canvis boto principal de prime VUE */
-
+/* Canvis boto secundari de PrimeVue */
 .p-button.p-button-secondary {
-    /* Gradient with 20% opacity */
     background: linear-gradient(
         90deg,
         rgba(19, 214, 217, 0.2) 0%,
@@ -1542,22 +1548,15 @@ aside.sidebar-container a:hover img {
         rgba(96, 194, 214, 0.2) 100%
     ) !important;
 
-    /* Border */
     border: 2px solid #60C2D6 !important;
-
-    /* Text */
     color: #6ED1D2 !important;
-
-    /* Optional: smooth look like your image */
     backdrop-filter: blur(2px);
 }
 
-/* Hover */
 .p-button.p-button-secondary:hover {
     filter: brightness(1.1);
 }
 
-/* Active */
 .p-button.p-button-secondary:active {
     filter: brightness(0.95);
 }
