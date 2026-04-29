@@ -12,6 +12,9 @@ use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+//This endpoint is up here because if its below the apiResource for leaderboard controller, auth sanctum gets applied to it
+//even if it isn't inside the route group for some reason
+Route::get('/leaderboards/getBestUsers', [LeaderboardController::class, 'getBestUsers']); 
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
 
@@ -22,7 +25,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
     
-    Route::get('/leaderboards/getBestUsers', [LeaderboardController::class, 'getBestUsers']);
     Route::get('/leaderboards/paginatedLeaderboards', [LeaderboardController::class, 'indexPaginated']);
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
     Route::apiResource('leaderboards', LeaderboardController::class);
@@ -66,3 +68,4 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
 });
+
