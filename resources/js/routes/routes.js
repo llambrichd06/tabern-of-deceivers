@@ -112,6 +112,11 @@ export default [
                 path: 'contactUs',
                 name: 'contactUs',
                 component: () => import('../views/public/contactUs/contactUs.vue'),
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: () => import('../views/public/profile/profile.vue'),
             }
         ]
     },

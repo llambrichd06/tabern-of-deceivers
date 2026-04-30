@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-full min-h-0 flex-col justify-between gap-3 lg:gap-4">
+    <div class="flex min-h-full flex-col gap-3 overflow-visible lg:gap-4">
         <!-- TOP PLAYERS -->
         <div class="flex flex-wrap justify-center gap-2 md:gap-3 lg:gap-4">
             <div
@@ -30,8 +30,8 @@
         </div>
 
         <!-- MIDDLE AREA -->
-        <div class="relative min-h-[260px] lg:min-h-52.5">
-            <div class="flex h-full items-center justify-center">
+        <div class="relative flex-1 min-h-[260px] lg:min-h-52.5">
+            <div class="flex h-full min-h-[260px] items-center justify-center lg:min-h-52.5">
                 <div class="flex items-center justify-center gap-4 lg:block">
                     <!-- PILE -->
                     <div class="flex flex-col items-center justify-center gap-1.5">
@@ -83,8 +83,34 @@
                                 optionLabel="name"
                                 optionValue="code"
                                 placeholder="Select rank"
-                                class="w-32 md:w-40"
-                            />
+                                class="w-40 md:w-48"
+                            >
+                                <template #value="slotProps">
+                                    <div v-if="slotProps.value" class="flex items-center gap-2">
+                                        <img
+                                            :src="getRankImage(slotProps.value)"
+                                            :alt="getRankName(slotProps.value)"
+                                            class="h-8 w-6 rounded border border-black object-cover"
+                                        />
+                                        <span>{{ getRankName(slotProps.value) }}</span>
+                                    </div>
+
+                                    <span v-else>
+                                        {{ slotProps.placeholder }}
+                                    </span>
+                                </template>
+
+                                <template #option="slotProps">
+                                    <div class="flex items-center gap-2">
+                                        <img
+                                            :src="getRankImage(slotProps.option.code)"
+                                            :alt="slotProps.option.name"
+                                            class="h-8 w-6 rounded border border-black object-cover"
+                                        />
+                                        <span>{{ slotProps.option.name }}</span>
+                                    </div>
+                                </template>
+                            </Select>
                         </div>
                     </div>
 
@@ -110,7 +136,7 @@
                             </p>
 
                             <p class="text-sm font-semibold">
-                                Rank: {{ pileCalledRank == 0 ? 'None' : pileCalledRank }}
+                                Rank: {{ pileCalledRank == 0 ? 'None' : getRankName(pileCalledRank) }}
                             </p>
                         </div>
                     </div>
@@ -139,14 +165,14 @@
                     </p>
 
                     <p class="text-center text-base font-semibold md:text-lg lg:text-right">
-                        Rank: {{ pileCalledRank == 0 ? 'No rank called' : pileCalledRank }}
+                        Rank: {{ pileCalledRank == 0 ? 'No rank called' : getRankName(pileCalledRank) }}
                     </p>
                 </div>
             </div>
         </div>
 
         <!-- BOTTOM ACTIONS -->
-        <div class="mt-4 grid grid-cols-1 items-end gap-6 lg:mt-0 lg:grid-cols-[140px_minmax(0,1fr)_140px] lg:gap-4">
+        <div class="mt-4 grid shrink-0 grid-cols-1 items-end gap-6 lg:grid-cols-[140px_minmax(0,1fr)_140px] lg:gap-4">
             <!-- CALL LIE -->
             <div class="order-2 flex justify-center lg:order-1 lg:justify-start">
                 <Button
@@ -169,7 +195,7 @@
                     v-for="card in myCards"
                     :key="card.id"
                     :class="getCardClass(card.id)"
-                    class="playing-card h-18 w-12 cursor-pointer overflow-hidden rounded-md border border-transparent transition-all duration-200 ease-out md:h-20 md:w-14"
+                    class="playing-card h-18 w-12 cursor-pointer overflow-hidden rounded-md border border-black transition-all duration-200 ease-out md:h-20 md:w-14"
                     @click="cardSelect(card)"
                 >
                     <Image
@@ -249,12 +275,13 @@ const getPlayerName = (index: number) => {
     return playerData?.name || `Player ${index + 1}`;
 };
 
-const getPlayerNameFromNum = (playerNum) => {
+const getPlayerNameFromNum = (playerNum: string) => {
     if (!playerNum) {
-        return 'Player'
+        return 'Player';
     }
-    return otherPlayerDecks?.value[playerNum]['user_name']
-}
+
+    return otherPlayerDecks?.value[playerNum]?.user_name;
+};
 
 const pileCount = computed(() => game.value.game_state.pile.count);
 const pileCalledRank = computed(() => game.value.game_state.pile.called_rank);
@@ -291,8 +318,9 @@ const getPileCardStyle = (index: number, total: number) => {
 };
 
 const selectedRank = ref('');
+
 const ranks = ref([
-    { name: 'Ace', code: 'Ace' },
+    { name: 'Ace', code: '1' },
     { name: '2', code: '2' },
     { name: '3', code: '3' },
     { name: '4', code: '4' },
@@ -302,10 +330,19 @@ const ranks = ref([
     { name: '8', code: '8' },
     { name: '9', code: '9' },
     { name: '10', code: '10' },
-    { name: 'Jack', code: 'Jack' },
-    { name: 'Queen', code: 'Queen' },
-    { name: 'King', code: 'King' }
+    { name: 'Jack', code: '11' },
+    { name: 'Queen', code: '12' },
+    { name: 'King', code: '13' }
 ]);
+
+const getRankName = (rank: string | number) => {
+    const foundRank = ranks.value.find((r) => r.code == String(rank));
+    return foundRank?.name || rank;
+};
+
+const getRankImage = (rank: string | number) => {
+    return `/images/Cards/${rank}.svg`;
+};
 
 const isRankNotSelected = computed(() => {
     return pileCalledRank.value == 0 && !selectedRank.value;
@@ -342,6 +379,7 @@ const getCardClass = (cardId: number) => {
 
 const cardSelect = (card: any) => {
     const index = mySelectedCards.value.indexOf(card.id);
+
     if (index > -1) {
         mySelectedCards.value.splice(index, 1);
     } else if (mySelectedCards.value.length < 6) {
@@ -375,13 +413,13 @@ const callALie = () => {
 
 .card-selected {
     transform: translateY(-10px);
-    border-color: transparent;
+    border-color: black;
     box-shadow: 0 12px 22px rgba(0, 0, 0, 0.32);
 }
 
 .card-selected:hover {
     transform: translateY(-10px);
-    border-color: transparent;
+    border-color: black;
     box-shadow: 0 13px 23px rgba(0, 0, 0, 0.34);
 }
 </style>
