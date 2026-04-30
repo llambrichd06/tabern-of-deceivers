@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     
     Route::get('/leaderboards/paginatedLeaderboards', [LeaderboardController::class, 'indexPaginated']);
     Route::post('/leaderboards/updateLeaderboards', [LeaderboardController::class, 'updateLeaderboards']);
+    Route::get('/leaderboards/myLeaderboard', [LeaderboardController::class, 'getMyLeaderboard']);
     Route::apiResource('leaderboards', LeaderboardController::class);
 
     Route::post('/rooms/leaveRoom', [RoomController::class, 'leaveRoom']);

@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 
 class LeaderboardController extends Controller
 {
@@ -98,5 +99,13 @@ class LeaderboardController extends Controller
         $this->authorize('leaderboard-delete');
         $leaderboard->delete();
         return response()->json([ 'data' => 'deleted successfully' ]);
+    }
+
+    public function getMyLeaderboard() {
+        $user = Auth::user();
+        
+        $leaderboard = Leaderboard::where('user_id', $user->id);
+
+        return response()->json([ 'leaderboard' => $leaderboard ]);
     }
 }
