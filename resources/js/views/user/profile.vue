@@ -1,43 +1,6 @@
 <template>
     <div class="w-full min-h-screen bg-[#520B93] text-white">
         <div class="w-full space-y-6">
-            <!-- Personal Data Section -->
-            <section class="w-full">
-                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
-                    <h2 class="mb-6 text-2xl font-bold text-white">Datos Personales</h2>
-
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div>
-                            <label class="mb-2 block font-bold text-white">Nombre</label>
-                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
-                                {{ user.name || "-" }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block font-bold text-white">Email</label>
-                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
-                                {{ user.email || "-" }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block font-bold text-white">Primer Apellido</label>
-                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
-                                {{ user.surname1 || "-" }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block font-bold text-white">Segundo Apellido</label>
-                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
-                                {{ user.surname2 || "-" }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Avatar Section -->
             <section class="w-full">
                 <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
@@ -63,6 +26,43 @@
                             chooseLabel="Cambiar Avatar"
                             class="avatar-upload w-full mt-6"
                         />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personal Data Section -->
+            <section class="w-full">
+                <div class="w-full rounded-3xl bg-purple-300/35 p-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-8">
+                    <h2 class="mb-6 text-2xl font-bold text-white">Datos Personales</h2>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Name</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.name || "-" }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Email</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.email || "-" }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block font-bold text-white">First Surname</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.surname1 || "-" }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block font-bold text-white">Second Surname</label>
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-3 text-white">
+                                {{ user.surname2 || "-" }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
