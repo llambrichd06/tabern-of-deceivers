@@ -44,7 +44,7 @@
                             </div>
                             <div>
                                 <p class="text-xl font-semibold">Community</p>
-                                <p class="text-base leading-7 text-white/90 md:text-lg">Join our Discord to report issues and meet other players.</p>
+                                <p class="text-base leading-7 text-white/90 md:text-lg">Join our Discord!</p>
                             </div>
                         </div>
 
@@ -118,9 +118,9 @@
                             <Button
                                 type="submit"
                                 label="Send Message"
-                                severity="secondary"
+                                severity="primary"
                                 :loading="sending"
-                                class="rounded-2xl! px-10! py-4! text-lg! font-semibold! shadow-[0_15px_20px_rgba(0,0,0,0.3)]"
+                                class="w-full rounded-2xl! px-10! py-4! text-lg! font-semibold! shadow-[0_15px_20px_rgba(0,0,0,0.3)]"
                             />
                         </div>
 

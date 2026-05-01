@@ -81,7 +81,7 @@
 
                 </div>
 
-                <div class="mt-10 flex justify-center">
+                <div class="mt-6 flex justify-center">
                     <Button
                         label="How To Play"
                         as="router-link"
@@ -95,7 +95,13 @@
 
         <!-- BEST PLAYERS -->
         <section class="mt-16 px-4 pb-14 md:pb-20">
-            <div class="mx-auto flex min-h-[560px] max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:min-h-[620px] md:px-10 md:pt-10">
+            <div class="relative mx-auto flex min-h-140 max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:min-h-[620px] md:px-10 md:pt-10">
+    
+                <img src="/images/confetti.svg" class="absolute top-50 left-35 w-13 opacity-30 md:w-17  hidden md:block"  alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute top-60 right-35 w-11 opacity-40 md:w-16 rotate-45 hidden md:block" alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute bottom-30 left-15 w-14 opacity-30 md:w-18 -rotate-12 hidden md:block" alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute bottom-40 right-10 w-9 opacity-40 md:w-15 rotate-180 hidden md:block" alt="confetti" aria-hidden="true" />
+
                 <h2 class="mb-8 text-center text-4xl font-bold md:text-6xl">
                     Rankings
                 </h2>
@@ -123,7 +129,7 @@
                     <div v-else class="flex items-end justify-center gap-4 text-black md:gap-14">
                         <!-- 2nd -->
                         <div v-if="bestUsers.leaderboards?.length >= 2" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-b from-slate-100 to-slate-400 shadow-lg">
+                            <div class="relative z-10 -mb-2.5 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-b from-slate-100 to-slate-400 shadow-lg">
                                 <img
                                     v-if="getUserAvatar(1)"
                                     :src="getUserAvatar(1)"
@@ -137,7 +143,7 @@
                                 </span>
                             </div>
 
-                            <div class="flex min-h-[170px] w-28 flex-col rounded-t-xl bg-gradient-to-b from-slate-100 via-slate-300 to-slate-500 px-4 pt-8 pb-4 text-center text-slate-900 shadow-[inset_0_4px_8px_rgba(255,255,255,0.45),0_12px_18px_rgba(0,0,0,0.25)] md:w-44">
+                            <div class="flex min-h-42.5 w-28 flex-col rounded-t-xl bg-gradient-to-b from-slate-100 via-slate-300 to-slate-500 px-4 pt-8 pb-4 text-center text-slate-900 shadow-[inset_0_4px_8px_rgba(255,255,255,0.45),0_12px_18px_rgba(0,0,0,0.25)] md:w-44">
                                 <p class="font-bold break-words">
                                     {{ bestUsers.leaderboards[1]?.user?.name ?? "No one :v" }}
                                 </p>
@@ -148,7 +154,7 @@
 
                         <!-- 1st -->
                         <div v-if="bestUsers.leaderboards?.length >= 1" class="flex flex-col items-center justify-end">
-                            <div class="relative z-10 mb-[-10px] flex h-20 w-20 items-center justify-center overflow-visible">
+                            <div class="relative z-10 -mb-2.5 flex h-20 w-20 items-center justify-center overflow-visible">
                                 <img
                                     src="/images/crown.svg"
                                     class="absolute -top-8 left-3/5 h-10 w-10 -translate-x-1/2 rotate-12"
@@ -212,7 +218,7 @@
             </div>
         </section>
 
-        <!-- CTA (UNCHANGED) -->
+        <!-- go to dashboard, old from the template the teachers gave us -->
         <!-- <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <div class="flex gap-4">
                 <template v-if="!auth.user?.name">

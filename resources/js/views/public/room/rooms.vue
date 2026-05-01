@@ -4,7 +4,7 @@
         <section class="px-4 pt-2 pb-10 md:pt-1 md:pb-14">
             <div class="mx-auto w-full max-w-7xl rounded-3xl bg-[#520B93]">
                 <!-- Header -->
-                <div class="mb-10 text-center">
+                <div class="mb-6 text-center">
                     <h1 class="mb-6 text-4xl font-extrabold tracking-tight md:text-6xl">
                         Available Rooms
                     </h1>
@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- ------------------------------ Menu Buttons ------------------------------ -->
-                <section class="px-4 pt-0 pb-10">
+                <section class="px-4 pt-0 pb-6">
                     <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 sm:grid-cols-3">
                         <Button
                             label="Host Game"
@@ -50,7 +50,7 @@
                 <div class="rounded-b-3xl bg-[#520B93] px-2 pb-4 pt-2 md:px-0">
                     <DataView :value="rooms" paginator :rows="6" layout="grid">
                         <template #grid="slotProps">
-                            <div class="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 xl:grid-cols-3">
+                            <div class="grid grid-cols-1 gap-6 p-4 pt-0 md:grid-cols-2 xl:grid-cols-3">
                                 <div
                                     v-for="item in slotProps.items"
                                     :key="item.id"
@@ -257,7 +257,7 @@ const handleAvatarError = (event) => {
     column-gap: 0.65rem;
 
     line-height: 1 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
 }
 
 :deep(.rooms-icon-button .p-button-icon) {
