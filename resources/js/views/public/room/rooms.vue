@@ -56,7 +56,7 @@
                                     :key="item.id"
                                 >
                                     <div class="h-full rounded-3xl bg-purple-300/35 p-5 text-white shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
-                                        <div class="flex min-h-[300px] flex-col">
+                                        <div class="flex min-h-75 flex-col">
                                             <!-- Top -->
                                             <div class="flex items-start justify-between gap-4 border-b border-white/20 pb-4">
                                                 <div>

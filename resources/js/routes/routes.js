@@ -117,6 +117,7 @@ export default [
                 path: 'profile',
                 name: 'profile',
                 component: () => import('../views/public/profile/profile.vue'),
+                beforeEnter: requireLogin,
             }
         ]
     },
