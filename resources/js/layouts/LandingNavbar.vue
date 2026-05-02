@@ -179,7 +179,7 @@ const navLinks = [
 const items = computed(() => [
     {
         items: [
-            { label: 'Profile', icon: 'pi pi-user', command: () => router.push('/app/profile') },
+            { label: 'Profile', icon: 'pi pi-user', command: () => router.push('/profile') },
             { 
                 label: 'Admin Panel', 
                 icon: 'pi pi-cog', 
