@@ -74,10 +74,38 @@
                 <section>
                     <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:p-8">
                         <h2 class="mb-6 text-2xl font-bold text-white">Game data</h2>
-                        <div>
-                            <p class="mb-2 block font-bold text-white">Wins</p>
-                            <p class="mb-2 block font-bold text-white">Wins</p>
-                            <p class="mb-2 block font-bold text-white">Wins</p>
+
+                        <div
+                            v-if="leaderboard.wins != null || leaderboard.points != null || leaderboard.matches != null"
+                            class="grid grid-cols-1 gap-4 md:grid-cols-3"
+                        >
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+                                <p class="text-sm font-semibold text-white/70">Wins</p>
+                                <p class="mt-1 text-2xl font-bold text-white">
+                                    {{ leaderboard.wins ?? "-" }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+                                <p class="text-sm font-semibold text-white/70">Points</p>
+                                <p class="mt-1 text-2xl font-bold text-white">
+                                    {{ leaderboard.points ?? "-" }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+                                <p class="text-sm font-semibold text-white/70">Matches</p>
+                                <p class="mt-1 text-2xl font-bold text-white">
+                                    {{ leaderboard.matches ?? "-" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            v-else
+                            class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center font-semibold text-white"
+                        >
+                            You don't have game data, try playing some games
                         </div>
                     </div>
                 </section>
@@ -96,8 +124,10 @@ const auth = authStore();
 const { getUser, user } = useUsers();
 const { getMyLeaderboard, leaderboard } = useLeaderboards();
 
-onMounted(() => {
+onMounted(async () => {
     getUser(auth.user.id);
+    await getMyLeaderboard();
+    console.log(leaderboard);
     
 });
 
@@ -106,14 +136,7 @@ const onBeforeUpload = (event) => {
 };
 
 const onTemplatedUpload = () => {
-    try {
-        getUser(auth.user.id);
-        getMyLeaderboard();
-        console.log(leaderboard.value)
-    } catch (error) {
-        
-    }
-    
+    getUser(auth.user.id);
 };
 
 const onSelectedFiles = () => {

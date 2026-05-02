@@ -1505,7 +1505,7 @@ aside.sidebar-container a:hover img {
 }
 /* Canvis boto principal de PrimeVue */
 .p-button.p-button-primary {
-    background: linear-gradient(90deg, #8dd0ee 0%, #2fd3e6 100%) !important;
+    background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
     color: white !important;
     border: 0 !important;
 
@@ -1524,7 +1524,7 @@ aside.sidebar-container a:hover img {
 
 .p-button.p-button-primary:hover,
 .p-button.p-button-primary:enabled:hover {
-    filter: brightness(1.05);
+    filter: brightness(1.04);
 }
 
 .p-button.p-button-primary:active,
@@ -1543,9 +1543,9 @@ aside.sidebar-container a:hover img {
 .p-button.p-button-secondary {
     background: linear-gradient(
         90deg,
-        rgba(19, 214, 217, 0.2) 0%,
-        rgba(149, 186, 183, 0.2) 57%,
-        rgba(96, 194, 214, 0.2) 100%
+        #4534A1 0%,
+        #5F2E9A 57%,
+        #5530A0 100%
     ) !important;
 
     border: 2px solid #60C2D6 !important;

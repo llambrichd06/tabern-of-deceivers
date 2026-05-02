@@ -18,14 +18,17 @@
 
                         <!-- CHAT -->
                         <div
-                            class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4"
+                            class="flex h-[520px] min-h-0 flex-col overflow-hidden rounded-3xl bg-purple-300/35 p-3 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-4 lg:h-[calc(100vh-100px)]"
                         >
-                            <div class="mb-3 flex items-center justify-between px-1">
-                                <h2 class="text-xl font-bold text-white"> Chat </h2>
-                                <p v-if="room.room_code" class="text-sm text-white/70"> Room {{ room.room_code }} </p>
+                            <div class="mb-3 flex shrink-0 items-center justify-between px-1">
+                                <h2 class="text-xl font-bold text-white">Chat</h2>
+
+                                <p v-if="room.room_code" class="text-sm text-white/70">
+                                    Room {{ room.room_code }}
+                                </p>
                             </div>
 
-                            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl p-2 md:p-3">
+                            <div class="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-2xl p-2 md:p-3">
                                 <Chat :roomId="game.room_id" />
                             </div>
                         </div>
@@ -47,7 +50,7 @@
         </div>
 
         <GameResult v-model:visible="gameWon" v-model:game="game" />
-        <QuitGame v-if="!gameWon"/>
+
         <!-- <Button label="simulate game win" @click="gameWon = true" /> -->
     </div>
 </template>
@@ -57,10 +60,9 @@ import { onBeforeMount, onUnmounted, ref } from "vue";
 import Chat from "../../../components/roomComponents/Chat.vue";
 import GameComponent from "../../../components/gameComponent/GameComponent.vue";
 import { useRoute } from "vue-router";
-import GameResult from "../../../components/gameComponent/GameResult.vue";
-import QuitGame from "../../../components/gameComponent/QuitGame.vue";
-import useRooms from "../../../composables/rooms";
 import useGames from "../../../composables/games";
+import GameResult from "../../../components/gameComponent/GameResult.vue";
+import useRooms from "../../../composables/rooms";
 
 const route = useRoute();
 
@@ -72,14 +74,16 @@ const gameWon = ref(false);
 
 onBeforeMount(async () => {
     await getGameState(gameId);
-    await getRoom(game.value.room_id)
+    await getRoom(game.value.room_id);
+
     window.Echo.join(`game.room.${game.value.room_id}`)
         .here((users) => {
             console.log("Currently loaded:", users);
         })
         .listen("UpdateGameState", async () => {
             console.log("GAME UPDATED! GET MY STATE");
-            await getGameState(gameId).then(isLoading.value = false);
+            await getGameState(gameId);
+            isLoading.value = false;
         })
         .listen("CardPlayed", () => {
             console.log("CARD PLAYED, PAUSE FOR A SECOND");

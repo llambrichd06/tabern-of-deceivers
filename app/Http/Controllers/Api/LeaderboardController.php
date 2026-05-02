@@ -104,7 +104,7 @@ class LeaderboardController extends Controller
     public function getMyLeaderboard() {
         $user = Auth::user();
         
-        $leaderboard = Leaderboard::where('user_id', $user->id);
+        $leaderboard = Leaderboard::where('user_id', $user->id) -> first();
 
         return response()->json([ 'leaderboard' => $leaderboard ]);
     }

@@ -167,6 +167,14 @@ export default function useLeaderboards() {
             toast.crud.errorMsgFromError(error)
         })
     }
+    
+    const getMyLeaderboard = async () => {
+        return axios.get('/api/leaderboards/myLeaderboard/')
+            .then(response => {
+                leaderboard.value = response.data.leaderboard;
+                return response;
+            })
+    }
 
     return {
         leaderboards,
@@ -182,6 +190,7 @@ export default function useLeaderboards() {
         getError,
         getBestUsers,
         getPaginatedLeaderboards,
+        getMyLeaderboard,
         validationErrors,
         isLoading,
         errors,
