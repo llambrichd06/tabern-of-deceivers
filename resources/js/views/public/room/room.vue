@@ -81,7 +81,7 @@
                 <div v-else class="mt-6">
                     <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
                         <!-- PLAYERS LEFT -->
-                        <div class="rounded-3xl bg-purple-300/35 px-6 py-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:px-8 lg:min-h-[560px]">
+                        <div class="rounded-3xl bg-purple-300/35 px-6 py-6 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:px-8 lg:min-h-140">
                             <div class="mb-8 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                                 <p class="text-lg font-semibold md:text-xl">
                                     Players in room: {{ numPlayers }}
@@ -94,7 +94,7 @@
 
                             <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 xl:grid-cols-3">
                                 <!-- Host -->
-                                <div class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center ring-2 ring-yellow-300/60">
+                                <div class="flex min-h-37.5 flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center ring-2 ring-yellow-300/60">
                                     <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
                                         <img
                                             v-if="room?.host"
@@ -122,7 +122,7 @@
                                 <div
                                     v-for="player in otherPlayers"
                                     :key="player.id"
-                                    class="flex min-h-[150px] flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center"
+                                    class="flex min-h-37.5 flex-col items-center rounded-2xl bg-white/8 px-3 py-4 text-center"
                                 >
                                     <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-white/10 text-lg font-bold text-white">
                                         <img
@@ -151,7 +151,7 @@
                                 <div
                                     v-for="slot in emptySlots"
                                     :key="`empty-${slot}`"
-                                    class="flex min-h-[150px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/25 bg-white/5 px-3 py-4 text-center"
+                                    class="flex min-h-37.5 flex-col items-center justify-center rounded-2xl border border-dashed border-white/25 bg-white/5 px-3 py-4 text-center"
                                 >
                                     <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-white/30 text-2xl text-white/40">
                                         +
@@ -165,7 +165,7 @@
                         </div>
 
                         <!-- CHAT RIGHT -->
-                        <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-5 lg:h-[560px] overflow-hidden">
+                        <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.28)] md:p-5 lg:h-140 overflow-hidden">
                             <div class="mb-3 flex items-center justify-between px-1">
                                 <h2 class="text-xl font-bold text-white">
                                     Chat

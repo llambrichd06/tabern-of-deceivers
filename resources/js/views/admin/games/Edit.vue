@@ -3,13 +3,13 @@
     <div class="grid grid-flow-col auto-rows-min gap-5">
         <Panel class="col-span-12" pt:content:class="flex flex-col gap-10 justify-between">
             <template #header>
-                <h5 class="game-name text-2xl font-bold mb-1">Game number {{ game.room_id }}</h5>
+                <h5 class="game-name text-2xl font-bold mb-1">Game {{ game.room_id }}</h5>
             </template>
             <div>
                 <h6 class="mb-4 text-lg font-bold">Datos personales</h6>
                 <div class="mb-4">
                     <div class="flex items-center gap-3">
-                        <label for="room_id">Game code:</label>
+                        <label for="room_id">room_id:</label>
                         <InputText 
                             v-model="game.room_id" 
                             type="text" 
@@ -40,7 +40,7 @@
 
                 <div class="mb-4">
                     <div class="flex items-center gap-3">
-                        <label for="game_state">Host id:</label>
+                        <label for="game_state">game_state:</label>
                         <InputText 
                             v-model="game.game_state" 
                             type="game_state" 

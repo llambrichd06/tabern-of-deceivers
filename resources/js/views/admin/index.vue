@@ -17,79 +17,6 @@
             </template>
         </Card>
 
-        <!-- Stats Cards -->
-        <div class="dashboard-stats-grid">
-            <Card class="dashboard-stat-card">
-                <template #content>
-                    <div class="stat-card-content">
-                        <div class="stat-card-icon stat-icon-primary">
-                            <i class="pi pi-users"></i>
-                        </div>
-                        <div class="stat-card-info">
-                            <p class="stat-card-label">Usuarios</p>
-                            <p class="stat-card-value">{{ stats.users || 0 }}</p>
-                        </div>
-                    </div>
-                </template>
-            </Card>
-
-            <Card class="dashboard-stat-card">
-                <template #content>
-                    <div class="stat-card-content">
-                        <div class="stat-card-icon stat-icon-success">
-                            <i class="pi pi-file"></i>
-                        </div>
-                        <div class="stat-card-info">
-                            <p class="stat-card-label">Posts</p>
-                            <p class="stat-card-value">{{ stats.posts || 0 }}</p>
-                        </div>
-                    </div>
-                </template>
-            </Card>
-
-            <Card class="dashboard-stat-card">
-                <template #content>
-                    <div class="stat-card-content">
-                        <div class="stat-card-icon stat-icon-success">
-                            <i class="pi pi-tags"></i>
-                        </div>
-                        <div class="stat-card-info">
-                            <p class="stat-card-label">Categorías</p>
-                            <p class="stat-card-value">{{ stats.categories || 0 }}</p>
-                        </div>
-                    </div>
-                </template>
-            </Card>
-
-            <Card class="dashboard-stat-card">
-                <template #content>
-                    <div class="stat-card-content">
-                        <div class="stat-card-icon stat-icon-warning">
-                            <i class="pi pi-shield"></i>
-                        </div>
-                        <div class="stat-card-info">
-                            <p class="stat-card-label">Roles</p>
-                            <p class="stat-card-value">{{ stats.roles || 0 }}</p>
-                        </div>
-                    </div>
-                </template>
-            </Card>
-
-            <Card class="dashboard-stat-card">
-                <template #content>
-                    <div class="stat-card-content">
-                        <div class="stat-card-icon stat-icon-users">
-                            <i class="pi pi-users"></i>
-                        </div>
-                        <div class="stat-card-info">
-                            <p class="stat-card-label">Leaderboards</p>
-                            <p class="stat-card-value">{{ stats.leaderboards || 0 }}</p>
-                        </div>
-                    </div>
-                </template>
-            </Card>
-        </div>
-
         <!-- Quick Actions Card -->
         <Card class="dashboard-actions-card">
             <template #content>
@@ -123,20 +50,6 @@
                             <div class="dashboard-action-info">
                                 <p class="dashboard-action-title">Gestionar Posts</p>
                                 <p class="dashboard-action-description">Ver y editar posts</p>
-                            </div>
-                            <i class="pi pi-chevron-right dashboard-action-arrow"></i>
-                        </router-link>
-
-                        <router-link
-                            to="/admin/categories"
-                            class="dashboard-action-item"
-                        >
-                            <div class="dashboard-action-icon stat-icon-success">
-                                <i class="pi pi-tags"></i>
-                            </div>
-                            <div class="dashboard-action-info">
-                                <p class="dashboard-action-title">Gestionar Categorías</p>
-                                <p class="dashboard-action-description">Ver y editar categorías</p>
                             </div>
                             <i class="pi pi-chevron-right dashboard-action-arrow"></i>
                         </router-link>
@@ -182,41 +95,11 @@ import usePosts from "../../composables/posts";
 import useCategories from "../../composables/categories";
 import useRoles from "../../composables/roles";
 
-const stats = ref({
-    users: 0,
-    posts: 0,
-    categories: 0,
-    roles: 0
-});
-
 const { users, getUsers } = useUsers();
 const { posts, getPosts } = usePosts();
 const { categories, getCategories } = useCategories();
 const { roles, getRoles } = useRoles();
 
-const loadStats = async () => {
-    try {
-        await Promise.all([
-            getUsers(),
-            getPosts(),
-            getCategories(),
-            getRoles()
-        ]);
-        
-        stats.value = {
-            users: users.value?.total || users.value?.data?.length || 0,
-            posts: posts.value?.total || posts.value?.data?.length || 0,
-            categories: categories.value?.total || categories.value?.data?.length || 0,
-            roles: roles.value?.total || roles.value?.data?.length || 0
-        };
-    } catch (error) {
-        console.error('Error loading stats:', error);
-    }
-};
-
-onMounted(() => {
-    loadStats();
-});
 </script>
 
 <style scoped>

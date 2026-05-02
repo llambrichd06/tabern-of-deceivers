@@ -14,7 +14,7 @@
         </section>
 
         <!-- CONTACT INFO + FORM -->
-        <section class="mt-6 px-6 py-8 md:px-10 md:py-10">
+        <section class=" px-6 py-8 md:px-10 md:py-10">
             <div class="mx-auto grid max-w-5xl gap-8 md:grid-cols-[1fr_1.3fr]">
                 <!-- CONTACT INFO -->
                 <div class="rounded-3xl bg-purple-300/35 p-8 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">

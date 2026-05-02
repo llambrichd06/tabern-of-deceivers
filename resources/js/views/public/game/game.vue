@@ -47,7 +47,7 @@
         </div>
 
         <GameResult v-model:visible="gameWon" v-model:game="game" />
-        <QuitGame/>
+        <QuitGame v-if="!gameWon"/>
         <!-- <Button label="simulate game win" @click="gameWon = true" /> -->
     </div>
 </template>

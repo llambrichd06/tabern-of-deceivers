@@ -21,7 +21,7 @@ class RoomFactory extends Factory
             'room_code' => $this->faker->unique()->regexify('[A-F0-0]{8}'), //this is to make the 8 random characters without repeating the codes
             'state' => $this->faker->randomElement(['on_going', 'lobby', 'completed']),
             'private' => $this->faker->randomElement(['1', '0']),
-            'host_id' => User::factory(),
+            'host_id' => $this->faker->randomElement([1, 2, 3]),
         ];;
     }
 }

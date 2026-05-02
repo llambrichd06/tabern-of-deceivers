@@ -20,7 +20,7 @@
         <template #default>
             <div class="text-white">
                 <div class="rounded-3xl bg-purple-300/35 p-5 shadow-[0_15px_20px_rgba(0,0,0,0.28)]">
-                    <FloatLabel variant="on">
+                    <FloatLabel variant="over">
                         <InputText
                             id="code"
                             v-model="code"
@@ -28,7 +28,7 @@
                             autocomplete="off"
                             @keyup.enter="joinRoomWithCode"
                         />
-                        <label for="code">Room Code</label>
+                        <label for="code" class="">Room Code</label>
                     </FloatLabel>
 
                     <p class="mt-3 text-sm text-white/70">
@@ -151,11 +151,12 @@ input.join-room-input,
 .p-inputtext.join-room-input:enabled:focus {
     background: rgba(255, 255, 255, 0.14) !important;
     color: white !important;
-    border-color: rgba(255, 255, 255, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.849) !important;
     box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.08) !important;
 }
 
 .join-room-dialog .p-button {
     color: white !important;
 }
+
 </style>

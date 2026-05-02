@@ -97,9 +97,9 @@
         <section class="mt-16 px-4 pb-14 md:pb-20">
             <div class="relative mx-auto flex min-h-140 max-w-5xl flex-col rounded-2xl bg-purple-300/35 px-6 pt-8 pb-0 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:min-h-[620px] md:px-10 md:pt-10">
     
-                <img src="/images/confetti.svg" class="absolute top-50 left-35 w-13 opacity-30 md:w-17  hidden md:block"  alt="confetti" aria-hidden="true" />
-                <img src="/images/confetti.svg" class="absolute top-60 right-35 w-11 opacity-40 md:w-16 rotate-45 hidden md:block" alt="confetti" aria-hidden="true" />
-                <img src="/images/confetti.svg" class="absolute bottom-30 left-15 w-14 opacity-30 md:w-18 -rotate-12 hidden md:block" alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute top-50 left-35 w-13 opacity-40 md:w-17  hidden md:block"  alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute top-60 right-35 w-11 opacity-50 md:w-16 rotate-45 hidden md:block" alt="confetti" aria-hidden="true" />
+                <img src="/images/confetti.svg" class="absolute bottom-30 left-15 w-14 opacity-50 md:w-18 -rotate-12 hidden md:block" alt="confetti" aria-hidden="true" />
                 <img src="/images/confetti.svg" class="absolute bottom-40 right-10 w-9 opacity-40 md:w-15 rotate-180 hidden md:block" alt="confetti" aria-hidden="true" />
 
                 <h2 class="mb-8 text-center text-4xl font-bold md:text-6xl">

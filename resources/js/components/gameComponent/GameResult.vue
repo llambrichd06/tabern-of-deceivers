@@ -47,7 +47,7 @@
                     
                     <!-- HEADER -->
                     <div class="flex items-center justify-between px-3 pb-2 text-sm font-bold text-white/80 border-b border-white/20">
-                        <span class="w-10 text-center">Rank</span>
+                        <span class="w-20 text-center">Rank</span>
                         <span class="flex-1 text-center">User</span>
                         <span class="w-20 text-right">Cards</span>
                     </div>
@@ -61,7 +61,7 @@
                             :class="index === 0 ? 'ring-2 ring-yellow-300/70' : ''"
                         >
                             <!-- Rank -->
-                            <div class="w-10 text-center font-bold">
+                            <div class="w-20 text-center font-bold">
                                 {{ index + 1 }}
                             </div>
 
