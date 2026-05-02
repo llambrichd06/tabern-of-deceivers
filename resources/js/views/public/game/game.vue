@@ -50,7 +50,7 @@
         </div>
 
         <GameResult v-model:visible="gameWon" v-model:game="game" />
-
+        <QuitGame v-if="!gameWon"/>
         <!-- <Button label="simulate game win" @click="gameWon = true" /> -->
     </div>
 </template>
@@ -63,6 +63,8 @@ import { useRoute } from "vue-router";
 import useGames from "../../../composables/games";
 import GameResult from "../../../components/gameComponent/GameResult.vue";
 import useRooms from "../../../composables/rooms";
+import QuitGame from "../../../components/gameComponent/QuitGame.vue";
+
 
 const route = useRoute();
 
