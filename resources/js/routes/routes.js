@@ -132,7 +132,7 @@ export default [
             {
                 name: 'app.profile',
                 path: 'profile',
-                component: () => import('../views/user/profile.vue'),
+                component: () => import('../views/user/old_profile.vue'),
                 meta: {
                     breadCrumb: 'Perfil',
                 },

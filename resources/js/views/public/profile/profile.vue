@@ -36,7 +36,7 @@
 
                     <!-- Personal Data Section -->
                     <div class="rounded-3xl bg-purple-300/35 p-4 shadow-[0_15px_20px_rgba(0,0,0,0.3)] md:p-8">
-                        <h2 class="mb-6 text-2xl font-bold text-white">Datos Personales</h2>
+                        <h2 class="mb-6 text-2xl font-bold text-white">User Data</h2>
 
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
