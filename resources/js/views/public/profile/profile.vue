@@ -145,14 +145,72 @@ const onSelectedFiles = () => {
 </script>
 
 <style scoped>
+:deep(.avatar-upload),
 :deep(.p-fileupload-basic) {
     width: 100%;
 }
 
-:deep(.avatar-upload .p-button),
-:deep(.p-fileupload-basic .p-button) {
-    width: 100%;
+/* Botón real de FileUpload */
+:deep(.avatar-upload .avatar-upload-button),
+:deep(.avatar-upload .p-fileupload-choose-button),
+:deep(.avatar-upload .p-fileupload-choose),
+:deep(.avatar-upload .p-button) {
+    width: 100% !important;
+    justify-content: center !important;
+
+    background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    background-color: #0fa8c0 !important;
+
+    color: white !important;
+    border: 0 !important;
+
     border-radius: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+
+    letter-spacing: normal !important;
+    text-transform: none !important;
+
     box-shadow: 0 12px 18px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Por si PrimeVue aplica el color con variables CSS */
+:deep(.avatar-upload .avatar-upload-button),
+:deep(.avatar-upload .p-button) {
+    --p-button-primary-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    --p-button-primary-hover-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    --p-button-primary-active-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    --p-button-primary-border-color: transparent !important;
+    --p-button-primary-hover-border-color: transparent !important;
+    --p-button-primary-active-border-color: transparent !important;
+    --p-button-primary-color: white !important;
+}
+
+:deep(.avatar-upload .avatar-upload-button:hover),
+:deep(.avatar-upload .p-fileupload-choose-button:hover),
+:deep(.avatar-upload .p-fileupload-choose:hover),
+:deep(.avatar-upload .p-button:hover) {
+    background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    background-color: #0fa8c0 !important;
+    color: white !important;
+    filter: brightness(1.04);
+}
+
+:deep(.avatar-upload .avatar-upload-button:active),
+:deep(.avatar-upload .p-fileupload-choose-button:active),
+:deep(.avatar-upload .p-fileupload-choose:active),
+:deep(.avatar-upload .p-button:active) {
+    filter: brightness(0.95);
+}
+
+:deep(.avatar-upload .p-button-label) {
+    font-weight: 600 !important;
+}
+
+:deep(.avatar-upload .p-button-icon) {
+    margin-right: 0.5rem;
 }
 </style>

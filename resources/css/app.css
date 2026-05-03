@@ -1574,3 +1574,92 @@ aside.sidebar-container a:hover img {
   font-weight: normal;
   font-style: normal;
 }
+/* ============================================
+   FileUpload Avatar como botón primary
+   ============================================ */
+
+.avatar-upload {
+    width: 100% !important;
+
+    --p-button-primary-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    --p-button-primary-hover-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    --p-button-primary-active-background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+
+    --p-button-primary-border-color: transparent !important;
+    --p-button-primary-hover-border-color: transparent !important;
+    --p-button-primary-active-border-color: transparent !important;
+
+    --p-button-primary-color: #ffffff !important;
+    --p-button-primary-hover-color: #ffffff !important;
+    --p-button-primary-active-color: #ffffff !important;
+}
+
+.avatar-upload.p-fileupload,
+.avatar-upload .p-fileupload,
+.avatar-upload.p-fileupload-basic,
+.avatar-upload .p-fileupload-basic {
+    width: 100% !important;
+}
+
+.avatar-upload .p-button,
+.avatar-upload.p-fileupload .p-button,
+.avatar-upload .p-fileupload-choose,
+.avatar-upload .p-fileupload-choose-button,
+.avatar-upload [data-pc-name="button"],
+.avatar-upload [data-pc-section="choosebutton"] {
+    width: 100% !important;
+    justify-content: center !important;
+
+    background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    background-color: #0fa8c0 !important;
+    background-image: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+
+    color: #ffffff !important;
+    border: 0 !important;
+
+    border-radius: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+
+    letter-spacing: normal !important;
+    text-transform: none !important;
+
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.28) !important;
+}
+
+.avatar-upload .p-button:hover,
+.avatar-upload.p-fileupload .p-button:hover,
+.avatar-upload .p-fileupload-choose:hover,
+.avatar-upload .p-fileupload-choose-button:hover,
+.avatar-upload [data-pc-name="button"]:hover,
+.avatar-upload [data-pc-section="choosebutton"]:hover {
+    background: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+    background-color: #0fa8c0 !important;
+    background-image: linear-gradient(90deg, #6fc4e6 0%, #0fa8c0 100%) !important;
+
+    color: #ffffff !important;
+    border: 0 !important;
+    filter: brightness(1.04);
+}
+
+.avatar-upload .p-button:active,
+.avatar-upload.p-fileupload .p-button:active,
+.avatar-upload .p-fileupload-choose:active,
+.avatar-upload .p-fileupload-choose-button:active,
+.avatar-upload [data-pc-name="button"]:active,
+.avatar-upload [data-pc-section="choosebutton"]:active {
+    filter: brightness(0.95);
+}
+
+.avatar-upload .p-button-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.avatar-upload .p-button-icon {
+    color: #ffffff !important;
+    margin-right: 0.5rem;
+}
