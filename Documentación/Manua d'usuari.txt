@@ -1,0 +1,23 @@
+Quan entres per primer cop a la pàgina estaràs en la pàgina d’inici (HOME), en aquesta tens diversos sectors 3 seccions en l'ordre mencionat, el banner, una petita secció de regles i el top 3 jugadors. En cada secció hi ha un botó que et portarà a les sales, la pàgina de regles i al leaderboard.
+
+A part totes les pàgines tenen un header on pots anar a la pàgina del home, la pàgina de sales i la pàgina de leaderboards, també pots iniciar sessió o registrar un nou usuari. Un cop iniciada la sessió pots anar a la teva pàgina de perfil.
+
+En la pàgina de perfil pots veure les teves dades igual que el nombre de partides, victòries i punts, en aquesta també pots canviar la teva foto de perfil.
+
+Un cop estiguis en la pàgina de les sales hi ha 3 botons principals, host game et deixa crear una sala, search game et deixa entrar en una sala amb el codi de la sala i refresh room recarrega les sales que hi ha disponibles. Si una sala es publica et pots unir a ella amb el botó de Join room que hi ha en la carta de la sala.
+
+Un cop estiguin en una sala hi ha un xat en què pots parlar amb altres persones que hi ha en la sala i un botó per a sortir de la sala. Si ets l'amfitrió també tens les opcions de fer la partida pública o privada clicant el botó de Un/Private room i si hi ha 2 jugadors o més pots donar-li a Start match per a començar el joc.
+
+L'amfitrió també pot fer que una altra persona sigui l'amfitrió en comptes d'ell mateix.
+
+Un cop en el joc hi ha un xat a la dreta per parlar amb altres jugadors.
+
+A l’esquerra hi ha el joc que consisteix en el següent: En primer lloc, es dona 6 cartes a cada jugador.
+
+A continuació, es tria un jugador aleatori per iniciar el joc. Aquest jugador tria un valor de cartes al mig de la pantalla del joc que serà les cartes que s’han de tirar per dir la "veritat", després el jugador escollir entre 1-6 cartes de la seva mà a jugar. Les cartes poden o no ser d'aquest valor. Després d'això, el següent jugador de la dreta pot triar jugar cartes, i la ronda continua de la mateixa manera. Però després de cada torn, qualsevol jugador, excepte el que l'últim que ha jugat, pot clicar el botó de “Call Lie”.
+
+Si totes les cartes jugades per l'últim jugador són del número de pila actual, o són comodins, llavors aquest jugador deia la veritat. En aquest cas, el jugador que ha cridat la mentida pren totes les cartes a la pila, i el jugador que ha jugat les cartes acusades de ser mentida comença la ronda.
+
+Si alguna de les cartes jugades per l'últim jugador no és del valor de pila actual i no són comodins, aquest jugador estava mentint. En aquest cas, el jugador mentider pren totes les cartes a la pila, i el jugador que descobreix la mentida comença la següent ronda.
+
+Un jugador guanya quan acaba el seu torn amb 0 cartes i el torn del següent jugador acaba sense que rebi cap carta.
