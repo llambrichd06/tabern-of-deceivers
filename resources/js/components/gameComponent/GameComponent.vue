@@ -320,7 +320,7 @@ const getPileCardStyle = (index: number, total: number) => {
 const selectedRank = ref('');
 
 const ranks = ref([
-    { name: 'Ace', code: '1' },
+    { name: 'Ace', code: 'Ace' },
     { name: '2', code: '2' },
     { name: '3', code: '3' },
     { name: '4', code: '4' },
@@ -330,9 +330,9 @@ const ranks = ref([
     { name: '8', code: '8' },
     { name: '9', code: '9' },
     { name: '10', code: '10' },
-    { name: 'Jack', code: '11' },
-    { name: 'Queen', code: '12' },
-    { name: 'King', code: '13' }
+    { name: 'Jack', code: 'Jack' },
+    { name: 'Queen', code: 'Queen' },
+    { name: 'King', code: 'King' }
 ]);
 
 const getRankName = (rank: string | number) => {
