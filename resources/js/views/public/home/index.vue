@@ -1,6 +1,6 @@
 <template>
     <div class="page-content min-h-screen bg-[#520B93] text-white">
-        <!-- Banner -->
+    <!-- Banner -->
         <section class="relative overflow-hidden min-h-70 md:min-h-80">
             <!-- Green fallback / base background -->
             <div class="absolute inset-0 bg-emerald-900"></div>
@@ -8,23 +8,25 @@
             <!-- Tavern background image -->
             <div
                 class="absolute inset-0 bg-center bg-cover bg-no-repeat"
-                style="background-image: url('/images/tabern-background.gif');"
+                style="background-image: url('/images/Banner.webp');"
             ></div>
+            
+            <div class="absolute inset-0 bg-black/35"></div>
 
             <!-- Centered content -->
             <div class="relative z-20 flex min-h-70 md:min-h-80 items-center justify-center">
                 <div class="mx-auto w-full max-w-5xl px-4">
                     <div class="flex flex-col items-center justify-center text-center pt-20 pb-8 md:pt-8">
 
-                        <h1 class="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-4">
+                        <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-[#F8FAFC] drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)] sm:text-5xl md:text-7xl">
                             Tabern of Deceivers
                         </h1>
 
-                        <h3 class="font-semibold leading-tight mb-3 text-3xl md:text-4xl text-white">
+                        <h3 class="mb-3 text-3xl font-semibold leading-tight text-[#E5E7EB] drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)] md:text-4xl">
                             Lie, decieve and scheme!
                         </h3>
 
-                        <p class="mb-8 max-w-2xl text-base md:text-lg leading-relaxed text-white/95">
+                        <p class="mb-8 max-w-2xl text-base leading-relaxed text-[#F1F5F9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] md:text-lg">
                             In the tavern of deceivers the best liar is the winner!
                         </p>
 
@@ -33,7 +35,7 @@
                             as="router-link"
                             to="/rooms"
                             severity="primary"
-                            class="border-0! px-10! py-4! text-2xl! md:px-12! md:text-3xl! font-bold!"
+                            class="border-0! px-10! py-4! text-2xl! font-bold! md:px-12! md:text-3xl!"
                         />
 
                     </div>
