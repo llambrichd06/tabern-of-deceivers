@@ -71,12 +71,12 @@
                                     </label>
                                 </div>
 
-                                <router-link
+                                <!-- <router-link
                                     :to="{ name: 'auth.forgot-password' }"
                                     class="text-sm font-medium text-white/90 transition-colors hover:text-white"
                                 >
                                     {{ $t('forgot_password') }}
-                                </router-link>
+                                </router-link> -->
                             </div>
 
                             <!-- Submit -->
