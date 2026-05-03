@@ -1,6 +1,6 @@
 # Laravel 10 + Vue 3 API Base Project
 
-Este proyecto es una base sólida diseñada para estudiantes y desarrolladores que deseen aprender a construir aplicaciones SPA (Single Page Application) modernas utilizando Laravel como API backend y Vue 3 como frontend.
+Este proyecto es para aprender a construir aplicaciones SPA (Single Page Application) modernas utilizando Laravel como API backend y Vue 3 como frontend.
 
 ## 🚀 Características Principales
 
@@ -89,7 +89,13 @@ Instalar dependencias de Node:
 npm install
 ```
 
-### 4. Ejecutar la Aplicación
+### 4. Vincular Storage con carpeta Public
+
+```bash
+php artisan storage:link
+```
+
+### 5. Ejecutar la Aplicación
 
 Necesitarás dos terminales:
 
@@ -101,6 +107,11 @@ php artisan serve
 Terminal 2 (Frontend):
 ```bash
 npm run dev
+```
+
+Terminal 3 (Reverb)
+```bash
+php artisan reverb:start 
 ```
 
 Accede a la aplicación en: `http://localhost:8000`
